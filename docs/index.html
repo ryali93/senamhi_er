@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]> <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]> <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]> <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en" class="no-js"><!--<![endif]-->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta content="Antero Matos Zabarburu" name="author" />
+    <meta content="Visor de Informacion Espacial del SENAMHI-PERU" name="description" />
+    <link rel="icon" href="assets/img/ide/favicon.ico">
+    <title>IDESEP</title>
+    <!-- ================== BEGIN BASE CSS STYLE ================== -->
+    
+    <!-- ================== BEGIN BASE CSS STYLE ================== -->
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <link href="assets/plugins/jquery-ui/themes/base/minified/jquery-ui.min.css" rel="stylesheet" />
+    <link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="assets/css/animate.min.css" rel="stylesheet" />
+    <link href="assets/css/style.min.css" rel="stylesheet" />
+    <link href="assets/css/style-responsive.min.css" rel="stylesheet" />
+    <link href="assets/css/theme/default.css" rel="stylesheet" id="theme" />
+    <!-- ================== END BASE CSS STYLE ================== -->
+    <!-- ================== END BASE CSS STYLE ================== -->
+    <!-- ================== BEGIN BASE JS ================== -->
+    
+    <!-- ================== BEGIN BASE JS ================== -->
+    <script src="assets/plugins/pace/pace.min.js"></script>
+    <!-- ================== END BASE JS ================== -->
+    <!-- ================== END BASE JS ================== -->
+    <!-- ================== BEGIN OL3 ================== -->
+    <link type="text/css" rel="stylesheet" href="assets/plugins/openlayer/ol3/3.17.1/css/ol.css">
+    <script type="text/javascript" src="assets/plugins/openlayer/ol3/3.17.1/js/ol.js"></script>
+    <script type="text/javascript" src="assets/plugins/openlayer/src/proj4js/proj4.js"></script>
+    <!--
+    <link type="text/css" rel="stylesheet" href="assets/plugins/openlayer/src/ol3-layerswitcher/ol3-layerswitcher.css"/>
+    <script type="text/javascript" src="assets/plugins/openlayer/src/ol3-layerswitcher/ol3-layerswitcher.js"></script>
+    -->
+    <link type="text/css" rel="stylesheet" href="assets/plugins/openlayer/canvas/control/layerswitchercontrol.css"/>
+    <script type="text/javascript" src="assets/plugins/openlayer/canvas/control/layerswitchercontrol.js"></script>
+    <script type="text/javascript" src="assets/plugins/openlayer/canvas/control/canvasscalelinecontrol.js"></script>
+    <script type="text/javascript" src="assets/plugins/openlayer/canvas/interaction/clipinteraction.js"></script>
+    <link type="text/css" rel="stylesheet" href="assets/plugins/openlayer/src/ol3-popup-master/src/ol3-popup.css">
+    <script type="text/javascript" src="assets/plugins/openlayer/src/ol3-popup-master/src/ol3-popup.js"></script>
+    <!-- ================== END OL3 ================== -->
+    <!-- Swipe -->
+    <link rel="stylesheet" href="http://viglino.github.io/ol3-ext/control/swipecontrol.css" type="text/css" />
+    <script type="text/javascript" src="http://viglino.github.io/ol3-ext/control/swipecontrol.js"></script>
+    <!-- ================== BEGIN PAGE LEVEL CSS ================== -->
+    <link type="text/css" rel="stylesheet" href="assets/css/styleSheet1.css">
+    <!-- ================== END PAGE LEVEL CSS ==================== -->
+    
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-9445737-10"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-9445737-10');
+    </script>
+</head>
+<body style="overflow:hidden;">
+    <!-- begin #variables globales -->
+    
+    <input type="hidden" id="modoVisualizarCapaTematica" value=""/>
+    <input type="hidden" id="radius" value=""/>
+    <!-- end   #page-loader -->
+    <!-- begin #page-loader -->
+    
+    <div id="page-loader" class="fade in"><span class="spinner"></span></div>
+    <!-- end #page-loader -->
+    <!-- begin #page-container -->
+    <div id="page-container" class="page-container fade page-sidebar-fixed page-header-fixed">
+        <!-- begin #header -->
+        
+        <div id="header" class="header navbar navbar-default navbar-fixed-top">
+            <!-- begin container-fluid -->
+            <div class="container-fluid">
+                <!-- begin mobile sidebar expand / collapse button -->
+                <div class="navbar-header">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <a href="//www.gob.pe/minam"  target="_blank" class="navbar-link"><img src="assets/img/ide/LOGO-MINAM-2016.png" alt="no disponible" style="margin: 0px 0px 0px 5px;"/></a>
+                            <a href="//www.senamhi.gob.pe/" target="_blank" class="navbar-form"><img src="assets/img/ide/logo_senamhi.png" alt="no disponible" style="margin: 3px 0px 0px 0px;"/></a>
+                            <button type="button" class="navbar-toggle" data-click="sidebar-toggled">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- end mobile sidebar expand / collapse button -->
+                <!-- begin header navigation right -->
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle f-s-14">
+                            <i class="fa fa-bell-o f-s-18"></i>
+                            <span class="label">2</span>
+                        </a>
+                        <ul class="dropdown-menu media-list pull-right animated fadeInDown">
+                            <li class="dropdown-header">Aviso</li>
+                            
+                            
+                            <li class="media">
+                                <a href="go?accion=aviso243">
+                                    <div class="media-left"><i class="fa fa-exclamation-triangle media-object bg-orange"></i></div> <!--bg-red-->
+                                    <div class="media-body">
+                                        <h6 class="media-heading">Precipitaciones en la sierra </h6>
+                                        <div class="text-muted f-s-11">Nivel 03 - Aviso N&deg; 243</div>
+                                        <p>36 horas - 25/11/2020</p>
+                                    </div>
+                                </a>
+                            </li>
+                            
+                            <li class="media">
+                                <a href="go?accion=aviso242">
+                                    <div class="media-left"><i class="fa fa-exclamation-triangle media-object bg-orange"></i></div> <!--bg-red-->
+                                    <div class="media-body">
+                                        <h6 class="media-heading">Lluvia en la selva </h6>
+                                        <div class="text-muted f-s-11">Nivel 03 - Aviso N&deg; 242</div>
+                                        <p>54 horas - 25/11/2020</p>
+                                    </div>
+                                </a>
+                            </li>
+                            
+                            
+                            <li class="dropdown-footer text-center">
+                                <a href="//www.senamhi.gob.pe/?p=avisos" target="_blank">Ver m&#225;s</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- end container-fluid -->
+        </div>
+        <!-- end #header -->
+        <!-- begin #sidebar -->
+        
+        <div id="sidebar" class="sidebar" >
+            <!-- begin sidebar scrollbar -->
+            <div data-scrollbar="true" data-height="100%" >
+                <!-- begin sidebar user -->
+                <ul class="nav" style="margin-top: -10px">
+                    <li class="nav-profile navbar-form">
+                        <div class="image">
+                            <a href="http://idesep.senamhi.gob.pe/geovisoridesep/"><img src="assets/img/ide/map_icon3.gif" alt="no disponible" /></a>
+                        </div>
+                        <div class="info "><a href="http://idesep.senamhi.gob.pe/portalidesep/" target="_blank" style="text-decoration:none; nounderline:link">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IDESEP</a>
+                        <small><cite>SENAMHI - PERU</cite></small>
+                        </div>
+                    </li>
+                </ul>
+            <!-- end sidebar user -->
+            <!-- begin sidebar nav -->
+                <ul class="nav" style="font-size: 95%">
+                    <li class="nav-header"><a href="#">TEMAS</a></li>
+                    <li class="has-sub">
+                        <a href="javascript:;"><b class="caret pull-right"></b><i class="fa fa-flash (alias)"></i><span>EVENTOS EXTREMOS</span></a>
+                        <ul class="sub-menu">
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Percentil 10 - TMin</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=01.01.005.03.001.512.0000.00.00">TMin Extrema - Mayo</a></li>
+                                    <li><a href="go?accion=01.01.006.03.001.512.0000.00.00">TMin Extrema - Junio</a></li>
+                                    <li><a href="go?accion=01.01.007.03.001.512.0000.00.00">TMin Extrema - Julio</a></li>
+                                    <li><a href="go?accion=01.01.008.03.001.512.0000.00.00">TMin Extrema - Agosto</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="has-sub">
+                        <a href="javascript:;"><b class="caret pull-right"></b><i class="fa fa-globe"></i><span>EVENTO EL NIÑO</span></a>
+                        <ul class="sub-menu">
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Niño 82-83</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=02.01.001.03.001.512.1983.00.00">Precipitación 83</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Niño 97-98</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=02.02.001.03.001.512.1998.00.00">Precipitación 98</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Niño 2017</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=02.04.001.03.001.512.2017.00.00">Precipitación 2017</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b><i class="fa fa-bar-chart-o"></i><span>PRONÓSTICO</span></a>
+                        <ul class="sub-menu">
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Climático</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=03.02.001.03.000.512.0000.00.00">Pp Nov-Dic-Ene</a></li>
+                                    <li><a href="go?accion=03.02.002.03.000.512.0000.00.00">Tmin Nov-Dic-Ene</a></li>
+                                    <li><a href="go?accion=03.02.003.03.000.512.0000.00.00">Tmax Nov-Dic-Ene</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Indice de Radiación UV</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=03.04.001.03.001.513.0000.00.00">Índice UV - 48 Hrs</a></li>
+                                    <li><a href="go?accion=03.04.002.03.001.513.0000.00.00">Índice UV - 72 Hrs</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Predicción Numérica</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=03.05.001.03.000.513.0000.00.00">Modelo Pp - 24 Hrs</a></li>
+                                    <li><a href="go?accion=03.05.002.03.000.513.0000.00.00">Modelo Pp - 48 Hrs</a></li>
+                                    <li><a href="go?accion=03.05.003.03.000.513.0000.00.00">Modelo Pp - 72 Hrs</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b><i class="fa fa-clock-o"></i><span>MONITOREO</span></a>
+                        <ul class="sub-menu">
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Precipitación (Nov)</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=04.02.005.03.002.512.0000.00.00">Anomalía - 1ra Década</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Temperatura Mínima (Nov)</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=04.04.005.03.002.512.0000.00.00">Anomalía - 1ra Década</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Temperatura Máxima (Nov)</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=04.05.005.03.002.512.0000.00.00">Anomalía - 1ra Década</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Evapotranspiración (Nov)</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=04.06.001.03.001.531.0000.00.00">1ra Década</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Indice de Humedad (Nov)</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=04.07.001.03.001.531.0000.00.00">1ra Década</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b><i class="fa fa-signal"></i><span>CARACTERIZACIÓN</span></a>
+                        <ul class="sub-menu">
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Clasificación Climática</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=05.01.001.03.001.512.0000.00.00">Clasificación Climática</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Temperatura Mínima</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=05.03.001.03.001.512.0000.00.00">Trimestre - MAM</a></li>
+                                    <li><a href="go?accion=05.03.002.03.001.512.0000.00.00">Trimestre - AMJ</a></li>
+                                    <li><a href="go?accion=05.03.003.03.001.512.0000.00.00">Trimestre - MJJ</a></li>
+                                    <li><a href="go?accion=05.03.004.03.001.512.0000.00.00">Trimestre - JJA</a></li>
+                                    <li><a href="go?accion=05.03.005.03.001.512.0000.00.00">Trimestre - JAS</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Temperatura Máxima</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=05.04.001.03.001.512.0000.00.00">Trimestre - MAM</a></li>
+                                    <li><a href="go?accion=05.04.002.03.001.512.0000.00.00">Trimestre - AMJ</a></li>
+                                    <li><a href="go?accion=05.04.003.03.001.512.0000.00.00">Trimestre - MJJ</a></li>
+                                    <li><a href="go?accion=05.04.004.03.001.512.0000.00.00">Trimestre - JJA</a></li>
+                                    <li><a href="go?accion=05.04.005.03.001.512.0000.00.00">Trimestre - JAS</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Zonas de Vida</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=05.06.001.03.001.521.0000.00.00">Zonas de Vida</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b><i class="fa fa-calendar"></i><span>CAMBIO CLIMÁTICO</span></a>
+                        <ul class="sub-menu">
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Proyección 2030 Anual</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=06.01.001.03.001.513.0000.00.00">Precipitación Anual 2030</a></li>
+                                    <li><a href="go?accion=06.01.002.03.001.513.0000.00.00">Temp. Mínima Anual 2030</a></li>
+                                    <li><a href="go?accion=06.01.003.03.001.513.0000.00.00">Temp. Máxima Anual 2030</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Variación 2030 Anual</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=06.03.001.03.001.513.0000.00.00">Precipitación Variación Anual 2030</a></li>
+                                    <li><a href="go?accion=06.03.002.03.001.513.0000.00.00">Temp. Mínima Variación Anual 2030</a></li>
+                                    <li><a href="go?accion=06.03.003.03.001.513.0000.00.00">Temp. Máxima Variación Anual 2030</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Disponibilidad Hídrica</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=06.07.001.03.001.521.2020.00.00">Disponibilidad Hídrica 2020</a></li>
+                                    <li><a href="go?accion=06.07.001.03.001.521.2030.00.00">Disponibilidad Hídrica 2030</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Tendencia TMínima</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=06.08.001.03.001.512.0000.00.00">Mes de Enero</a></li>
+                                    <li><a href="go?accion=06.08.002.03.001.512.0000.00.00">Mes de Febrero</a></li>
+                                    <li><a href="go?accion=06.08.003.03.001.512.0000.00.00">Mes de Marzo</a></li>
+                                    <li><a href="go?accion=06.08.004.03.001.512.0000.00.00">Mes de Abril</a></li>
+                                    <li><a href="go?accion=06.08.005.03.001.512.0000.00.00">Mes de Mayo</a></li>
+                                    <li><a href="go?accion=06.08.006.03.001.512.0000.00.00">Mes de Junio</a></li>
+                                    <li><a href="go?accion=06.08.007.03.001.512.0000.00.00">Mes de Julio</a></li>
+                                    <li><a href="go?accion=06.08.008.03.001.512.0000.00.00">Mes de Agosto</a></li>
+                                    <li><a href="go?accion=06.08.009.03.001.512.0000.00.00">Mes de Septiembre</a></li>
+                                    <li><a href="go?accion=06.08.010.03.001.512.0000.00.00">Mes de Octubre</a></li>
+                                    <li><a href="go?accion=06.08.011.03.001.512.0000.00.00">Mes de Noviembre</a></li>
+                                    <li><a href="go?accion=06.08.012.03.001.512.0000.00.00">Mes de Diciembre</a></li>
+                                    <li><a href="go?accion=06.08.013.03.001.512.0000.00.00">Anual</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Tendencia TMedia</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=06.09.001.03.001.512.0000.00.00">Mes de Enero</a></li>
+                                    <li><a href="go?accion=06.09.002.03.001.512.0000.00.00">Mes de Febrero</a></li>
+                                    <li><a href="go?accion=06.09.003.03.001.512.0000.00.00">Mes de Marzo</a></li>
+                                    <li><a href="go?accion=06.09.004.03.001.512.0000.00.00">Mes de Abril</a></li>
+                                    <li><a href="go?accion=06.09.005.03.001.512.0000.00.00">Mes de Mayo</a></li>
+                                    <li><a href="go?accion=06.09.006.03.001.512.0000.00.00">Mes de Junio</a></li>
+                                    <li><a href="go?accion=06.09.007.03.001.512.0000.00.00">Mes de Julio</a></li>
+                                    <li><a href="go?accion=06.09.008.03.001.512.0000.00.00">Mes de Agosto</a></li>
+                                    <li><a href="go?accion=06.09.009.03.001.512.0000.00.00">Mes de Septiembre</a></li>
+                                    <li><a href="go?accion=06.09.010.03.001.512.0000.00.00">Mes de Octubre</a></li>
+                                    <li><a href="go?accion=06.09.011.03.001.512.0000.00.00">Mes de Noviembre</a></li>
+                                    <li><a href="go?accion=06.09.012.03.001.512.0000.00.00">Mes de Diciembre</a></li>
+                                    <li><a href="go?accion=06.09.013.03.001.512.0000.00.00">Anual</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Tendencia TMáxima</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=06.10.001.03.001.512.0000.00.00">Mes de Enero</a></li>
+                                    <li><a href="go?accion=06.10.002.03.001.512.0000.00.00">Mes de Febrero</a></li>
+                                    <li><a href="go?accion=06.10.003.03.001.512.0000.00.00">Mes de Marzo</a></li>
+                                    <li><a href="go?accion=06.10.004.03.001.512.0000.00.00">Mes de Abril</a></li>
+                                    <li><a href="go?accion=06.10.005.03.001.512.0000.00.00">Mes de Mayo</a></li>
+                                    <li><a href="go?accion=06.10.006.03.001.512.0000.00.00">Mes de Junio</a></li>
+                                    <li><a href="go?accion=06.10.007.03.001.512.0000.00.00">Mes de Julio</a></li>
+                                    <li><a href="go?accion=06.10.008.03.001.512.0000.00.00">Mes de Agosto</a></li>
+                                    <li><a href="go?accion=06.10.009.03.001.512.0000.00.00">Mes de Septiembre</a></li>
+                                    <li><a href="go?accion=06.10.010.03.001.512.0000.00.00">Mes de Octubre</a></li>
+                                    <li><a href="go?accion=06.10.011.03.001.512.0000.00.00">Mes de Noviembre</a></li>
+                                    <li><a href="go?accion=06.10.012.03.001.512.0000.00.00">Mes de Diciembre</a></li>
+                                    <li><a href="go?accion=06.10.013.03.001.512.0000.00.00">Anual</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b><i class="fa fa-book"></i><span>ATLAS</span></a>
+                        <ul class="sub-menu">
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Frecuencia de Heladas</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=08.01.001.03.001.532.0000.00.00">Mes de Enero</a></li>
+                                    <li><a href="go?accion=08.01.002.03.001.532.0000.00.00">Mes de Febrero</a></li>
+                                    <li><a href="go?accion=08.01.003.03.001.532.0000.00.00">Mes de Marzo</a></li>
+                                    <li><a href="go?accion=08.01.004.03.001.532.0000.00.00">Mes de Abril</a></li>
+                                    <li><a href="go?accion=08.01.005.03.001.532.0000.00.00">Mes de Mayo</a></li>
+                                    <li><a href="go?accion=08.01.006.03.001.532.0000.00.00">Mes de Junio</a></li>
+                                    <li><a href="go?accion=08.01.007.03.001.532.0000.00.00">Mes de Julio</a></li>
+                                    <li><a href="go?accion=08.01.008.03.001.532.0000.00.00">Mes de Agosto</a></li>
+                                    <li><a href="go?accion=08.01.009.03.001.532.0000.00.00">Mes de Septiembre</a></li>
+                                    <li><a href="go?accion=08.01.010.03.001.532.0000.00.00">Mes de Octubre</a></li>
+                                    <li><a href="go?accion=08.01.011.03.001.532.0000.00.00">Mes de Noviembre</a></li>
+                                    <li><a href="go?accion=08.01.012.03.001.532.0000.00.00">Mes de Diciembre</a></li>
+                                    <li><a href="go?accion=08.01.013.03.001.532.0000.00.00">Anual</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Erosión del Suelo</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=08.03.030.03.001.522.2010.12.31">Hídrica Pluvial 2010</a></li>
+                                    <li><a href="go?accion=08.03.031.03.001.522.2011.12.31">Hídrica Pluvial 2011</a></li>
+                                    <li><a href="go?accion=08.03.032.03.001.522.2012.12.31">Hídrica Pluvial 2012</a></li>
+                                    <li><a href="go?accion=08.03.033.03.001.522.2013.12.31">Hídrica Pluvial 2013</a></li>
+                                    <li><a href="go?accion=08.03.034.03.001.522.2014.12.31">Hídrica Pluvial 2014</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Energía Solar</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=08.04.001.03.001.514.0000.00.00">Mes de Enero</a></li>
+                                    <li><a href="go?accion=08.04.002.03.001.514.0000.00.00">Mes de Febrero</a></li>
+                                    <li><a href="go?accion=08.04.003.03.001.514.0000.00.00">Mes de Marzo</a></li>
+                                    <li><a href="go?accion=08.04.004.03.001.514.0000.00.00">Mes de Abril</a></li>
+                                    <li><a href="go?accion=08.04.005.03.001.514.0000.00.00">Mes de Mayo</a></li>
+                                    <li><a href="go?accion=08.04.006.03.001.514.0000.00.00">Mes de Junio</a></li>
+                                    <li><a href="go?accion=08.04.007.03.001.514.0000.00.00">Mes de Julio</a></li>
+                                    <li><a href="go?accion=08.04.008.03.001.514.0000.00.00">Mes de Agosto</a></li>
+                                    <li><a href="go?accion=08.04.009.03.001.514.0000.00.00">Mes de Septiembre</a></li>
+                                    <li><a href="go?accion=08.04.010.03.001.514.0000.00.00">Mes de Octubre</a></li>
+                                    <li><a href="go?accion=08.04.011.03.001.514.0000.00.00">Mes de Noviembre</a></li>
+                                    <li><a href="go?accion=08.04.012.03.001.514.0000.00.00">Mes de Diciembre</a></li>
+                                    <li><a href="go?accion=08.04.013.03.001.514.0000.00.00">Anual</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b><i class="fa fa-bullseye"></i><span>ESPECÍFICOS</span></a>
+                        <ul class="sub-menu">
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Frecuencia de Nevadas</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=09.02.001.03.002.511.0000.00.00">Mes de Enero</a></li>
+                                    <li><a href="go?accion=09.02.002.03.002.511.0000.00.00">Mes de Febrero</a></li>
+                                    <li><a href="go?accion=09.02.003.03.002.511.0000.00.00">Mes de Marzo</a></li>
+                                    <li><a href="go?accion=09.02.004.03.002.511.0000.00.00">Mes de Abril</a></li>
+                                    <li><a href="go?accion=09.02.005.03.002.511.0000.00.00">Mes de Mayo</a></li>
+                                    <li><a href="go?accion=09.02.006.03.002.511.0000.00.00">Mes de Junio</a></li>
+                                    <li><a href="go?accion=09.02.007.03.002.511.0000.00.00">Mes de Julio</a></li>
+                                    <li><a href="go?accion=09.02.008.03.002.511.0000.00.00">Mes de Agosto</a></li>
+                                    <li><a href="go?accion=09.02.009.03.002.511.0000.00.00">Mes de Septiembre</a></li>
+                                    <li><a href="go?accion=09.02.010.03.002.511.0000.00.00">Mes de Octubre</a></li>
+                                    <li><a href="go?accion=09.02.011.03.002.511.0000.00.00">Mes de Noviembre</a></li>
+                                    <li><a href="go?accion=09.02.012.03.002.511.0000.00.00">Mes de Diciembre</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Vigilancia de Incendios</a>
+                                <ul class="sub-menu"><li><a href="go?accion=09.03.001.03.001.511.2016.12.00">    Incendio Forestal 2016</a></li>
+                                    <li><a href="go?accion=09.03.329.03.001.513.2020.11.24">FWI - 2020.11.24</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b><i class="fa fa-envira"></i><span>RIESGO AGROCLIMATICO</span></a>
+                        <ul class="sub-menu">
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Riesgo de Arroz (Ago)</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=11.01.001.03.001.531.0000.00.00">Mensual de Arroz</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Riesgo de Maiz (Ago)</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=11.02.001.03.001.531.0000.00.00">Mensual de Maiz</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Riesgo de Papa (Ago)</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=11.03.001.03.001.531.0000.00.00">Mensual de Papa</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Riesgo de Cacao (Ago)</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=11.04.001.03.001.531.0000.00.00">Mensual de Cacao</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Riesgo de Café (Ago)</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=11.05.001.03.001.531.0000.00.00">Mensual de Café</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub"><a href="javascript:;"><b class="caret pull-right"></b>Riesgo de Pasto (Ago)</a>
+                                <ul class="sub-menu">
+                                    <li><a href="go?accion=11.06.001.03.001.531.0000.00.00">Mensual de Pasto</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                <li class="has-sub">
+                    <a href="javascript:;">
+                        <b class="caret pull-right"></b>
+                        <i class="fa fa-medkit"></i>
+                        <span>Ayuda</span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Cat&#225;logo de Metadatos</a></li>
+                    </ul>
+                </li>
+                <!-- begin sidebar minify button -->
+                <li><a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify"><i class="fa fa-angle-double-left"></i></a></li>
+                <!-- end sidebar minify button -->
+            </ul>
+            <!-- end sidebar nav -->
+        </div>
+        <!-- end sidebar scrollbar -->
+    </div>
+    <div class="sidebar-bg"></div>
+    <!-- end #sidebar -->
+    <!-- begin #content -->
+    
+    <!-- begin #content -->
+    <div id="content" class="content content-full-width">
+        <div class="map">
+            <div id="map" class="height-full width-full"></div>
+            <input type="hidden" id="proyeccion" value="EPSG:4326"/>
+            <input type="hidden" id="extent" value="[-81.32812321186065, -18.350177324938613, -68.6519604921341, -0.039256808070482214]"/>
+            <input type="hidden" id="presicion_decimal" value="12"/>
+            <input type="hidden" id="key_bing_map" value="AhaJDO_bWhekq58C0nGLRkwJSMphRFDTYeccozENkqZTAAa1W0OgoaWmcgbPxatZ"/>
+            <input type="hidden" id="url" value="http://idesep.senamhi.gob.pe/geoserver/g_00_02/wms"/>
+            <input type="hidden" id="lyr" value="g_00_02:00_02_002_03_000_000_0000_00_00"/>
+            <input type="hidden" id="nomlyr" value="g_00_02:00_02_002_03_000_000_0000_00_00"/>
+            <input type="hidden" id="dominio" value="http://idesep.senamhi.gob.pe"/>
+            
+            
+            
+            
+            
+        </div>
+        <div id="nodelist" style="display:none" class="table-responsive"></div>
+    </div>
+    <!-- end #content -->
+    <!-- end #content -->
+    <!-- begin theme-panel -->
+    
+    <div class="theme-panel" style="margin-top: 80px"> <!-- <div class="theme-panel active" style="margin-top: 80px"> -->
+    <a href="javascript:;" data-click="theme-panel-expand" class="theme-collapse-btn"><i class="fa fa-cog"></i></a>
+    <div class="theme-panel-content">
+        <!--
+        <ul class="theme-list clearfix">
+            <li><a href="javascript:;" class="bg-purple" data-theme="purple" data-click="theme-selector" data-toggle="tooltip" data-trigger="hover" data-container="body">&nbsp;</a></li>
+            <li class="active"><a href="javascript:;" class="bg-blue" data-theme="default" data-click="theme-selector" data-toggle="tooltip" data-trigger="hover" data-container="body">&nbsp;</a></li>
+            <li><a href="javascript:;" class="bg-green" data-theme="green" data-click="theme-selector" data-toggle="tooltip" data-trigger="hover" data-container="body">&nbsp;</a></li>
+            <li><a href="javascript:;" class="bg-orange" data-theme="orange" data-click="theme-selector" data-toggle="tooltip" data-trigger="hover" data-container="body">&nbsp;</a></li>
+            <li><a href="javascript:;" class="bg-red" data-theme="red" data-click="theme-selector" data-toggle="tooltip" data-trigger="hover" data-container="body">&nbsp;</a></li>
+            <li><a href="javascript:;" class="bg-black" data-theme="black" data-click="theme-selector" data-toggle="tooltip" data-trigger="hover" data-container="body">&nbsp;</a></li>
+        </ul>
+        <div class="divider"></div>
+        -->
+        
+        <ul class="theme-list clearfix">
+            <li><a href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Metadato</a></li>
+        </ul>
+        
+        <div class="row m-t-10">
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-inverse overflow-hidden">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                        <a class="accordion-toggle accordion-toggle-styled" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                            <i class="fa fa-plus-circle pull-right"></i>
+                            Leyenda
+                        </a>
+                        </h3>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in"> <!--<div id="collapseOne" class="panel-collapse collapse">-->
+                    <div id="legend">
+                        
+                        
+                        
+                        
+                        <img src="http://idesep.senamhi.gob.pe/geoserver/g_00_02/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=g_00_02:00_02_002_03_000_000_0000_00_00">
+                        
+                        
+                    </div>
+                </div>
+                
+            </div>
+            <!--***-->
+            <!--
+            <div class="panel panel-inverse overflow-hidden">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                    <a class="accordion-toggle accordion-toggle-styled collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+                        <i class="fa fa-plus-circle pull-right"></i>
+                        Capas
+                    </a>
+                    </h3>
+                </div>
+                <div id="collapseFour" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#default-tab-1" data-toggle="tab">WMS</a></li>
+                            <li class=""><a href="#default-tab-2" data-toggle="tab">WMTS</a></li>
+                            <li class=""><a href="#default-tab-3" data-toggle="tab">Mapa Base</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade active in" id="default-tab-1">
+                                <h3 class="m-t-10"><i class="fa fa-cog"></i> Lorem ipsum dolor sit amet</h3>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                    Integer ac dui eu felis hendrerit lobortis. Phasellus elementum, nibh eget adipiscing porttitor,
+                                    est diam sagittis orci, a ornare nisi quam elementum tortor. Proin interdum ante porta est convallis
+                                    dapibus dictum in nibh. Aenean quis massa congue metus mollis fermentum eget et tellus.
+                                    Aenean tincidunt, mauris ut dignissim lacinia, nisi urna consectetur sapien, nec eleifend orci eros id lectus.
+                                </p>
+                                <p class="text-right m-b-0">
+                                    <a href="javascript:;" class="btn btn-white m-r-5">Default</a>
+                                    <a href="javascript:;" class="btn btn-primary">Primary</a>
+                                </p>
+                            </div>
+                            <div class="tab-pane fade" id="default-tab-2">
+                                <blockquote>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                    <small>Someone famous in <cite title="Source Title">Source Title</cite></small>
+                                </blockquote>
+                                <h4>Lorem ipsum dolor sit amet</h4>
+                                <p>
+                                    Nullam ac sapien justo. Nam augue mauris, malesuada non magna sed, feugiat blandit ligula.
+                                </p>
+                            </div>
+                            <div class="tab-pane fade" id="default-tab-3">
+                                <span class="fa-stack fa-4x pull-none m-r-10">
+                                    <i class="fa fa-square-o fa-stack-2x"></i>
+                                    <i class="fa fa-map fa-stack-1x"></i>
+                                </span>
+                                <br/>
+                                <div class="checkbox checkbox-css checkbox-success">
+                                    <input type="checkbox"  name="mapabase" id="mb1" value="mb1" />
+                                    <label for="mb1">
+                                        Natural Earth
+                                    </label>
+                                </div>
+                                <div class="checkbox checkbox-css checkbox-success">
+                                    <input type="checkbox" name="mapabase" id="mb2" value="mb2" />
+                                    <label for="mb2">
+                                        MapBox
+                                    </label>
+                                </div>
+                                <div class="checkbox checkbox-css checkbox-success">
+                                    <input type="checkbox" name="mapabase" id="mb3" value="mb3" />
+                                    <label for="mb3">
+                                        Bing Maps AerialWithLabels
+                                    </label>
+                                </div>
+                                <div class="checkbox checkbox-css">
+                                    <input type="checkbox" name="mapabase" id="mb4" value="mb4" checked />
+                                    <label for="mb4">
+                                        Bing Maps Road
+                                    </label>
+                                </div>
+                                <div class="checkbox checkbox-css checkbox-success">
+                                    <input type="checkbox" name="mapabase" id="mb5" value="mb5" />
+                                    <label for="mb5">
+                                        Bing Maps Aerial
+                                    </label>
+                                </div>
+                                <div class="checkbox checkbox-css checkbox-success">
+                                    <input type="checkbox" name="mapabase" id="mb6" value="mb6" />
+                                    <label for="mb6">
+                                        ArcGis
+                                    </label>
+                                </div>
+                                <div class="checkbox checkbox-css">
+                                    <input type="checkbox" name="mapabase" id="mb7" value="mb7" checked />
+                                    <label for="mb7">
+                                        OpenStreetMap
+                                    </label>
+                                </div>
+                                <div class="checkbox checkbox-css checkbox-success">
+                                    <input type="checkbox" name="mapabase" id="mb8" value="mb8" />
+                                    <label for="mb8">
+                                        Stamen Water color
+                                    </label>
+                                </div>
+                                <div class="checkbox checkbox-css checkbox-success">
+                                    <input type="checkbox" name="mapabase" id="mb9" value="mb9" />
+                                    <label for="mb9">
+                                        Stamen Toner
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-inverse overflow-hidden">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                    <a class="accordion-toggle accordion-toggle-styled collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                        <i class="fa fa-plus-circle pull-right"></i>
+                        Filtro
+                    </a>
+                    </h3>
+                </div>
+                <div id="collapseThree" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <select id="filterType" style="width: 100%">
+                            <option value="cql">CQL</option>
+                            <option value="ogc">OGC</option>
+                            <option value="fid">FeatureID</option>
+                        </select>
+                        <input type="text" id="filter"/>
+                        <a id="updateFilterButton" href="#" onClick="updateFilter()" title="Aplicar filtro">Aplicar</a>
+                        <a id="resetFilterButton" href="#" onClick="resetFilter()" title="Cancelar filtro">Cancelar</a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-inverse overflow-hidden">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                    <a class="accordion-toggle accordion-toggle-styled collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+                        <i class="fa fa-plus-circle pull-right"></i>
+                        Añadir Capa
+                    </a>
+                    </h3>
+                </div>
+                <div id="collapseFour" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#default-tab-1" data-toggle="tab">WMS</a></li>
+                            <li class=""><a href="#default-tab-2" data-toggle="tab">WMTS</a></li>
+                            <li class=""><a href="#default-tab-3" data-toggle="tab">KML</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade active in" id="default-tab-1">
+                                <h3 class="m-t-10"><i class="fa fa-cog"></i> Lorem ipsum dolor sit amet</h3>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                    Integer ac dui eu felis hendrerit lobortis. Phasellus elementum, nibh eget adipiscing porttitor,
+                                    est diam sagittis orci, a ornare nisi quam elementum tortor. Proin interdum ante porta est convallis
+                                    dapibus dictum in nibh. Aenean quis massa congue metus mollis fermentum eget et tellus.
+                                    Aenean tincidunt, mauris ut dignissim lacinia, nisi urna consectetur sapien, nec eleifend orci eros id lectus.
+                                </p>
+                                <p class="text-right m-b-0">
+                                    <a href="javascript:;" class="btn btn-white m-r-5">Default</a>
+                                    <a href="javascript:;" class="btn btn-primary">Primary</a>
+                                </p>
+                            </div>
+                            <div class="tab-pane fade" id="default-tab-2">
+                                <blockquote>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                    <small>Someone famous in <cite title="Source Title">Source Title</cite></small>
+                                </blockquote>
+                                <h4>Lorem ipsum dolor sit amet</h4>
+                                <p>
+                                    Nullam ac sapien justo. Nam augue mauris, malesuada non magna sed, feugiat blandit ligula.
+                                    In tristique tincidunt purus id iaculis. Pellentesque volutpat tortor a mauris convallis,
+                                    sit amet scelerisque lectus adipiscing.
+                                </p>
+                            </div>
+                            <div class="tab-pane fade" id="default-tab-3">
+                                <p>
+                                    <span class="fa-stack fa-4x pull-left m-r-10">
+                                        <i class="fa fa-square-o fa-stack-2x"></i>
+                                        <i class="fa fa-twitter fa-stack-1x"></i>
+                                    </span>
+                                    Praesent tincidunt nulla ut elit vestibulum viverra. Sed placerat magna eget eros accumsan elementum.
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam quis lobortis neque.
+                                    Maecenas justo odio, bibendum fringilla quam nec, commodo rutrum quam.
+                                    Donec cursus erat in lacus congue sodales. Nunc bibendum id augue sit amet placerat.
+                                    Quisque et quam id felis tempus volutpat at at diam. Vivamus ac diam turpis.Sed at lacinia augue.
+                                    Nulla facilisi. Fusce at erat suscipit, dapibus elit quis, luctus nulla.
+                                    Quisque adipiscing dui nec orci fermentum blandit.
+                                    Sed at lacinia augue. Nulla facilisi. Fusce at erat suscipit, dapibus elit quis, luctus nulla.
+                                    Quisque adipiscing dui nec orci fermentum blandit.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            -->
+            <!--***-->
+        </div>
+    </div>
+</div>
+</div>
+<!--
+<div class="theme-panel">
+<a href="javascript:;" data-click="theme-panel-expand" class="theme-collapse-btn"><i class="fa fa-cog"></i></a>
+<div class="theme-panel-content">
+    <h5 class="m-t-0">Color Theme</h5>
+    <ul class="theme-list clearfix">
+        <li class="active"><a href="javascript:;" class="bg-green" data-theme="default" data-click="theme-selector" data-toggle="tooltip" data-trigger="hover" data-container="body" data-title="Default">&nbsp;</a></li>
+        <li><a href="javascript:;" class="bg-red" data-theme="red" data-click="theme-selector" data-toggle="tooltip" data-trigger="hover" data-container="body" data-title="Red">&nbsp;</a></li>
+        <li><a href="javascript:;" class="bg-blue" data-theme="blue" data-click="theme-selector" data-toggle="tooltip" data-trigger="hover" data-container="body" data-title="Blue">&nbsp;</a></li>
+        <li><a href="javascript:;" class="bg-purple" data-theme="purple" data-click="theme-selector" data-toggle="tooltip" data-trigger="hover" data-container="body" data-title="Purple">&nbsp;</a></li>
+        <li><a href="javascript:;" class="bg-orange" data-theme="orange" data-click="theme-selector" data-toggle="tooltip" data-trigger="hover" data-container="body" data-title="Orange">&nbsp;</a></li>
+        <li><a href="javascript:;" class="bg-black" data-theme="black" data-click="theme-selector" data-toggle="tooltip" data-trigger="hover" data-container="body" data-title="Black">&nbsp;</a></li>
+    </ul>
+    <div class="divider"></div>
+    <div class="row m-t-10">
+        <div class="col-md-5 control-label double-line">Header Styling</div>
+        <div class="col-md-7">
+            <select name="header-styling" class="form-control input-sm">
+                <option value="1">default</option>
+                <option value="2">inverse</option>
+            </select>
+        </div>
+    </div>
+    <div class="row m-t-10">
+        <div class="col-md-5 control-label">Header</div>
+        <div class="col-md-7">
+            <select name="header-fixed" class="form-control input-sm">
+                <option value="1">fixed</option>
+                <option value="2">default</option>
+            </select>
+        </div>
+    </div>
+    <div class="row m-t-10">
+        <div class="col-md-5 control-label double-line">Sidebar Styling</div>
+        <div class="col-md-7">
+            <select name="sidebar-styling" class="form-control input-sm">
+                <option value="1">default</option>
+                <option value="2">grid</option>
+            </select>
+        </div>
+    </div>
+    <div class="row m-t-10">
+        <div class="col-md-5 control-label">Sidebar</div>
+        <div class="col-md-7">
+            <select name="sidebar-fixed" class="form-control input-sm">
+                <option value="1">fixed</option>
+                <option value="2">default</option>
+            </select>
+        </div>
+    </div>
+    <div class="row m-t-10">
+        <div class="col-md-5 control-label double-line">Sidebar Gradient</div>
+        <div class="col-md-7">
+            <select name="content-gradient" class="form-control input-sm">
+                <option value="1">disabled</option>
+                <option value="2">enabled</option>
+            </select>
+        </div>
+    </div>
+    <div class="row m-t-10">
+        <div class="col-md-5 control-label double-line">Content Styling</div>
+        <div class="col-md-7">
+            <select name="content-styling" class="form-control input-sm">
+                <option value="1">default</option>
+                <option value="2">black</option>
+            </select>
+        </div>
+    </div>
+    <div class="row m-t-10">
+        <div class="col-md-12">
+            <a href="#" class="btn btn-inverse btn-block btn-sm" data-click="reset-local-storage"><i class="fa fa-refresh m-r-3"></i> Reset Local Storage</a>
+        </div>
+    </div>
+</div>
+</div>
+-->
+<!-- end theme-panel -->
+<!-- begin scroll to top btn -->
+
+<a href="javascript:;" class="btn btn-icon btn-circle btn-success btn-scroll-to-top fade" data-click="scroll-top"><i class="fa fa-angle-up"></i></a>
+<!-- end scroll to top btn -->
+</div>
+<!-- end page container -->
+<!-- ================== BEGIN BASE JS ================== -->
+
+<!-- ================== BEGIN BASE JS ================== -->
+<script src="assets/plugins/jquery/jquery-1.9.1.min.js"></script>
+<script src="assets/plugins/jquery/jquery-migrate-1.1.0.min.js"></script>
+<script src="assets/plugins/jquery-ui/ui/minified/jquery-ui.min.js"></script>
+<script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<!--[if lt IE 9]>
+<script src="assets/crossbrowserjs/html5shiv.js"></script>
+<script src="assets/crossbrowserjs/respond.min.js"></script>
+<script src="assets/crossbrowserjs/excanvas.min.js"></script>
+<![endif]-->
+<script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="assets/plugins/jquery-cookie/jquery.cookie.js"></script>
+<!-- ================== END BASE JS ================== -->
+<!-- ================== END BASE JS ================== -->
+<!-- ================== BEGIN PAGE LEVEL JS ================== -->
+<script src="assets/js/apps.min.js"></script>
+<script src="assets/js/map-ol3.min.js"></script>
+<!-- ================== END PAGE LEVEL JS ==================== -->
+<script>
+$(document).ready(function () {
+App.init();
+//variable iniciales
+var proyeccion = $("#proyeccion").val();
+var extent = JSON.parse($("#extent").val());
+var presicionDecimal = $("#presicion_decimal").val();
+var wmsCurrent = $("#url").val();
+var layerCurrent = $("#lyr").val();
+var layerCurrentTitle = $("#nomlyr").val();//$("#titulo_tematico").val().toUpperCase();
+var wmsMapaBase = $("#url").val();
+var keyBingMap = $("#key_bing_map").val();
+var dominio = $("#dominio").val();
+MapOpenLayer.init(proyeccion, extent, presicionDecimal, wmsCurrent, layerCurrent, layerCurrentTitle, wmsMapaBase, keyBingMap, dominio);
+});
+</script>
+</body>
+</html>

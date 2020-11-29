@@ -1,0 +1,206 @@
+/* 
+    Created on : 15/09/2016, 09:32:44 AM
+    Author     : Antero Matos Zabarburu
+*/
+
+/**
+ * MousePosition
+ */
+.ol-mouse-position {
+    top: auto;
+    bottom: 2em;
+    background: #275DA4;
+    color: white;
+    opacity: 0.5;
+    filter: alpha(opacity=50); /* For IE8 and earlier */
+    z-index: 99998;
+}
+div.btn-group{
+    margin-left: 60px;
+}
+
+button.ol-full-screen, button.ol-full-screen:hover{
+    z-index: 99999;
+    background-color: transparent;
+    top: auto; 
+    bottom: 1em;    /*bottom: 4em;*/
+}
+
+.ol-mouse-position {
+    top: auto;
+    bottom: 0.5em;
+    margin-right: 53px;
+}
+
+
+/*
+.ol-full-screen, .ol-full-screen:hover{
+    z-index: 99999;
+    background-color: transparent;
+    padding-top: 20px;
+}
+*/
+/*
+button.ol-zoom-in{
+    margin-top: 90px;
+}
+
+button.ol-zoom-out{
+    margin-top: 2px;
+}
+*/
+.ol-zoom-extent{
+    margin-top: 220px;
+}
+.ol-unselectable.ol-layerswitcher{
+    top: auto; 
+    bottom: 5em;   /*bottom: 30em;*/
+    background: transparent;
+    opacity: 0.8;
+    filter: alpha(opacity=80); /* For IE8 and earlier */
+    z-index: 99997;
+}
+
+/*
+.ol-overviewmap{
+    margin-bottom: 30px;
+}
+*/
+
+
+.ol-popup {
+    position: absolute;
+    background-color: #2d353c;/*white;*/
+    -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+    filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #cccccc;
+    bottom: 12px;
+    left: -50px;
+    opacity: 0.9;
+    filter: alpha(opacity=90); /* For IE8 and earlier */
+}
+.ol-popup:after, .ol-popup:before {
+    top: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+.ol-popup:after {
+    border-top-color: white;
+    border-width: 10px;
+    left: 48px;
+    margin-left: -10px;
+}
+.ol-popup:before {
+    border-top-color: #cccccc;
+    border-width: 11px;
+    left: 48px;
+    margin-left: -11px;
+}
+.ol-popup-content {
+    position: relative;
+    min-width: 300px;
+    min-height: 150px;
+    height: 100%;
+    max-height: 300px;
+    padding:2px;
+    white-space: normal;        
+    background-color: #f7f7f9;
+    border: 1px solid #e1e1e8;
+    overflow-y: auto!important;
+    overflow-x: auto!important;    
+}
+
+@media screen and (max-width:960px) {
+    .ol-popup-content {
+        overflow-x: scroll!important;
+        overflow-y: scroll!important;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+.ol-popup-content p{
+    font-size: 14px;
+    padding: 2px 4px;
+    color: #222;
+    margin-bottom: 15px;
+}
+.ol-popup-closer {
+    position: absolute;
+    top: -4px;
+    right: 2px;
+    font-size: 100%;
+    color: #0088cc;
+    text-decoration: none;
+}
+a.ol-popup-closer:hover{
+    color: #005580;
+    text-decoration: underline;
+}
+.ol-popup-closer:after {
+    content: "âœ–";
+}
+
+
+
+@media screen and (max-width:320px) {
+    .logo_completo{
+        display: none;
+    }
+    .logo_incompleto{
+        display: inline-block;
+    }
+}
+@media screen and (min-width:320px) and (max-width:640px) {
+    .logo_completo{
+        display: none;
+    }
+    .logo_incompleto{
+        display: inline-block;
+    }
+}
+@media screen and (min-width:640px) and (max-width:960px) {
+    .logo_completo{
+        display: inline-block;
+    }
+    .logo_incompleto{
+        display: none;
+    }
+}
+@media screen and (min-width:960px) and (max-width:1280px) {
+    .logo_completo{
+        display: inline-block;
+    }
+    .logo_incompleto{
+        display: none;
+    }
+}
+@media screen and (min-width:1280px) and (max-width:1600px) {
+    .logo_completo{
+        display: inline-block;
+    }
+    .logo_incompleto{
+        display: none;
+    }
+}
+@media screen and (min-width:1600px) {
+    .logo_completo{
+        display: inline-block;
+    }
+    .logo_incompleto{
+        display: none;
+    }
+}
+@media screen and (min-width:1920px) {
+    .logo_completo{
+        display: inline-block;
+    }
+    .logo_incompleto{
+        display: none;
+    }
+}
