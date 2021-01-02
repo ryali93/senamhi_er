@@ -87,3 +87,18 @@ Website: http://www.seantheme.com/color-admin-v2.0/admin/html/
 .top-menu .nav > li.active > a:hover {
     background: #348fe2;
 }
+
+.sidepanel_n {
+    background: #1F6B75;
+    width: 20%;
+    height: 100%;
+    float: left;
+}
+
+.sidepanel_n-title {
+    width: 100%;
+    font-size: 3em;
+    color: #ffffff;
+    display: block;
+    text-align: center;
+}
