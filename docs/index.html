@@ -40,6 +40,9 @@
     <link type="text/css" rel="stylesheet" href="assets/plugins/openlayer/ol3/3.17.1/css/ol.css">
     <script type="text/javascript" src="assets/plugins/openlayer/ol3/3.17.1/js/ol.js"></script>
     <script type="text/javascript" src="assets/plugins/openlayer/src/proj4js/proj4.js"></script>
+    <!-- <script type="text/javascript" src="https://unpkg.com/elm-pep.js"></script> -->
+    <script type="text/javascript" src="getfeatureinfo-image.js"></script>
+
     <!--
     <link type="text/css" rel="stylesheet" href="assets/plugins/openlayer/src/ol3-layerswitcher/ol3-layerswitcher.css"/>
     <script type="text/javascript" src="assets/plugins/openlayer/src/ol3-layerswitcher/ol3-layerswitcher.js"></script>
@@ -50,10 +53,12 @@
     <script type="text/javascript" src="assets/plugins/openlayer/canvas/interaction/clipinteraction.js"></script>
     <link type="text/css" rel="stylesheet" href="assets/plugins/openlayer/src/ol3-popup-master/src/ol3-popup.css">
     <script type="text/javascript" src="assets/plugins/openlayer/src/ol3-popup-master/src/ol3-popup.js"></script>
+    <script type="text/javascript" src="assets/data.json"></script>
+    <script type="text/javascript" src="assets/q_pp.json"></script>
     <!-- ================== END OL3 ================== -->
     <!-- Swipe -->
-    <link rel="stylesheet" href="http://viglino.github.io/ol3-ext/control/swipecontrol.css" type="text/css" />
-    <script type="text/javascript" src="http://viglino.github.io/ol3-ext/control/swipecontrol.js"></script>
+    <!-- <link rel="stylesheet" href="http://viglino.github.io/ol3-ext/control/swipecontrol.css" type="text/css" />
+    <script type="text/javascript" src="http://viglino.github.io/ol3-ext/control/swipecontrol.js"></script> -->
     <!-- ================== BEGIN PAGE LEVEL CSS ================== -->
     <link type="text/css" rel="stylesheet" href="assets/css/styleSheet1.css">
     <!-- ================== END PAGE LEVEL CSS ==================== -->
@@ -204,8 +209,8 @@
                     <ul role="tablist">
                         <li><a href="#lluvias" role="tab"><i class="fa fa-bars"></i></a></li>
                         <li><a href="#lluvias_graficos" role="tab"><i class="fa fa-user"></i></a></li>
-                        <li class="disabled"><a href="#messages" role="tab"><i class="fa fa-envelope"></i></a></li>
-                        <li><a href="https://github.com/ryali93/senamhi_er" role="tab" target="_blank"><i class="fa fa-github"></i></a></li>
+                        <!-- <li class="disabled"><a href="#messages" role="tab"><i class="fa fa-envelope"></i></a></li> -->
+                        <!-- <li><a href="https://github.com/ryali93/senamhi_er" role="tab" target="_blank"><i class="fa fa-github"></i></a></li> -->
                     </ul>
                     <ul role="tablist">
                         <li><a href="#settings" role="tab"><i class="fa fa-gear"></i></a></li>
@@ -218,30 +223,64 @@
                         <!-- <p>A responsive sidebar_ol for mapping libraries like <a href="http://leafletjs.com/">Leaflet</a> or <a href="http://openlayers.org/">OpenLayers</a>.</p>
                         <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p> -->
                         <br>
+                        <br>
+                        <p>Retornar a la <b><a href="/">página principal</a></b></p>
+                        <b>Consultar el <a href="/">manual de uso</a></b>
+                        <br>
+                        <br>
                         <div id="info">&nbsp;</div>
-                        <br>
-                        <p>Return to the <b><a href="/">homepage</a></b></p>
-                        <b>Draw a rectangle or select a default area</b>
-                        <br>
-                        <br>
-                        <select name="select" id="select">
-                            <option value ="none">none</option>
-                            <option value ="baumgarten">Baumgarten</option>
-                            <option value ="jedenspeigen">Jedenspeigen</option>
-                            <option value ="droesing">Droesing</option>
-                            <option value ="hohenau">Hohenau</option>
-                            <option value ="rabensburg">Rabensburg</option>
-                            <option value ="duernkrut">Duernkrut</option>
-                            <option value ="stillfried">Stillfried</option>
-                            <option value ="marchegg">Marchegg</option>
-                            <option value ="angern">Angern</option>
-                        </select> <br>
+                        <!-- <pre id="info"/> -->
 
-                            <div id="control_aoi" onclick="sendbbox()"><br>
-                                    <input class="button is-primary" type="submit" value='Generate AOI'>
-                            </div>
+                        
+                        <!-- <div id="container"></div> -->
+                        <b>Seleccionar Quantil:</b>
+                        <br>
+                        <select id="select_quantil" style="width: 70%;">
+                            <option value="Q1">Quantil 1</option>
+                            <option value="Q2">Quantil 2</option>
+                            <option value="Q3">Quantil 3</option>
+                            <option value="Q4">Quantil 4</option>
+                        </select>
+                        <br><br>
+                        <b>Seleccionar Percentil:</b>
+                        <br>
+                        <select id="select_percentil" style="width: 70%;">
+                            <option value="P10">Percentil 10</option>
+                            <option value="P50">Percentil 50</option>
+                            <option value="P90">Percentil 90</option>
+                        </select>
+                        <br><br>
 
-                        <form method="post">
+                        <b>Seleccionar Periodo de Retorno (TR):</b>
+                        <br>
+                        <select id="select_tr" style="width: 70%;">
+                            <option value="LM_TR2">TR 2</option>
+                            <option value="LM_TR5">TR 5</option>
+                            <option value="LM_TR10">TR 10</option>
+                            <option value="LM_TR30">TR 30</option>
+                            <option value="LM_TR50">TR 50</option>
+                            <option value="LM_TR75">TR 75</option>
+                            <option value="LM_TR100">TR 100</option>
+                            <option value="LM_TR200">TR 200</option>
+                            <option value="LM_TR500">TR 500</option>
+                            <option value="LM_TR1000">TR 1000</option>
+                        </select>
+                        <br><br>
+
+                        <div><button id="generate" onclick="generar_tb_pp()">Generate</button></div>
+                        <!-- <div id="sendbbox"></div> -->
+                        <!-- <div id="control_aoi" onclick="sendbbox()"><br>
+                                <input class="button is-primary" type="submit" value='Generar Tabla'>
+                        </div> -->
+
+                        <br><br>
+
+                        <div id="tabla_datos"></div>
+                        <br>
+                        <button onclick="exportTableToExcel('tabla_datos')">Exportar a Excel</button>
+
+
+                        <!-- <form method="post">
                             <label for="fname">xmin:</label><br>
                             <input type="text" id="xmin" name="xmin"><br>
                             <label for="lname">ymin:</label><br>
@@ -264,7 +303,7 @@
                             <b><label for="fname">Waterlogging threshold model:</label></b><br><br>
                             <input type="text" id="threshold" name="threshold" value = "1.30"><br><br>
                             <input type="submit" name="action" value="display">
-                            <input type="submit" name="action" value="download">
+                            <input type="submit" name="action" value="download"> -->
 
 
                     </div>
@@ -343,6 +382,7 @@
 <script src="assets/js/apps.min.js"></script>
 <script src="assets/js/map-ol3.min.js"></script>
 <script src="assets/js/ol3-sidebar.js"></script>
+<script src="assets/js/elm-pep.js"></script>
 <!-- ================== END PAGE LEVEL JS ==================== -->
 <script>
     $(document).ready(function () {
@@ -363,7 +403,70 @@
 
 
 <script>
-    
+    var data_regiones = JSON.parse(datos_regiones)[0];
+    console.log(data_regiones);
+
+    var q_pp = JSON.parse(quantiles_pp);
+    var trs = q_pp["features"][0]["properties"];
+    console.log(trs);
+
+    var generar_tb_pp = function() {
+
+        var region = "A1";//document.getElementById('select_quantil').value;
+        var quantil = document.getElementById('select_quantil').value;
+        var percentil = document.getElementById('select_percentil').value;
+        var tr = document.getElementById('select_tr').value;
+        var val_temp;
+
+        console.log(trs[tr]);
+
+        console.log(data_regiones["A1"][quantil][percentil]);
+
+        var tabla_datos = "<table border=1 width=80%>";
+        tabla_datos += "<tr><th align=center>Horas</th><th align=center>"+percentil+"</th><th align=center>PP</th><th align=center>"+trs[tr].toFixed(2)+"</th></tr>"
+        for(j=0;j<=23;j++){
+            var n = j+1
+            // console.log(q_pp[tr])
+            var val_pp = data_regiones["A1"][quantil][percentil];
+            var val_hiet = (val_pp[j]*trs[tr]).toFixed(2);
+            if(n==1){
+                val_temp = val_hiet
+            }else{
+                val_temp = val_pp[j]*trs[tr] - val_pp[j-1]*trs[tr]
+            };
+            console.log(val_temp);
+            tabla_datos += "<tr><td align=center>"+n+"</td><td align=center>"+ val_pp[j] +"</td><td align=center>"+val_hiet+"</td><td align=center>"+parseFloat(val_temp).toFixed(2)+"</td></tr>";
+            // val_temp = parseFloat(val_hiet) - val_temp
+        }
+        tabla_datos += "</table>";
+        document.getElementById("tabla_datos").innerHTML = tabla_datos;
+
+    }
+
+    var exportTableToExcel = function(tableID, filename = ''){
+        var downloadLink;
+        var dataType = 'application/vnd.ms-excel';
+        var tableSelect = document.getElementById(tableID);
+        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+        
+        filename = filename?filename+'.xls':'excel_data.xls';
+        downloadLink = document.createElement("a");
+        
+        document.body.appendChild(downloadLink);
+        
+        if(navigator.msSaveOrOpenBlob){
+            var blob = new Blob(['\ufeff', tableHTML], {
+                type: dataType
+            });
+            navigator.msSaveOrOpenBlob( blob, filename);
+        }else{
+            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+            downloadLink.download = filename;
+            downloadLink.click();
+        }
+    }
+
+
 </script>>
 </body>
 </html>

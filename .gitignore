@@ -1,3 +1,5 @@
 mockup.png
 *.mkv
 template.png
+/geoserver
+/static
