@@ -1,9 +1,4 @@
 <!DOCTYPE html>
-<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
-<!--[if IE 7 ]> <html lang="en" class="no-js ie7"> <![endif]-->
-<!--[if IE 8 ]> <html lang="en" class="no-js ie8"> <![endif]-->
-<!--[if IE 9 ]> <html lang="en" class="no-js ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!-->
 <html lang="en" class="no-js"><!--<![endif]-->
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -53,8 +48,12 @@
     <script type="text/javascript" src="assets/plugins/openlayer/canvas/interaction/clipinteraction.js"></script>
     <link type="text/css" rel="stylesheet" href="assets/plugins/openlayer/src/ol3-popup-master/src/ol3-popup.css">
     <script type="text/javascript" src="assets/plugins/openlayer/src/ol3-popup-master/src/ol3-popup.js"></script>
+
     <script type="text/javascript" src="assets/data.json"></script>
     <script type="text/javascript" src="assets/q_pp.json"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
     <!-- ================== END OL3 ================== -->
     <!-- Swipe -->
     <!-- <link rel="stylesheet" href="http://viglino.github.io/ol3-ext/control/swipecontrol.css" type="text/css" />
@@ -208,9 +207,7 @@
                 <div class="sidebar_ol-tabs">
                     <ul role="tablist">
                         <li><a href="#lluvias" role="tab"><i class="fa fa-bars"></i></a></li>
-                        <li><a href="#lluvias_graficos" role="tab"><i class="fa fa-user"></i></a></li>
-                        <!-- <li class="disabled"><a href="#messages" role="tab"><i class="fa fa-envelope"></i></a></li> -->
-                        <!-- <li><a href="https://github.com/ryali93/senamhi_er" role="tab" target="_blank"><i class="fa fa-github"></i></a></li> -->
+                        <li><a href="#lluvias_graficos" role="tab"><i class="fa fa-bar-chart"></i></a></li>
                     </ul>
                     <ul role="tablist">
                         <li><a href="#settings" role="tab"><i class="fa fa-gear"></i></a></li>
@@ -220,8 +217,6 @@
                     <div class="sidebar_ol-pane" id="lluvias">
                         <h1 class="sidebar_ol-header">Módulo de Lluvias extremas<span class="sidebar_ol-close"><i class="fa fa-caret-left"></i></span></h1>
                         
-                        <!-- <p>A responsive sidebar_ol for mapping libraries like <a href="http://leafletjs.com/">Leaflet</a> or <a href="http://openlayers.org/">OpenLayers</a>.</p>
-                        <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p> -->
                         <br>
                         <br>
                         <p>Retornar a la <b><a href="/">página principal</a></b></p>
@@ -279,37 +274,16 @@
                         <br>
                         <button onclick="exportTableToExcel('tabla_datos')">Exportar a Excel</button>
 
+                    </div>
+                    <div class="sidebar_ol-pane" id="lluvias_graficos"><h1 class="sidebar_ol-header">Gráficos<span class="sidebar_ol-close"><i class="fa fa-caret-left"></i></span></h1>
 
-                        <!-- <form method="post">
-                            <label for="fname">xmin:</label><br>
-                            <input type="text" id="xmin" name="xmin"><br>
-                            <label for="lname">ymin:</label><br>
-                            <input type="text" id="ymin" name="ymin"><br>
-                            <label for="lname">xmax:</label><br>
-                            <input type="text" id="xmax" name="xmax"><br>
-                            <label for="lname">ymax:</label><br>
-                            <input type="text" id="ymax" name="ymax"><br><br>
-
-                            <b> Range base dates </b> <br><br>
-
-                            <input type="date" id="init_start" name="init_start" value="2020-10-10" min="2014-01-01"> -
-                            <input type="date" id="init_last" name="init_last" value="2020-10-16" min="2014-01-01"><br><br>
-
-                            <b> Range waterlogging dates </b> <br><br>
-
-                            <input type="date" id="flood_start" name="flood_start" value="2020-10-16" min="2014-01-01"> -
-                            <input type="date" id="flood_last" name="flood_last" value="2020-10-25" min="2014-01-01"><br><br>
-
-                            <b><label for="fname">Waterlogging threshold model:</label></b><br><br>
-                            <input type="text" id="threshold" name="threshold" value = "1.30"><br><br>
-                            <input type="submit" name="action" value="display">
-                            <input type="submit" name="action" value="download"> -->
-
+                        <br><br>
+                        <button class="btn btn-primary btn-lg" id="render_btn">Generar gráfico</button>
+                        <canvas id="graph_ddf" width="400" height="400"></canvas>
 
                     </div>
-                    <div class="sidebar_ol-pane" id="lluvias_graficos"><h1 class="sidebar_ol-header">Profile<span class="sidebar_ol-close"><i class="fa fa-caret-left"></i></span></h1></div>
-                    <div class="sidebar_ol-pane" id="messages"><h1 class="sidebar_ol-header">Messages<span class="sidebar_ol-close"><i class="fa fa-caret-left"></i></span></h1></div>
-                    <div class="sidebar_ol-pane" id="settings"><h1 class="sidebar_ol-header">Settings<span class="sidebar_ol-close"><i class="fa fa-caret-left"></i></span></h1></div>
+                    <!-- <div class="sidebar_ol-pane" id="messages"><h1 class="sidebar_ol-header">Messages<span class="sidebar_ol-close"><i class="fa fa-caret-left"></i></span></h1></div>
+                    <div class="sidebar_ol-pane" id="settings"><h1 class="sidebar_ol-header">Settings<span class="sidebar_ol-close"><i class="fa fa-caret-left"></i></span></h1></div> -->
                 </div>
             </div>
 
@@ -411,7 +385,6 @@
     console.log(trs);
 
     var generar_tb_pp = function() {
-
         var region = "A1";//document.getElementById('select_quantil').value;
         var quantil = document.getElementById('select_quantil').value;
         var percentil = document.getElementById('select_percentil').value;
@@ -419,7 +392,6 @@
         var val_temp;
 
         console.log(trs[tr]);
-
         console.log(data_regiones["A1"][quantil][percentil]);
 
         var tabla_datos = "<table border=1 width=80%>";
@@ -465,8 +437,106 @@
             downloadLink.click();
         }
     }
+</script>
+<script>
+    var create_graph = function() {
+        var region = "S3";//document.getElementById('select_quantil').value;
+        var quantil = document.getElementById('select_quantil').value;
+        var percentil = document.getElementById('select_percentil').value;
+        var tr = document.getElementById('select_tr').value;
+        var val_temp;
 
+        var graph = document.getElementById("graph_ddf");
+        var q_pp = JSON.parse(quantiles_pp);
 
-</script>>
+        var trs = q_pp["features"][0]["properties"];
+        var val_pp = data_regiones[region][quantil][percentil];
+        
+        var lista_horas = [];
+        var lista_perc = [];
+        var lista_hiet = [];
+        var lista_pp = [];
+
+        for(j=0;j<=23;j++){
+                var n = j+1;
+                lista_horas.push(String(n));
+                var val_hiet = (val_pp[j]*trs[tr]).toFixed(2);
+                if(n==1){
+                    val_temp = val_hiet;
+                }else{
+                    val_temp = val_pp[j]*trs[tr] - val_pp[j-1]*trs[tr];
+                };
+                lista_pp.push(val_temp);
+            };
+
+        Chart.defaults.global.defaultFontFamily = "Lato";
+        Chart.defaults.global.defaultFontSize = 12;
+
+        var dataFirst = {
+            label: "Hietograma de tormenta",
+            data: lista_pp,
+            lineTension: 0,
+            fill: false,
+            backgroundColor: "#3e95cd"
+          };
+
+        var chartData = {
+            labels: lista_horas,
+            datasets: [dataFirst]
+        };
+
+        // var chartOptions = {
+        //   legend: {
+        //     display: true,
+        //     position: 'top',
+        //     labels: {
+        //       boxWidth: 80,
+        //       fontColor: 'black'
+        //     }
+        //   }
+        // };
+
+        var chartOptions = {
+          scales: {
+            xAxes: [{
+              barPercentage: 1,
+              categoryPercentage: 0.6,
+              scaleLabel: {
+                display: true,
+                labelString: "Tiempo (Horas)"
+              }
+            }],
+            yAxes: [{
+              id: "y-axis-density",
+              scaleLabel: {
+                display: true,
+                labelString: "Precipitación (mm)"
+              }
+            }]
+          }
+        };
+
+        const ctx = document.getElementById("graph_ddf").getContext('2d');
+
+        var lineChart = new Chart(graph, {
+          type: 'bar',
+          data: chartData,
+          options: chartOptions
+        });
+    };
+
+    $(document).ready(function() {
+      $("#render_btn").on("click", function(e) {
+        e.preventDefault();
+        create_graph();
+        // console.log(chartData);
+
+        // graph_ddf.data = chartData;
+        graph_ddf.update();
+
+      });
+    });
+    
+</script>
 </body>
 </html>
