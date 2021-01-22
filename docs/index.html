@@ -223,7 +223,7 @@
                         <b>Consultar el <a href="/">manual de uso</a></b>
                         <br>
                         <br>
-                        <div id="info">&nbsp;</div>
+                        <p id="info"></p>
                         <!-- <pre id="info"/> -->
 
                         
@@ -485,22 +485,10 @@
             datasets: [dataFirst]
         };
 
-        // var chartOptions = {
-        //   legend: {
-        //     display: true,
-        //     position: 'top',
-        //     labels: {
-        //       boxWidth: 80,
-        //       fontColor: 'black'
-        //     }
-        //   }
-        // };
-
         var chartOptions = {
           scales: {
             xAxes: [{
               barPercentage: 1,
-              categoryPercentage: 0.6,
               scaleLabel: {
                 display: true,
                 labelString: "Tiempo (Horas)"
