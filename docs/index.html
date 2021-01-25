@@ -225,8 +225,8 @@
                         <br>
                         <div style="width: 100%;display: flex;">
                             <div style="width: 50%;">
-                                <b>Subregion: </b><p id="infoRaster"></p>
-                                <b>PP Máxima: </b><p id="infoVector"></p>
+                                <p id="infoVector"><b>Subregión: </b></p>
+                                <p id="infoRaster"><b>PP Máxima: </b></p>
                             </div>
                             <div style="width: 50%;">
                                 <p id="coord_x"><b>X (wgs84): </b></p>
@@ -395,26 +395,28 @@
     console.log(trs);
 
     var generar_tb_pp = function() {
-        var region = "A1";//document.getElementById('select_quantil').value;
+        // var region = "A1";//document.getElementById('select_quantil').value;
+        var region = document.getElementById("infoVector").innerText;
+        var trs_tr = parseFloat(document.getElementById("infoRaster").innerText);
         var quantil = document.getElementById('select_quantil').value;
         var percentil = document.getElementById('select_percentil').value;
         var tr = document.getElementById('select_tr').value;
         var val_temp;
 
-        console.log(trs[tr]);
-        console.log(data_regiones["A1"][quantil][percentil]);
+        console.log(trs_tr);
+        console.log(data_regiones[region][quantil][percentil]);
 
         var tabla_datos = "<table border=1 width=80%>";
-        tabla_datos += "<tr><th align=center>Horas</th><th align=center>"+percentil+"</th><th align=center>PP</th><th align=center>"+trs[tr].toFixed(2)+"</th></tr>"
+        tabla_datos += "<tr><th align=center>Horas</th><th align=center>"+percentil+"</th><th align=center>PP</th><th align=center>"+trs_tr.toFixed(2)+"</th></tr>";
         for(j=0;j<=23;j++){
             var n = j+1
             // console.log(q_pp[tr])
-            var val_pp = data_regiones["A1"][quantil][percentil];
-            var val_hiet = (val_pp[j]*trs[tr]).toFixed(2);
+            var val_pp = data_regiones[region][quantil][percentil];
+            var val_hiet = (val_pp[j]*trs_tr).toFixed(2);
             if(n==1){
                 val_temp = val_hiet
             }else{
-                val_temp = val_pp[j]*trs[tr] - val_pp[j-1]*trs[tr]
+                val_temp = val_pp[j]*trs_tr - val_pp[j-1]*trs_tr
             };
             console.log(val_temp);
             tabla_datos += "<tr><td align=center>"+n+"</td><td align=center>"+ val_pp[j] +"</td><td align=center>"+val_hiet+"</td><td align=center>"+parseFloat(val_temp).toFixed(2)+"</td></tr>";
@@ -450,7 +452,10 @@
 </script>
 <script>
     var create_graph = function() {
-        var region = "S3";//document.getElementById('select_quantil').value;
+        // var region = "S3";//document.getElementById('select_quantil').value;
+        var region = document.getElementById("infoVector").innerText;
+        var trs_tr = parseFloat(document.getElementById("infoRaster").innerText);
+
         var quantil = document.getElementById('select_quantil').value;
         var percentil = document.getElementById('select_percentil').value;
         var tr = document.getElementById('select_tr').value;
@@ -470,11 +475,11 @@
         for(j=0;j<=23;j++){
                 var n = j+1;
                 lista_horas.push(String(n));
-                var val_hiet = (val_pp[j]*trs[tr]).toFixed(2);
+                var val_hiet = (val_pp[j]*trs_tr).toFixed(2);
                 if(n==1){
                     val_temp = val_hiet;
                 }else{
-                    val_temp = val_pp[j]*trs[tr] - val_pp[j-1]*trs[tr];
+                    val_temp = val_pp[j]*trs_tr - val_pp[j-1]*trs_tr;
                 };
                 lista_pp.push(val_temp);
             };
