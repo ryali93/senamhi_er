@@ -397,7 +397,7 @@
     var generar_tb_pp = function() {
         // var region = "A1";//document.getElementById('select_quantil').value;
         var region = document.getElementById("infoVector").innerText.replace("Subregión: ","");
-        var trs_tr = parseFloat(document.getElementById("infoRaster").innerText);
+        var trs_tr = parseFloat(document.getElementById("infoRaster").innerText.replace("PP Máxima: ", ""));
         var quantil = document.getElementById('select_quantil').value;
         var percentil = document.getElementById('select_percentil').value;
         var tr = document.getElementById('select_tr').value;
@@ -454,7 +454,7 @@
     var create_graph = function() {
         // var region = "S3";//document.getElementById('select_quantil').value;
         var region = document.getElementById("infoVector").innerText.replace("Subregión: ","");
-        var trs_tr = parseFloat(document.getElementById("infoRaster").innerText);
+        var trs_tr = parseFloat(document.getElementById("infoRaster").innerText.replace("PP Máxima: ", ""));
 
         var quantil = document.getElementById('select_quantil').value;
         var percentil = document.getElementById('select_percentil').value;
