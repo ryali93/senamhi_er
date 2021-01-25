@@ -396,7 +396,7 @@
 
     var generar_tb_pp = function() {
         // var region = "A1";//document.getElementById('select_quantil').value;
-        var region = document.getElementById("infoVector").innerText;
+        var region = document.getElementById("infoVector").innerText.replace("Subregión: ","");
         var trs_tr = parseFloat(document.getElementById("infoRaster").innerText);
         var quantil = document.getElementById('select_quantil').value;
         var percentil = document.getElementById('select_percentil').value;
@@ -453,7 +453,7 @@
 <script>
     var create_graph = function() {
         // var region = "S3";//document.getElementById('select_quantil').value;
-        var region = document.getElementById("infoVector").innerText;
+        var region = document.getElementById("infoVector").innerText.replace("Subregión: ","");
         var trs_tr = parseFloat(document.getElementById("infoRaster").innerText);
 
         var quantil = document.getElementById('select_quantil').value;
