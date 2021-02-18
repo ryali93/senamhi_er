@@ -102,3 +102,49 @@ Website: http://www.seantheme.com/color-admin-v2.0/admin/html/
     display: block;
     text-align: center;
 }
+
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.flex-item-left {
+  flex: 50%;
+}
+
+.flex-item-right {
+  flex: 50%;
+}
+
+/* Responsive layout - makes a one column layout instead of a two-column layout */
+@media (max-width: 800px) {
+  .flex-item-right, .flex-item-left {
+    flex: 100%;
+  }
+}
+
+
+
+
+.dtHorizontalWrapper {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+#dtHorizontal th{
+    white-space: nowrap;
+    font-size: 12px;
+}
+
+#dtHorizontal td{
+    font-size: 11px;
+    /*display: block;*/
+}
+
+#dtHorizontal td strong{
+    display: block;
+}
+
+.scrollme {
+    overflow-x: auto;
+}
