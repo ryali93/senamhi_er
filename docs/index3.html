@@ -32,6 +32,8 @@
     <link rel="stylesheet" href="assets/css/leaflet-sidebar.css" />
     <script src="assets/js/leaflet-groupedlayercontrol/leaflet.groupedlayercontrol.css"></script>
 
+    <script src="assets/js/leaflet.wms.js"></script>
+
 
     <!-- ================== END LEAFLET ================== -->
 
@@ -89,7 +91,7 @@
                     <!-- <li><a href="#profile" role="tab"><i class="fa fa-user"></i></a></li> -->
                     <!-- <li class="disabled"><a href="#messages" role="tab"><i class="fa fa-envelope"></i></a></li> -->
 
-                    <li><a href="#lluvias" role="tab"><i class="fa fa-bars"></i></a></li>
+                    <li class="active"><a href="#lluvias" role="tab"><i class="fa fa-bars"></i></a></li>
                     <li><a href="#lluvias_graficos" role="tab"><i class="fa fa-bar-chart"></i></a></li>
                     <li><a href="https://github.com/ryali93" role="tab" target="_blank"><i class="fa fa-github"></i></a></li>
                 </ul>
@@ -101,6 +103,10 @@
 
             <!-- Tab panes -->
             <div class="sidebar_leaflet-content">
+                <!-- <div>
+                    <p>La aplicación del análisis regional de frecuencias de las precipitaciones máximas en 24 horas y el enfoque de desagregación basado</p>
+                    <img src="assets/img/cosude_logo.svg" alt="Smiley face" width="50" height="55">
+                </div> -->
                 <div class="sidebar_leaflet-pane" id="lluvias">
                     <h1 class="sidebar_leaflet-header">
                         Módulo de Lluvias extremas
@@ -120,7 +126,7 @@
                     <br>
                     <div style="width: 100%;display: flex;">
                         <div style="width: 50%;">
-                            <p id="infoVector"><b>Subregión: </b></p>
+                            <p id="infoRegion"><b>Subregión: </b></p>
                             <!-- <p id="infoRaster"><b>PP Máxima: </b></p> -->
                         </div>
                         <div style="width: 50%;">
@@ -137,6 +143,32 @@
                         <option value="Q3">Quartil 3</option>
                         <option value="Q4">Quartil 4</option>
                     </select>
+                    <br><br>
+
+                    <b>Seleccionar Percentil:</b>
+                    <br>
+                    <select id="select_percentil" style="width: 70%;">
+                        <option value="P10">Percentil 10</option>
+                        <option value="P50">Percentil 50</option>
+                        <option value="P90">Percentil 90</option>
+                    </select>
+                    <br><br>
+
+                    <b>Seleccionar Periodo de Retorno (TR):</b>
+                    <br>
+                    <select id="select_tr" style="width: 70%;">
+                        <option value="LM_TR2">TR 2</option>
+                        <option value="LM_TR5">TR 5</option>
+                        <option value="LM_TR10">TR 10</option>
+                        <option value="LM_TR30">TR 30</option>
+                        <option value="LM_TR50">TR 50</option>
+                        <option value="LM_TR75">TR 75</option>
+                        <option value="LM_TR100">TR 100</option>
+                        <option value="LM_TR200">TR 200</option>
+                        <option value="LM_TR500">TR 500</option>
+                        <option value="LM_TR1000">TR 1000</option>
+                    </select>
+                    <br><br>
 
                     <br><br>
                     <div id="tabla_datos" class="scrollme"></div>
@@ -198,6 +230,7 @@
 
 <script src="assets/js/leaflet-sidebar.js"></script>
 <script src="assets/js/map-leaflet.js"></script>
+<script src="assets/js/tabla_datos.js"></script>
 
 
 <!-- <script type="text/javascript">

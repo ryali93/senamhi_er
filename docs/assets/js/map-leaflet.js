@@ -19,10 +19,19 @@ var blank = function() {
     return layer;
 }
 
+
+var create_point = function(){
+    map.on("click", function(e){
+        var mp = new L.Marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+        console.log(mp.getLatLng());
+    });
+}
+
+
 var funcion_inicial = function(){
     // Configuracion inicial
     var map = L.map('map');
-    map.setView([-10, -75], 6);
+    map.setView([-10, -82], 6);
 
     // Capas principales
     var regiones = L.tileLayer.wms("http://localhost:8080/geoserver/senamhi_v1/wms", {
@@ -57,7 +66,32 @@ var funcion_inicial = function(){
 
     L.control.layers(basemaps, layers, {collapsed: false}).addTo(map);
 
-    var sidebar = L.control.sidebar('sidebar_leaflet', {collapsed: false}).addTo(map);
+    var sidebar = L.control.sidebar('sidebar_leaflet').addTo(map);
+    sidebar.open('lluvias');
+
+    /////// CON <script src="assets/js/leaflet.wms.js"></script> //////
+    var source = L.WMS.source("http://localhost:8080/geoserver/senamhi_v1/wms?service=WMS&", {
+          opacity: 0.1,
+    });
+    source.getLayer("q_pp").addTo(map);
+    ///////////////////////////////////////////////////////////////////
+
+    var source_url = "http://localhost:8080/geoserver/senamhi_v1/wms";
+
+    map.on('click', function (evt) {
+        document.getElementById('coord_x').innerHTML = "<b>X (wgs84): </b>" + evt.latlng["lng"].toFixed(3) + "°";
+        document.getElementById('coord_y').innerHTML = "<b>Y (wgs84): </b>" + evt.latlng["lat"].toFixed(3) + "°";
+        getFeatureInfo(evt, "senamhi_v1:gpo_regiones_pp_max"),
+        getFeatureInfo(evt, "senamhi_v1:q_pp")
+    });
+
+
+
+
+
+
+
+    
 
     // var parser = new ol.format.WMSCapabilities();
 
@@ -274,8 +308,90 @@ var funcion_inicial = function(){
     // /*Inicio: Show Mapa*/
     // map.getView().fit(extent, map.getSize());
     // /*Fin: Show Mapa*/
+    var getFeatureInfoUrl = function (latlng, lyr) {
+        var point = map.latLngToContainerPoint(latlng, map.getZoom());
+        var size = map.getSize();
+        var defaultParameters = {
+                service:"WMS",
+                request:"GetFeatureInfo",
+                version:"1.1.1",
+                layers:lyr,
+                query_layers:lyr,
+                srs:"EPSG:4326",
+                bbox: map.getBounds().toBBoxString(),
+                width: size.x,
+                height: size.y,
+                X: point.x,
+                Y: point.y,
+                info_format:"application/json"
+        };
+
+        var parameters = L.Util.extend(defaultParameters);
+        var URL = source_url + L.Util.getParamString(parameters);
+        console.log(URL);
+        return(URL)
+    };
+
+    var getFeatureInfo = function(evt, lyr){
+        var url = getFeatureInfoUrl(evt.latlng, lyr);
+        if (url){
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data["features"][0]["properties"]);
+                infoRaster = data["features"][0]["properties"];
+                periodoRetorno = document.getElementById('select_tr').value;
+                // document.getElementById('infoRegion').innerHTML = infoRaster[periodoRetorno]
+                document.getElementById('infoRaster').innerHTML = "<b>PP Máxima: </b>" + infoRaster[periodoRetorno].toFixed(2);
+            });
+        }
+    };
 
 
+    map.on('singleclick', function(evt) {
+        document.getElementById('coord_x').innerHTML = "<b>X (wgs84): </b>" + evt.coordinate[0].toFixed(3) + "°";
+        document.getElementById('coord_y').innerHTML = "<b>Y (wgs84): </b>" + evt.coordinate[1].toFixed(3) + "°";
+        getInfoRaster(evt, wmsLayer);
+        getInfoVector(evt, wmsLayerVector);
+    });
+
+    function getInfoRaster(evt, layer) {
+        var resolution = map.getView().getResolution();
+        var coordinate = evt.coordinate;
+        
+        console.log(resolution);
+        console.log(coordinate);
+
+        var url = layer.getSource().getGetFeatureInfoUrl(evt.coordinate,
+            resolution, 'EPSG:4326', {'INFO_FORMAT': 'application/json', 'FEATURE_COUNT': 50 });
+
+        console.log(url);
+
+        if (url){
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data["features"][0]["properties"]);
+                    infoRaster = data["features"][0]["properties"];
+                    periodoRetorno = document.getElementById('select_tr').value;
+                    // document.getElementById('infoRaster').innerHTML = infoRaster[periodoRetorno]
+                    document.getElementById('infoRaster').innerHTML = "<b>PP Máxima: </b>" + infoRaster[periodoRetorno].toFixed(2);
+                });
+        }
+    };
+
+    var markerIcon = L.icon({
+        iconUrl: 'assets/img/marker.png',
+        iconAnchor:   [0.5, 1]
+    });
+    var marker = null;
+    map.on('click', function (e) {
+        if (marker !== null) {
+            map.removeLayer(marker);
+        }
+        marker = L.marker(e.latlng, {icon: markerIcon}).addTo(map);
+    });
 }
 
 funcion_inicial()
+create_point()
