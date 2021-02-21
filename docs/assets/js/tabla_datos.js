@@ -1,25 +1,16 @@
-var data_regiones = JSON.parse(datos_regiones)[0];
-console.log(data_regiones);
-
-var q_pp = JSON.parse(quartiles_pp);
-var trs = q_pp["features"][0]["properties"];
-console.log(trs);
-
 var generar_tb_pp = function() {
+    var data_regiones = JSON.parse(datos_regiones)[0];
+    console.log(data_regiones);
+
     var tr_anos = ["TR_2","TR_5","TR_10","TR_30","TR_50","TR_75","TR_100","TR_200","TR_500","TR_1000"];
-    // var region = "A1";//document.getElementById('select_quartil').value;
     var region = document.getElementById("infoRegion").innerText.replace("Subregión: ","");
-    var trs_tr = parseFloat(document.getElementById("infoRaster").innerText.replace("PP Máxima: ", ""));
     var quartil = document.getElementById('select_quartil').value;
-    var percentil = document.getElementById('select_percentil').value;
-    var tr = document.getElementById('select_tr').value;
+    var trs_tr = 100;
     var val_temp;
 
-    console.log(trs_tr);
-    console.log(data_regiones[region][quartil][percentil]);
+    console.log(quartil);
 
     var tabla_datos = "<table id='dtHorizontal' class='table table-striped' width=100%>";
-    // tabla_datos += "<tr><th align=center>Horas</th><th align=center>"+percentil+"</th><th align=center>PP</th><th align=center>"+trs_tr.toFixed(2)+"</th></tr>";
     tabla_datos += "<thead><tr><th align=center>Duración</th>";
 
     for(cab=0;cab<=9;cab++){
@@ -29,7 +20,6 @@ var generar_tb_pp = function() {
     tabla_datos += "</tr></thead><tbody>";
     for(j=0;j<=23;j++){
         var n = j+1
-        // console.log(q_pp[tr])
 
         var val_pp_mn = data_regiones[region][quartil]["P10"];
         var val_pp_me = data_regiones[region][quartil]["P50"];

@@ -19,12 +19,119 @@ var blank = function() {
     return layer;
 }
 
-
 var create_point = function(){
     map.on("click", function(e){
         var mp = new L.Marker([e.latlng.lat, e.latlng.lng]).addTo(map);
         console.log(mp.getLatLng());
     });
+}
+
+var generar_tb_pp = function(trs_tr) {
+    var data_regiones = JSON.parse(datos_regiones)[0];
+    console.log(data_regiones);
+    console.log(trs_tr);
+
+    var tr_anos = ["TR2","TR5","TR10","TR30","TR50","TR75","TR100","TR200","TR500","TR1000"];
+    var region = document.getElementById("infoRegion").innerText.replace("Subregión: ","");
+    var quartil = document.getElementById('select_quartil').value;
+    // var trs_tr = 100;
+    var val_temp;
+
+    console.log(quartil);
+
+    var tabla_datos = "<table id='dtHorizontal' class='table table-striped' width=100%>";
+    tabla_datos += "<thead><tr><th align=center>Duración</th>";
+
+    for(cab=0;cab<=9;cab++){
+        tabla_datos+="<th>"+tr_anos[cab]+"</th>";
+    };
+
+    tabla_datos += "</tr></thead><tbody>";
+    for(j=0;j<=23;j++){
+        var n = j+1
+
+        var val_pp_mn = data_regiones[region][quartil]["P10"];
+        var val_pp_me = data_regiones[region][quartil]["P50"];
+        var val_pp_mx = data_regiones[region][quartil]["P90"];
+
+        tabla_datos += "<tr><td align=center>"+n+"-hr";
+
+        for(m=0;m<=9;m++){
+            var val_hiet_mn = (val_pp_mn[j]*trs_tr["LI_"+tr_anos[m]]).toFixed(2);
+            var val_hiet_me = (val_pp_me[j]*trs_tr["LM_"+tr_anos[m]]).toFixed(2);
+            var val_hiet_mx = (val_pp_mx[j]*trs_tr["LS_"+tr_anos[m]]).toFixed(2);
+
+            console.log(val_hiet_me);
+
+            val_temp_mn = val_hiet_mn;
+            val_temp_me = val_hiet_me;
+            val_temp_mx = val_hiet_mx;
+            // if(n==1){
+            //     val_temp_mn = val_hiet_mn;
+            //     val_temp_me = val_hiet_me;
+            //     val_temp_mx = val_hiet_mx;
+            // }else{
+            //     val_temp_mn = val_pp_mn[j]*trs_tr["LI_"+tr_anos[m]] - val_pp_mn[j-1]*trs_tr["LI_"+tr_anos[m]];
+            //     val_temp_me = val_pp_me[j]*trs_tr["LM_"+tr_anos[m]] - val_pp_me[j-1]*trs_tr["LM_"+tr_anos[m]];
+            //     val_temp_mx = val_pp_mx[j]*trs_tr["LS_"+tr_anos[m]] - val_pp_mx[j-1]*trs_tr["LS_"+tr_anos[m]];
+            // };
+            console.log(val_temp_me);
+
+            tabla_datos += "</td><td align=center style='padding: 0px;'>";
+            tabla_datos += "<strong>"+parseFloat(val_temp_me).toFixed(2)+"</strong>";
+            tabla_datos += "("+parseFloat(val_temp_mn).toFixed(2)+"-"+parseFloat(val_temp_mx).toFixed(2)+")";
+            tabla_datos += "</td>";
+        }
+        tabla_datos += "</tr>"
+
+        // var val_hiet_mn = (val_pp_mn[j]*trs_tr).toFixed(2);
+        // var val_hiet_me = (val_pp_me[j]*trs_tr).toFixed(2);
+        // var val_hiet_mx = (val_pp_mx[j]*trs_tr).toFixed(2);
+
+        // if(n==1){
+        //     val_temp_mn = val_hiet_mn;
+        //     val_temp_me = val_hiet_me;
+        //     val_temp_mx = val_hiet_mx;
+        // }else{
+        //     val_temp_mn = val_pp_mn[j]*trs_tr - val_pp_mn[j-1]*trs_tr;
+        //     val_temp_me = val_pp_me[j]*trs_tr - val_pp_me[j-1]*trs_tr;
+        //     val_temp_mx = val_pp_mx[j]*trs_tr - val_pp_mx[j-1]*trs_tr;
+        // };
+        // console.log(val_temp_me);
+        // tabla_datos += "</td><td align=center>"+val_pp_me[j];
+        // tabla_datos += "</td><td align=center>"+val_hiet_me;
+        // tabla_datos += "</td><td align=center style='padding: 0px;'>";
+        // tabla_datos += "<strong>"+parseFloat(val_temp_me).toFixed(2)+"</strong>";
+        // tabla_datos += "("+parseFloat(val_temp_mn).toFixed(2)+"-"+parseFloat(val_temp_mx).toFixed(2)+")";
+        // tabla_datos += "</td></tr>";
+        // val_temp = parseFloat(val_hiet) - val_temp
+    }
+    tabla_datos += "</tbody></table>";
+    document.getElementById("tabla_datos").innerHTML = tabla_datos;
+
+}
+
+var exportTableToExcel = function(tableID, filename = ''){
+    var downloadLink;
+    var dataType = 'application/vnd.ms-excel';
+    var tableSelect = document.getElementById(tableID);
+    var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+    
+    filename = filename?filename+'.xls':'excel_data.xls';
+    downloadLink = document.createElement("a");
+    
+    document.body.appendChild(downloadLink);
+    
+    if(navigator.msSaveOrOpenBlob){
+        var blob = new Blob(['\ufeff', tableHTML], {
+            type: dataType
+        });
+        navigator.msSaveOrOpenBlob( blob, filename);
+    }else{
+        downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+        downloadLink.download = filename;
+        downloadLink.click();
+    }
 }
 
 
@@ -52,6 +159,7 @@ var funcion_inicial = function(){
        transparent: true
     });
 
+    // Mapas base
     var basemaps = {
         'Stamen': basemap1().addTo(map),
         'OpenStreetMap': basemap2().addTo(map),
@@ -69,245 +177,15 @@ var funcion_inicial = function(){
     var sidebar = L.control.sidebar('sidebar_leaflet').addTo(map);
     sidebar.open('lluvias');
 
-    /////// CON <script src="assets/js/leaflet.wms.js"></script> //////
-    var source = L.WMS.source("http://localhost:8080/geoserver/senamhi_v1/wms?service=WMS&", {
-          opacity: 0.1,
-    });
-    source.getLayer("q_pp").addTo(map);
-    ///////////////////////////////////////////////////////////////////
-
     var source_url = "http://localhost:8080/geoserver/senamhi_v1/wms";
-
     map.on('click', function (evt) {
         document.getElementById('coord_x').innerHTML = "<b>X (wgs84): </b>" + evt.latlng["lng"].toFixed(3) + "°";
         document.getElementById('coord_y').innerHTML = "<b>Y (wgs84): </b>" + evt.latlng["lat"].toFixed(3) + "°";
-        getFeatureInfo(evt, "senamhi_v1:gpo_regiones_pp_max"),
+        getFeatureInfo(evt, "senamhi_v1:gpo_regiones_pp_max");
         getFeatureInfo(evt, "senamhi_v1:q_pp")
+        
     });
 
-
-
-
-
-
-
-    
-
-    // var parser = new ol.format.WMSCapabilities();
-
-    // var current_wms = [
-    //     new ol.layer.Tile({
-    //         title: layerCurrentTitle,
-    //         visible: true,
-    //         source: new ol.source.TileWMS({
-    //             url: wmsCurrent,
-    //             params: {'LAYERS': layerCurrent},
-    //             serverType: 'geoserver'
-    //         })
-    //     })
-    // ];
-    // /*Fin: Cartografia Tematica*/
-
-    // /*Inicio: Union de Capas o Layers*/
-    // if (layerCurrentTitle === 'g_00_02:00_02_002_03_000_000_0000_00_00') {
-    //     layers = [
-    //         new ol.layer.Group({'title': 'Mapa Base', layers: layersMapaBase}),
-    //         new ol.layer.Group({title: 'CARTOGRAFIA BASE', layers: layersCartografiaBase})
-    //     ];
-    // } else {
-    //     layers = [
-    //         new ol.layer.Group({'title': 'Mapa Base', layers: layersMapaBase}),
-    //         //overlayGroupPP,
-    //         new ol.layer.Group({title: "Cartograf\xeda Tem\xe1tica", layers: current_wms}),
-    //         new ol.layer.Group({title: 'CARTOGRAFIA BASE', layers: layersCartografiaBase})
-    //     ];
-    // }
-    // /*Fin: Union de Capas o Layers*/
-
-    // /*Inicio: Mapa*/
-    // var map = new ol.Map({
-    //     target: document.getElementById('map'),
-    //     renderer: 'canvas',
-    //     layers: layers,
-    //     view: view,
-    //     controls: controls,
-    //     interactions: interactions,
-
-    //     loadTilesWhileAnimating: true,
-    //     loadTilesWhileInteracting: true,
-
-    //     controls: ol.control.defaults({
-    //         attribution: false,
-    //         attributionOptions: ({
-    //             collapsible: true
-    //         })
-    //     }).extend([
-    //         new ol.control.FullScreen(),
-    //         new ol.control.ZoomSlider(),
-    //         new ol.control.CanvasScaleLine()
-    //     ])
-    // });
-
-    // // var layerSwitcher = new ol.control.LayerSwitcher({
-    // //     tipLabel: 'Arbol de Capas'
-    // // });
-    // // map.addControl(layerSwitcher);
-
-
-    // /*Fin: Mapa*/
-
-    // /*Inicio: Controles*/
-    // //...i
-    // var dragdrop = new ol.interaction.DragAndDrop({formatConstructors: [ol.format.GPX, ol.format.KML, ol.format.GeoJSON]});
-    // map.addInteraction(dragdrop);
-
-    // dragdrop.on("addfeatures", function (a) {
-    //     a = new ol.source.Vector({features: a.features, projection: a.projection});
-    //     map.getLayers().push(new ol.layer.Vector({source: a}));
-    //     map.getView().fitExtent(a.getExtent(), map.getSize())
-    // });
-    // //...f
-
-    // //...i
-    // var zoom_to_extent = new ol.control.ZoomToExtent({ extent: extent });
-    // map.addControl(zoom_to_extent);
-
-    // var sidebar = new ol.control.Sidebar({ element: 'sidebar_ol'});
-    // map.addControl(sidebar);
-    // sidebar.isVisible();
-
-    // var switcher = new ol.control.LayerSwitcher({ target: $("#capas_switcher > div").get(0)});
-    // map.addControl(switcher);
-    // //...f
-
-    // //...i
-    // var popup = new ol.Overlay.Popup();
-    // popup.setOffset([0, 0]);
-    // map.addOverlay(popup);
-
-
-    // // var wmsSource = new ol.source.TileWMS({
-    // //   url: 'https://ahocevar.com/geoserver/wms',
-    // //   params: {'LAYERS': 'ne:ne', 'TILED': true},
-    // //   serverType: 'geoserver',
-    // //   crossOrigin: 'anonymous',
-    // // });
-
-    // // var wmsLayer = new ol.layer.Image({
-    // //   source: wmsSource,
-    // // });
-
-    // var wmsSource = new ol.source.ImageWMS({
-    //   url: 'http://localhost:8080/geoserver/senamhi_v1/wms',
-    //   params: {"LAYERS": 'senamhi_v1:q_pp'},
-    //   serverType: 'geoserver'
-    // });
-
-    // var wmsLayer = new ol.layer.Image({
-    //   source: wmsSource,
-    // });
-
-    // var wmsLayerVector = new ol.layer.Tile({
-    //     title: 'Regiones2',
-    //     visible: false,
-    //     source: new ol.source.TileWMS({
-    //         url: 'http://localhost:8080/geoserver/senamhi_v1/wms',
-    //         params: {'LAYERS': 'senamhi_v1:gpo_regiones_pp_max'},
-    //         serverType: 'geoserver'
-    //     })
-    // });
-
-    // var infoRaster;
-    // var infoVector;
-    // var periodoRetorno;
-
-    // map.on('singleclick', function(evt) {
-    //     document.getElementById('coord_x').innerHTML = "<b>X (wgs84): </b>" + evt.coordinate[0].toFixed(3) + "°";
-    //     document.getElementById('coord_y').innerHTML = "<b>Y (wgs84): </b>" + evt.coordinate[1].toFixed(3) + "°";
-    //     getInfoRaster(evt, wmsLayer);
-    //     getInfoVector(evt, wmsLayerVector);
-    // });
-
-    // function getInfoRaster(evt, layer) {
-    //     var resolution = map.getView().getResolution();
-    //     var coordinate = evt.coordinate;
-        
-    //     console.log(resolution);
-    //     console.log(coordinate);
-
-    //     var url = layer.getSource().getGetFeatureInfoUrl(evt.coordinate,
-    //         resolution, 'EPSG:4326', {'INFO_FORMAT': 'application/json', 'FEATURE_COUNT': 50 });
-
-    //     console.log(url);
-
-    //     if (url){
-    //         fetch(url)
-    //             .then(response => response.json())
-    //             .then(data => {
-    //                 console.log(data["features"][0]["properties"]);
-    //                 infoRaster = data["features"][0]["properties"];
-    //                 periodoRetorno = document.getElementById('select_tr').value;
-    //                 // document.getElementById('infoRaster').innerHTML = infoRaster[periodoRetorno]
-    //                 document.getElementById('infoRaster').innerHTML = "<b>PP Máxima: </b>" + infoRaster[periodoRetorno].toFixed(2);
-    //             });
-    //     }
-    // };
-
-    // function getInfoVector(evt, layer){
-    //     var resolution = map.getView().getResolution();
-    //     var coordinate = evt.coordinate;
-        
-    //     console.log(resolution);
-    //     console.log(coordinate);
-
-    //     var url = layer.getSource().getGetFeatureInfoUrl(evt.coordinate,
-    //         resolution, 'EPSG:4326', {'INFO_FORMAT': 'application/json', 'FEATURE_COUNT': 50 });
-
-    //     console.log(url);
-
-    //     if (url){
-    //         fetch(url)
-    //             .then(response => response.json())
-    //             .then(data => {
-    //                 console.log(data["features"][0]["properties"]["sub_regi_1"]);
-    //                 infoVector = data["features"][0]["properties"]["sub_regi_1"];
-    //                 // document.getElementById('infoVector').innerHTML = infoVector;
-    //                 document.getElementById('infoVector').innerHTML = "<b>Subregión: </b>" + infoVector;
-    //             });
-    //     }
-
-    // };
-
-    // // Agregando punto que se borre luego
-    // var vectorSource = new ol.source.Vector();
-    // map.on('click', function (evt) {
-    //     vectorSource.clear();
-    //     var feature = new ol.Feature({
-    //             geometry: new ol.geom.Point(evt.coordinate),
-    //         name: 'PUNTO'
-    //     });
-    //     vectorSource = new ol.source.Vector({
-    //         features: [feature]
-    //     });
-    //     var iconLayer = new ol.layer.Vector({
-    //         source: vectorSource,
-    //         style: new ol.style.Style({
-    //             image: new ol.style.Icon({
-    //                 src:'assets/img/marker.png',
-    //                 anchor: [0.5, 1],
-    //                 scale: 1
-    //             })
-                    
-    //             })
-    //     });
-    //     map.addLayer(iconLayer); 
-    // });
-    // //...f
-    // /*Fin: Controles*/
-
-    // /*Inicio: Show Mapa*/
-    // map.getView().fit(extent, map.getSize());
-    // /*Fin: Show Mapa*/
     var getFeatureInfoUrl = function (latlng, lyr) {
         var point = map.latLngToContainerPoint(latlng, map.getZoom());
         var size = map.getSize();
@@ -331,53 +209,27 @@ var funcion_inicial = function(){
         console.log(URL);
         return(URL)
     };
-
+    
     var getFeatureInfo = function(evt, lyr){
+        var infoRaster;
+        var InfoVector;
         var url = getFeatureInfoUrl(evt.latlng, lyr);
-        if (url){
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data["features"][0]["properties"]);
-                infoRaster = data["features"][0]["properties"];
-                periodoRetorno = document.getElementById('select_tr').value;
-                // document.getElementById('infoRegion').innerHTML = infoRaster[periodoRetorno]
-                document.getElementById('infoRaster').innerHTML = "<b>PP Máxima: </b>" + infoRaster[periodoRetorno].toFixed(2);
-            });
-        }
-    };
-
-
-    map.on('singleclick', function(evt) {
-        document.getElementById('coord_x').innerHTML = "<b>X (wgs84): </b>" + evt.coordinate[0].toFixed(3) + "°";
-        document.getElementById('coord_y').innerHTML = "<b>Y (wgs84): </b>" + evt.coordinate[1].toFixed(3) + "°";
-        getInfoRaster(evt, wmsLayer);
-        getInfoVector(evt, wmsLayerVector);
-    });
-
-    function getInfoRaster(evt, layer) {
-        var resolution = map.getView().getResolution();
-        var coordinate = evt.coordinate;
-        
-        console.log(resolution);
-        console.log(coordinate);
-
-        var url = layer.getSource().getGetFeatureInfoUrl(evt.coordinate,
-            resolution, 'EPSG:4326', {'INFO_FORMAT': 'application/json', 'FEATURE_COUNT': 50 });
-
-        console.log(url);
-
-        if (url){
+        if(url){
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data["features"][0]["properties"]);
-                    infoRaster = data["features"][0]["properties"];
-                    periodoRetorno = document.getElementById('select_tr').value;
-                    // document.getElementById('infoRaster').innerHTML = infoRaster[periodoRetorno]
-                    document.getElementById('infoRaster').innerHTML = "<b>PP Máxima: </b>" + infoRaster[periodoRetorno].toFixed(2);
+                    info_data = data["features"][0]["properties"];
+                    if(Object.keys(info_data).length == 1){
+                        document.getElementById('infoRegion').innerHTML = '<p id="infoRegion"><b>Subregión: '+info_data["sub_regi_1"]+'</b></p>'
+                    }
+                    else{
+                        console.log("Crear Tabla aqui");
+                        generar_tb_pp(info_data);
+                    }
                 });
+
         }
+
     };
 
     var markerIcon = L.icon({

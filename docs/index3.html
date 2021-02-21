@@ -144,37 +144,9 @@
                         <option value="Q4">Quartil 4</option>
                     </select>
                     <br><br>
-
-                    <b>Seleccionar Percentil:</b>
-                    <br>
-                    <select id="select_percentil" style="width: 70%;">
-                        <option value="P10">Percentil 10</option>
-                        <option value="P50">Percentil 50</option>
-                        <option value="P90">Percentil 90</option>
-                    </select>
-                    <br><br>
-
-                    <b>Seleccionar Periodo de Retorno (TR):</b>
-                    <br>
-                    <select id="select_tr" style="width: 70%;">
-                        <option value="LM_TR2">TR 2</option>
-                        <option value="LM_TR5">TR 5</option>
-                        <option value="LM_TR10">TR 10</option>
-                        <option value="LM_TR30">TR 30</option>
-                        <option value="LM_TR50">TR 50</option>
-                        <option value="LM_TR75">TR 75</option>
-                        <option value="LM_TR100">TR 100</option>
-                        <option value="LM_TR200">TR 200</option>
-                        <option value="LM_TR500">TR 500</option>
-                        <option value="LM_TR1000">TR 1000</option>
-                    </select>
-                    <br><br>
-
-                    <br><br>
+                    <!-- <div><button id="generate" onclick="generar_tb_pp()">Generar tabla</button></div> -->
+                    <!-- <br><br> -->
                     <div id="tabla_datos" class="scrollme"></div>
-                    <br>
-
-                    <div><button id="generate" onclick="generar_tb_pp()">Generar tabla</button></div>
                 </div>
 
                 <div class="sidebar_leaflet-pane" id="lluvias_graficos">
@@ -230,17 +202,7 @@
 
 <script src="assets/js/leaflet-sidebar.js"></script>
 <script src="assets/js/map-leaflet.js"></script>
-<script src="assets/js/tabla_datos.js"></script>
+<!-- <script src="assets/js/tabla_datos.js"></script> -->
 
-
-<!-- <script type="text/javascript">
-    var map = L.map('map');
-    map.setView([-10, -75], 6);
-
-    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 18}).addTo(map);
-
-    var sidebar = L.control.sidebar('sidebar_leaflet').addTo(map);
-</script>
- -->
 </body>
 </html>
