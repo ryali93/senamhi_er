@@ -21,7 +21,7 @@
       width: 390px; } }
   @media (min-width: 1200px) {
     .sidebar_leaflet {
-      width: 750px; } }
+      width: 850px; } }
 
 .sidebar_leaflet-left {
   left: 0; }
@@ -62,7 +62,7 @@
         background-color: #eee; }
       .sidebar_leaflet-tabs > li.active, .sidebar_leaflet-tabs > ul > li.active {
         color: #fff;
-        background-color: #0074d9; }
+        background-color: #344E80; }
       .sidebar_leaflet-tabs > li.disabled, .sidebar_leaflet-tabs > ul > li.disabled {
         color: rgba(51, 51, 51, 0.4); }
         .sidebar_leaflet-tabs > li.disabled:hover, .sidebar_leaflet-tabs > ul > li.disabled:hover {
@@ -121,7 +121,7 @@
   line-height: 40px;
   font-size: 14.4pt;
   color: #fff;
-  background-color: #0074d9; }
+  background-color: #344E80; }
   .sidebar_leaflet-right .sidebar_leaflet-header {
     padding-left: 40px; }
 

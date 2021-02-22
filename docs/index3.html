@@ -24,15 +24,18 @@
     <script type="text/javascript" src="assets/data.json"></script>
     <script type="text/javascript" src="assets/q_pp.json"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
     <!-- ================== END OL3 ================== -->
 
     <!-- ================== BEGIN LEAFLET ================== -->
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="assets/css/leaflet-sidebar.css" />
-    <script src="assets/js/leaflet-groupedlayercontrol/leaflet.groupedlayercontrol.css"></script>
+    
+    <!-- <script src="assets/js/leaflet.wms.js"></script> -->
 
-    <script src="assets/js/leaflet.wms.js"></script>
+    <link rel="stylesheet" href="assets/css/L.Control.BetterScale.css" />
+    <script src="assets/js/L.Control.BetterScale.js"></script>
 
 
     <!-- ================== END LEAFLET ================== -->
@@ -137,25 +140,29 @@
 
                     <b>Seleccionar quartil:</b>
                     <br>
-                    <select id="select_quartil" style="width: 70%;">
-                        <option value="Q1">Quartil 1</option>
-                        <option value="Q2">Quartil 2</option>
-                        <option value="Q3">Quartil 3</option>
-                        <option value="Q4">Quartil 4</option>
-                    </select>
+                    <div class="selectWrapper">
+                        <select id="select_quartil" >
+                            <option value="Q1">Quartil 1</option>
+                            <option value="Q2">Quartil 2</option>
+                            <option value="Q3">Quartil 3</option>
+                            <option value="Q4">Quartil 4</option>
+                        </select>
+                    </div>
                     <br><br>
                     <!-- <div><button id="generate" onclick="generar_tb_pp()">Generar tabla</button></div> -->
                     <!-- <br><br> -->
                     <div id="tabla_datos" class="scrollme"></div>
+                    <button id="exportar_tabla" class="exportar_tabla" onclick="exportTableToExcel('tabla_datos')">Exportar a Excel</button>
+                    <br><br>
                 </div>
 
                 <div class="sidebar_leaflet-pane" id="lluvias_graficos">
-                    <h1 class="sidebar_leaflet-header">Gráficos<span class="sidebar_leaflet-close"><i class="fa fa-caret-left"></i></span></h1>
+                    <h1 class="sidebar_leaflet-header">Módulo de Lluvias extremas - Gráficos<span class="sidebar_leaflet-close"><i class="fa fa-caret-left"></i></span></h1>
                     <br>
-                    <button class="btn btn-primary btn-lg" id="render_btn">Generar gráfico</button>
+                    <!-- <button class="btn btn-primary btn-lg" id="render_btn">Generar gráfico</button>
                     <canvas id="graph_ddf" width="400" height="400"></canvas>
-                    <br><br>
-                    <canvas id="graph_ddf_2" width="400" height="400"></canvas>
+                    <br><br> -->
+                    <canvas id="graph_ddf" width="400" height="250"></canvas>
                 </div>
 
                 <!-- <div class="sidebar_leaflet-pane" id="messages">
@@ -202,7 +209,6 @@
 
 <script src="assets/js/leaflet-sidebar.js"></script>
 <script src="assets/js/map-leaflet.js"></script>
-<!-- <script src="assets/js/tabla_datos.js"></script> -->
 
 </body>
 </html>
