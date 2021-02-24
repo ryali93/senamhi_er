@@ -260,31 +260,44 @@ var funcion_inicial = function(){
     });
 
     var quartiles = L.tileLayer.wms("http://localhost:8080/geoserver/senamhi_v1/wms", {
-       opacity: 0.3,
+       // opacity: 0.6,
        layers: "senamhi_v1:q_pp",
        format: 'image/png',
-       transparent: true
+       transparent: true,
+       version: "1.3.0"
     });
+
 
     // Mapas base
     var basemaps = {
-        'Stamen': bm_stamen().addTo(map),
+        'Stamen': bm_stamen(),
         'OpenStreetMap': bm_openstreetmap().addTo(map),
-        'OpenTopoMap': bm_opentopomap().addTo(map),
-        'Satellite': bm_satellite().addTo(map),
+        'OpenTopoMap': bm_opentopomap(),
+        'Satellite': bm_satellite(),
         'Blank': blank()
     };
 
     var layers = {
         'Quartiles': quartiles.addTo(map),
         'Regiones pp': regionespp.addTo(map),
-        'Departamentos': departamentos.addTo(map),
-        'Provincias': provincias.addTo(map),
-        'Cuencas Hidrograficas': cuencas.addTo(map),
+        'Departamentos': departamentos,
+        'Provincias': provincias,
+        'Cuencas Hidrograficas': cuencas,
     };
 
     L.control.layers(basemaps, layers, {collapsed: false}).addTo(map);
     L.control.betterscale().addTo(map);
+
+    var legend = L.control({position: 'bottomright'});
+    legend.onAdd = function (map) {
+        var div = L.DomUtil.create('div', 'info legend');
+            div.innerHTML += "<b>Leyenda:</b><br>";
+            div.innerHTML += '<img src="http://localhost:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.3.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&STRICT=false&style=raster_style">';
+        return div;
+    };
+
+    legend.addTo(map);
+
 
     var sidebar = L.control.sidebar('sidebar_leaflet').addTo(map);
     sidebar.open('lluvias');
