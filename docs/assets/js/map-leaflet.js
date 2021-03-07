@@ -1,3 +1,86 @@
+var map = L.map('map');
+map.setView([-10, -82], 6);
+var marker = null;
+var host = "http://192.168.1.62:8080/"
+var source_url = host + "geoserver/senamhi_v1/wms";
+var markerIcon = L.icon({
+    iconUrl: 'assets/img/marker.png',
+    iconAnchor:   [0.5, 1]
+});
+
+var getFeatureInfoUrl = function (latlng, lyr) {
+    var point = map.latLngToContainerPoint(latlng, map.getZoom());
+    var size = map.getSize();
+    var defaultParameters = {
+            service:"WMS",
+            request:"GetFeatureInfo",
+            version:"1.1.1",
+            layers:lyr,
+            query_layers:lyr,
+            srs:"EPSG:4326",
+            bbox: map.getBounds().toBBoxString(),
+            width: size.x,
+            height: size.y,
+            X: point.x,
+            Y: point.y,
+            info_format:"application/json"
+    };
+
+    var parameters = L.Util.extend(defaultParameters);
+    var URL = source_url + L.Util.getParamString(parameters);
+    console.log(URL);
+    return(URL)
+};
+
+var getFeatureInfo = function(evt, lyr){
+    var infoRaster;
+    var InfoVector;
+    console.log(evt.latlng);
+    var url = getFeatureInfoUrl(evt.latlng, lyr);
+    if(url){
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                info_data = data["features"][0]["properties"];
+                if(Object.keys(info_data).length == 1){
+                    document.getElementById('infoRegion').innerHTML = '<p id="infoRegion"><b>Subregión: '+info_data["sub_regi_1"]+'</b></p>'
+                }
+                else{
+                    console.log("Crear Tabla aqui");
+                    generar_tb_pp(info_data);
+                    changeVisibility();
+                }
+            });
+
+    }
+
+};
+
+var showDisclaimer = function() {
+    var div = document.getElementById("info legend")
+    div.innerHTML = "<b>Leyenda:</b><br>";
+    div.innerHTML += '<img src="'+host+'geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.3.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&STRICT=false&style=raster_style">';
+}
+
+var hideDisclaimer = function() {
+    var div = document.getElementById("info legend")
+    div.innerHTML = "<b>Leyenda:</b><br>";
+}
+
+var extraerData_click = function (evt) {
+    if (marker !== null) {
+        map.removeLayer(marker);
+    }
+    marker = L.marker(evt.latlng, {icon: markerIcon}).addTo(map);
+    map.setView([evt.latlng["lat"], evt.latlng["lng"]-0.05], 11);
+    console.log(evt.latlng);
+    document.getElementById("coord_x").value = evt.latlng["lng"].toFixed(3);
+    document.getElementById("coord_y").value = evt.latlng["lat"].toFixed(3);
+    getFeatureInfo(evt, "senamhi_v1:gpo_regiones_pp_max");
+    getFeatureInfo(evt, "senamhi_v1:q_pp")
+    
+}
+
 var bm_stamen = function() {
     var attr = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.';
     return L.tileLayer("http://tile.stamen.com/toner-background/{z}/{x}/{y}.png", {
@@ -57,7 +140,8 @@ var generar_tb_pp = function(trs_tr) {
     console.log(quartil);
 
     var tabla_datos = "<table id='dtHorizontal' class='table table-striped' width=100%>";
-    tabla_datos += "<thead><tr><th align=center>Duración</th>";
+    tabla_datos += "<thead><tr><th colspan='11' align=center style='font-size:16px;'>Estimaciones de frecuencia de precipitación basadas en PDS</th>";
+    tabla_datos += "<tr><th align=center>Duración</th>";
 
     var datos_hietograma = {};
     for(cab=0;cab<=9;cab++){
@@ -76,9 +160,9 @@ var generar_tb_pp = function(trs_tr) {
         tabla_datos += "<tr><td align=center>"+n+"-hr";
 
         for(m=0;m<=9;m++){
-            var val_hiet_mn = (val_pp_mn[j]*trs_tr["LI_"+tr_anos[m]]).toFixed(1);
-            var val_hiet_me = (val_pp_me[j]*trs_tr["LM_"+tr_anos[m]]).toFixed(1);
-            var val_hiet_mx = (val_pp_mx[j]*trs_tr["LS_"+tr_anos[m]]).toFixed(1);
+            var val_hiet_mn = (val_pp_mn[j]*trs_tr["LI_"+tr_anos[m]]).toFixed(3);
+            var val_hiet_me = (val_pp_me[j]*trs_tr["LM_"+tr_anos[m]]).toFixed(3);
+            var val_hiet_mx = (val_pp_mx[j]*trs_tr["LS_"+tr_anos[m]]).toFixed(3);
 
             val_temp_mn = val_hiet_mn;
             val_temp_me = val_hiet_me;
@@ -187,9 +271,31 @@ var create_graph = function(datos){
 
     var chartOptionsLine = {
       fontSize:10,
+      title: {
+        display: true,
+        text: 'PDS basada en intensidad-duración-frecuencia (DDF)'
+      },
+      scales:{
+        yAxes: [{
+            scaleLabel: {
+                display: true,
+                labelString: 'Intensidad de la precipitación (mm)'
+            }
+        }],
+        xAxes: [{
+                ticks: {
+                    autoSkip: false,
+                    maxRotation: 90,
+                    minRotation: 90
+                }
+            }]
+      },
       legend: {
         display: true,
-        position: 'bottom',
+        position: 'right',
+        align: 'center',
+        // verticalAlign: "center",
+        // horizontalAlign: "center",
         labels: {
           fontColor: 'black',
           fontSize: 10,
@@ -231,37 +337,35 @@ var exportTableToExcel = function(tableID, filename = ''){
 
 var funcion_inicial = function(){
     // Configuracion inicial
-    var map = L.map('map');
-    map.setView([-10, -82], 6);
 
     // Capas principales
-    var cuencas = L.tileLayer.wms("http://localhost:8080/geoserver/dhi/wms", {
+    var cuencas = L.tileLayer.wms(host + "geoserver/dhi/wms", {
       layers: "dhi:gpo_regiones_hidrograficas",
       format: 'image/png',
       transparent: true
     });
 
-    var departamentos = L.tileLayer.wms("http://localhost:8080/geoserver/dhi/wms", {
+    var departamentos = L.tileLayer.wms(host + "geoserver/dhi/wms", {
        layers: "dhi:gpo_departamentos",
        format: 'image/png',
        transparent: true
     });
 
-    var provincias = L.tileLayer.wms("http://localhost:8080/geoserver/dhi/wms", {
+    var provincias = L.tileLayer.wms(host + "geoserver/dhi/wms", {
        layers: "dhi:gpo_provincias",
        format: 'image/png',
        transparent: true
     });
 
-    var regionespp = L.tileLayer.wms("http://localhost:8080/geoserver/dhi/wms", {
+    var regionespp = L.tileLayer.wms(host + "geoserver/dhi/wms", {
        layers: "dhi:gpo_regiones_pp",
        format: 'image/png',
        transparent: true
     });
 
-    var quartiles = L.tileLayer.wms("http://localhost:8080/geoserver/senamhi_v1/wms", {
-       // opacity: 0.6,
-       layers: "senamhi_v1:q_pp",
+    var indice_avenidas = L.tileLayer.wms(host + "geoserver/dhi/wms", {
+       // opacity: 0.8,
+       layers: "dhi:gpo_indice_avenida",
        format: 'image/png',
        transparent: true,
        version: "1.3.0"
@@ -278,95 +382,51 @@ var funcion_inicial = function(){
     };
 
     var layers = {
-        'Quartiles': quartiles.addTo(map),
-        'Regiones pp': regionespp.addTo(map),
+        'Indice de avenidas': indice_avenidas.addTo(map),
+        'Regiones pp máxima': regionespp.addTo(map),
         'Departamentos': departamentos,
         'Provincias': provincias,
         'Cuencas Hidrograficas': cuencas,
     };
 
-    L.control.layers(basemaps, layers, {collapsed: false}).addTo(map);
-    L.control.betterscale().addTo(map);
+    L.control.layers(basemaps, layers, {collapsed: true}).addTo(map);
+    L.control.betterscale({metric: true, imperial: false}).addTo(map);
 
     var legend = L.control({position: 'bottomright'});
     legend.onAdd = function (map) {
         var div = L.DomUtil.create('div', 'info legend');
             div.innerHTML += "<b>Leyenda:</b><br>";
-            div.innerHTML += '<img src="http://localhost:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.3.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&STRICT=false&style=raster_style">';
+            // div.innerHTML += '<img src="'+host+'geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.3.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&STRICT=false&style=raster_style">';
+            div.setAttribute("onmouseenter", "showDisclaimer()");
+            div.setAttribute("onmouseleave", "hideDisclaimer()");
+            div.id = "info legend"
         return div;
     };
 
     legend.addTo(map);
 
-
     var sidebar = L.control.sidebar('sidebar_leaflet').addTo(map);
-    sidebar.open('lluvias');
-    var markerIcon = L.icon({
-        iconUrl: 'assets/img/marker.png',
-        iconAnchor:   [0.5, 1]
-    });
-    var marker = null;
-
-    var source_url = "http://localhost:8080/geoserver/senamhi_v1/wms";
-    map.on('click', function (evt) {
-        if (marker !== null) {
-            map.removeLayer(marker);
-        }
-        marker = L.marker(evt.latlng, {icon: markerIcon}).addTo(map);
-        document.getElementById('coord_x').innerHTML = "<b>X (wgs84): </b>" + evt.latlng["lng"].toFixed(3) + "°";
-        document.getElementById('coord_y').innerHTML = "<b>Y (wgs84): </b>" + evt.latlng["lat"].toFixed(3) + "°";
-        getFeatureInfo(evt, "senamhi_v1:gpo_regiones_pp_max");
-        getFeatureInfo(evt, "senamhi_v1:q_pp")
-        
-    });
-
-    var getFeatureInfoUrl = function (latlng, lyr) {
-        var point = map.latLngToContainerPoint(latlng, map.getZoom());
-        var size = map.getSize();
-        var defaultParameters = {
-                service:"WMS",
-                request:"GetFeatureInfo",
-                version:"1.1.1",
-                layers:lyr,
-                query_layers:lyr,
-                srs:"EPSG:4326",
-                bbox: map.getBounds().toBBoxString(),
-                width: size.x,
-                height: size.y,
-                X: point.x,
-                Y: point.y,
-                info_format:"application/json"
-        };
-
-        var parameters = L.Util.extend(defaultParameters);
-        var URL = source_url + L.Util.getParamString(parameters);
-        console.log(URL);
-        return(URL)
-    };
+    sidebar.open('principal');
     
-    var getFeatureInfo = function(evt, lyr){
-        var infoRaster;
-        var InfoVector;
-        var url = getFeatureInfoUrl(evt.latlng, lyr);
-        if(url){
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    info_data = data["features"][0]["properties"];
-                    if(Object.keys(info_data).length == 1){
-                        document.getElementById('infoRegion').innerHTML = '<p id="infoRegion"><b>Subregión: '+info_data["sub_regi_1"]+'</b></p>'
-                    }
-                    else{
-                        console.log("Crear Tabla aqui");
-                        generar_tb_pp(info_data);
-                        changeVisibility();
-                    }
-                });
-
-        }
-
-    };
+    map.on('click', function (evt) { extraerData_click(evt) });
+    
 }
 
 funcion_inicial()
-// create_point()
+
+var extraerData_button = function () {
+    if (marker !== null) {
+        map.removeLayer(marker);
+    }
+    var coord_x = document.getElementById("coord_x").value;
+    var coord_y = document.getElementById("coord_y").value;
+    var coord = [parseFloat(coord_y), parseFloat(coord_x)]
+    marker = L.marker(coord, {icon: markerIcon}).addTo(map);
+    map.setView([coord[0], coord[1]-0.05], 11);
+    console.log(coord);
+    var coord_evt = {"latlng": {"lat": coord[0], "lng": coord[1]}}
+    console.log(coord_evt);
+    getFeatureInfo(coord_evt, "senamhi_v1:gpo_regiones_pp_max");
+    getFeatureInfo(coord_evt, "senamhi_v1:q_pp")
+    
+}

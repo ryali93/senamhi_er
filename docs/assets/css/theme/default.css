@@ -150,13 +150,14 @@ Website: http://www.seantheme.com/color-admin-v2.0/admin/html/
 }
 
 #exportar_tabla{
-  float: left;
+  float: right;
   text-align: center;
   width: 120px;
   border: 1px solid gray;
   margin: 4px;
   padding: 6px;
   visibility: hidden;
+  cursor: pointer;
 }
 
 
@@ -210,3 +211,99 @@ Website: http://www.seantheme.com/color-admin-v2.0/admin/html/
     box-shadow: 0 0 15px rgb(0 0 0 / 20%);
     border-radius: 5px;
 }
+
+.inline {
+    display : inline;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.page-container {
+    height: 100%;
+    display: flex;
+    /*flex-wrap: wrap;*/
+    flex-direction: column;
+}
+
+
+.fade {
+    /*opacity: 0;*/
+    -webkit-transition: opacity .3s linear;
+    transition: opacity .3s linear;
+}
+
+.fade.in {
+    opacity: 1;
+}
+
+/*.page-header-fixed {
+    padding-top: 54px;
+}*/
+
+.navbar {
+    position: relative;
+    min-height: 50px;
+    /*margin-bottom: 20px;*/
+    border: 1px solid transparent;
+}
+
+.container-fluid {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#header{
+    min-height: 5.5%;
+    position: static;
+}
+
+#cuerpo{
+    min-height: 94.5%;
+    position: static;
+}
+
+#extraerData_button{
+    max-width: 35px;
+    max-height: 40px;
+    background: #e6e6e6;
+    border-radius: 5px;
+    border-style: groove;
+}
+
+.container_image{
+    display: flex;
+    align-items: center;
+}
+
+tr:hover {
+  background-color: #d9d9d9;
+  cursor: pointer;
+}
+
+
+/*tr:hover{
+   background-color: rgba(255, 255, 0, 0.5);
+}
+
+td:hover::after,th:hover::after { 
+   background-color: rgba(255, 255, 0, 0.5);
+   content: '\00a0';  
+   height: 10000px;    
+   left: 0;
+   position: absolute;  
+   top: -5000px;
+   width: 100%;   
+}*/

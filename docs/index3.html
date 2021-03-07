@@ -19,6 +19,7 @@
 
     <link href="assets/css/style-responsive.min.css" rel="stylesheet" />
     <link href="assets/css/theme/default.css" rel="stylesheet" id="theme" />
+    <!-- <link href="assets/css/style.min.css" rel="stylesheet" id="theme" /> -->
 
     <script src="assets/plugins/pace/pace.min.js"></script>
     <script type="text/javascript" src="assets/data.json"></script>
@@ -32,8 +33,6 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="assets/css/leaflet-sidebar.css" />
     
-    <!-- <script src="assets/js/leaflet.wms.js"></script> -->
-
     <link rel="stylesheet" href="assets/css/L.Control.BetterScale.css" />
     <script src="assets/js/L.Control.BetterScale.js"></script>
 
@@ -49,13 +48,14 @@
             margin: 0;
         }
         html, body {
-            height: 100%;
+            /*height: 100%;*/
             font: 10pt "Helvetica Neue", Arial, Helvetica, sans-serif;
         }
         #map {
             height: 94.5%;
             width: 100%;
             font: 10pt "Helvetica Neue", Arial, Helvetica, sans-serif;
+            position: fixed;
         }
         .lorem {
             font-style: italic;
@@ -64,13 +64,9 @@
     </style>
     <!-- ================== END PAGE LEVEL CSS ==================== -->
 </head>
-<body style="overflow:hidden;">
-    <input type="hidden" id="modoVisualizarCapaTematica" value=""/>
-    <input type="hidden" id="radius" value=""/>
-
-    <div id="page-loader" class="fade in"><span class="spinner"></span></div>
-    <div id="page-container" class="page-container fade page-sidebar-fixed page-header-fixed">
-        <div id="header" class="header navbar navbar-default navbar-fixed-top">
+<body>
+    <div id="page-container" class="page-container fade">
+        <div id="header" class="header">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <div class="row">
@@ -82,104 +78,107 @@
                 </div>
             </div>
         </div>
-    </div>
+        <div id="cuerpo">
+            <div id="sidebar_leaflet" class="sidebar_leaflet collapsed">
+                <div class="sidebar_leaflet-tabs">
+                    <ul role="tablist">
+                        <li class="active"><a href="#principal" role="tab"><i class="fa fa-bars"></i></a></li>
+                        <li><a href="#lluvias" role="tab"><i class="fa fa-cloud"></i></a></li>
+                        <li><a href="#lluvias_graficos" role="tab"><i class="fa fa-bar-chart"></i></a></li>
+                        <li><a href="https://github.com/ryali93" role="tab" target="_blank"><i class="fa fa-github"></i></a></li>
+                    </ul>
 
-    <div id="map">
-        <div id="sidebar_leaflet" class="sidebar_leaflet collapsed">
-            <div class="sidebar_leaflet-tabs">
-                <ul role="tablist">
-                    <li class="active"><a href="#lluvias" role="tab"><i class="fa fa-bars"></i></a></li>
-                    <li><a href="#lluvias_graficos" role="tab"><i class="fa fa-bar-chart"></i></a></li>
-                    <li><a href="https://github.com/ryali93" role="tab" target="_blank"><i class="fa fa-github"></i></a></li>
-                </ul>
+                    <ul role="tablist">
+                        <li><a href="#metadatos" role="tab"><i class="fa fa-gear"></i></a></li>
+                    </ul>
+                </div>
+                <div class="sidebar_leaflet-content">
+                    <div class="sidebar_leaflet-pane" id="principal">
+                        <h1 class="sidebar_leaflet-header"><span class="sidebar_leaflet-close"><i class="fa fa-caret-left"></i></span></h1>
+                        <br>
+                        <h2 style="text-align: center;">Geovisor de la Dirección de Hidrología - SENAMHI (DHI)</h2>
 
-                <ul role="tablist">
-                    <li><a href="#settings" role="tab"><i class="fa fa-gear"></i></a></li>
-                </ul>
+
+                    </div>
+                    <div class="sidebar_leaflet-pane" id="lluvias">
+                        <h1 class="sidebar_leaflet-header">
+                            Módulo de Lluvias extremas
+                            <span class="sidebar_leaflet-close"><i class="fa fa-caret-left"></i></span>
+                        </h1>
+
+                        <div style="display: flex;text-align: justify;">
+                            <div>
+                                <p>La aplicación del análisis regional de frecuencias de las precipitaciones máximas en 24 horas y el enfoque de desagregación basado en las curvas sintéticas de Huff. El uso de estos resultados para propósitos de diseño de ingeniería debe ser tomado con cuidado y siempre considerando las bandas de confianza de las curvas de crecimiento regional y teniendo en cuenta que el período de las series de tiempo utilizadas en algunas regiones determinadas es corto, así como el número de estaciones para cada una de las regiones. </p>
+                            </div>
+                            <div style="margin: 13px;">
+                                <img src="assets/img/cosude_logo.svg" alt="Smiley face" width="50" height="55">
+                            </div>
+                        </div>
+                        <b>Consultar el <a href="/">manual de uso</a></b>
+                        <br>
+                        <div style="width: 100%;display: flex;">
+                            <div style="width: 30%;">
+                                <p id="infoRegion"><b>Subregión: </b></p>
+                            </div>
+                            <div style="width: 70%;display: flex;">
+                                <div>
+                                    <label>X (wgs84):</label><input id="coord_x" class="inline" type="number"><br>
+                                    <label>Y (wgs84):</label><input id="coord_y" class="inline" type="number">
+                                </div>
+                                <div class="container_image">
+                                    <input id="extraerData_button" onclick="extraerData_button()" type="image" alt="Exportar" src="assets/img/location.png">
+                                </div>
+                            </div>
+                        </div>
+
+                        <b>Seleccionar quartil:</b>
+                        <br>
+                        <div class="selectWrapper">
+                            <select id="select_quartil" >
+                                <option value="Q1">Quartil 1</option>
+                                <option value="Q2">Quartil 2</option>
+                                <option value="Q3">Quartil 3</option>
+                                <option value="Q4">Quartil 4</option>
+                            </select>
+                        </div>
+                        <br><br>
+                        <div id="tabla_datos" class="scrollme"></div>
+                        <button id="exportar_tabla" class="exportar_tabla" onclick="exportTableToExcel('tabla_datos')">Exportar a Excel</button>
+                        <br><br>
+                    </div>
+
+                    <div class="sidebar_leaflet-pane" id="lluvias_graficos">
+                        <h1 class="sidebar_leaflet-header">Módulo de Lluvias extremas - Gráficos<span class="sidebar_leaflet-close"><i class="fa fa-caret-left"></i></span></h1>
+                        <br>
+                        <canvas id="graph_ddf" width="400" height="200"></canvas>
+                    </div>
+                    <div class="sidebar_leaflet-pane" id="metadatos">
+                        <h1 class="sidebar_leaflet-header">Catálogo de Metadatos<span class="sidebar_leaflet-close"><i class="fa fa-caret-left"></i></span></h1>
+                        <br>
+                        <dl>
+                          <dt><h2>Base</h2></dt>
+                            <dd>- Límite departamental</dd>
+                            <dd>- Límite provincial</dd>
+                            <dd>- Delimitación de cuencas</dd>
+                        </dl>
+                        <dl>
+                          <dt><h2>Lluvias extremas</h2></dt>
+                            <dd>- Índice de avenidas</dd>
+                            <dd>- Regiones de precipitación máxima</dd>
+                        </dl>
+
+                    </div>
+                </div>
             </div>
-            <div class="sidebar_leaflet-content">
-                <div class="sidebar_leaflet-pane" id="lluvias">
-                    <h1 class="sidebar_leaflet-header">
-                        Módulo de Lluvias extremas
-                        <span class="sidebar_leaflet-close"><i class="fa fa-caret-left"></i></span>
-                    </h1>
-
-                    <div style="display: flex;text-align: justify;">
-                        <div>
-                            <p>La aplicación del análisis regional de frecuencias de las precipitaciones máximas en 24 horas y el enfoque de desagregación basado en las curvas sintéticas de Huff. El uso de estos resultados para propósitos de diseño de ingeniería debe ser tomado con cuidado y siempre considerando las bandas de confianza de las curvas de crecimiento regional y teniendo en cuenta que el período de las series de tiempo utilizadas en algunas regiones determinadas es corto, así como el número de estaciones para cada una de las regiones. </p>
-                        </div>
-                        <div style="margin: 13px;">
-                            <img src="assets/img/cosude_logo.svg" alt="Smiley face" width="50" height="55">
-                        </div>
-                    </div>
-                    <b>Consultar el <a href="/">manual de uso</a></b>
-                    <br>
-                    <div style="width: 100%;display: flex;">
-                        <div style="width: 50%;">
-                            <p id="infoRegion"><b>Subregión: </b></p>
-                            <!-- <p id="infoRaster"><b>PP Máxima: </b></p> -->
-                        </div>
-                        <div style="width: 50%;">
-                            <p id="coord_x"><b>X (wgs84): </b></p>
-                            <p id="coord_y"><b>Y (wgs84): </b></p>
-                        </div>
-                    </div>
-
-                    <b>Seleccionar quartil:</b>
-                    <br>
-                    <div class="selectWrapper">
-                        <select id="select_quartil" >
-                            <option value="Q1">Quartil 1</option>
-                            <option value="Q2">Quartil 2</option>
-                            <option value="Q3">Quartil 3</option>
-                            <option value="Q4">Quartil 4</option>
-                        </select>
-                    </div>
-                    <br><br>
-                    <div id="tabla_datos" class="scrollme"></div>
-                    <button id="exportar_tabla" class="exportar_tabla" onclick="exportTableToExcel('tabla_datos')">Exportar a Excel</button>
-                    <br><br>
-                </div>
-
-                <div class="sidebar_leaflet-pane" id="lluvias_graficos">
-                    <h1 class="sidebar_leaflet-header">Módulo de Lluvias extremas - Gráficos<span class="sidebar_leaflet-close"><i class="fa fa-caret-left"></i></span></h1>
-                    <br>
-                    <canvas id="graph_ddf" width="400" height="250"></canvas>
-                </div>
-                <div class="sidebar_leaflet-pane" id="settings">
-                    <h1 class="sidebar_leaflet-header">Settings<span class="sidebar_leaflet-close"><i class="fa fa-caret-left"></i></span></h1>
-                </div>
-            </div>
+            <div id="map"></div>
+            
         </div>
+        
     </div>
+    
     
     <div class="theme-panel" style="margin-top: 80px">
     <a href="javascript:;" data-click="theme-panel-expand" class="theme-collapse-btn"><i class="fa fa-cog"></i></a>
-    <div class="theme-panel-content">
-        <ul class="theme-list clearfix">
-            <li><a href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Metadato</a></li>
-        </ul>
-        
-        <div class="row m-t-10">
-            <div class="panel-group" id="accordion">
-                <div class="panel panel-inverse overflow-hidden">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">
-                        <a class="accordion-toggle accordion-toggle-styled" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                            <i class="fa fa-plus-circle pull-right"></i>
-                            Leyenda
-                        </a>
-                        </h3>
-                    </div>
-                    <div id="collapseOne" class="panel-collapse collapse in">
-                    <div id="legend">
-                        <img src="http://idesep.senamhi.gob.pe/geoserver/g_00_02/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=g_00_02:00_02_002_03_000_000_0000_00_00">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 </div>
 
 <a href="javascript:;" class="btn btn-icon btn-circle btn-success btn-scroll-to-top fade" data-click="scroll-top"><i class="fa fa-angle-up"></i></a>

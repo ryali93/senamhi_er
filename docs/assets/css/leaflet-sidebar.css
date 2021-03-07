@@ -1,8 +1,8 @@
 .sidebar_leaflet {
   position: absolute;
-  top: 0;
+  top: 16.5%;
   bottom: 0;
-  max-height: 95%;
+  /*max-height: 95%;*/
   width: 100%;
   overflow: hidden;
   z-index: 2000; }
@@ -10,15 +10,15 @@
     width: 40px; }
   @media (min-width: 768px) {
     .sidebar_leaflet {
-      top: 10px;
-      bottom: 10px;
+      top: 130px;
+      bottom: 35px;
       transition: width 500ms; } }
   @media (min-width: 768px) and (max-width: 991px) {
     .sidebar_leaflet {
-      width: 305px; } }
+      width: 405px; } }
   @media (min-width: 992px) and (max-width: 1199px) {
     .sidebar_leaflet {
-      width: 390px; } }
+      width: 600px; } }
   @media (min-width: 1200px) {
     .sidebar_leaflet {
       width: 850px; } }
