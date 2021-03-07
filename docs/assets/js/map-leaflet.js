@@ -58,7 +58,7 @@ var getFeatureInfo = function(evt, lyr){
 
 var showDisclaimer = function() {
     var div = document.getElementById("info legend")
-    div.innerHTML = "<b>Leyenda:</b><br>";
+    div.innerHTML = "<b>Índice de avenidas:</b><br>";
     div.innerHTML += '<img src="'+host+'geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.3.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&STRICT=false&style=raster_style">';
 }
 
