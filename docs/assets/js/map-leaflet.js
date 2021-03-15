@@ -2,7 +2,7 @@ var map = L.map('map');
 map.setView([-10, -82], 6);
 var marker = null;
 var host = "http://192.168.1.62:8080/"
-var source_url = host + "geoserver/senamhi_v1/wms";
+var source_url = host + "geoserver/dhi/wms";
 var markerIcon = L.icon({
     iconUrl: 'assets/img/marker.png',
     iconAnchor:   [0.5, 1]
@@ -42,8 +42,8 @@ var getFeatureInfo = function(evt, lyr){
             .then(response => response.json())
             .then(data => {
                 info_data = data["features"][0]["properties"];
-                if(Object.keys(info_data).length == 1){
-                    document.getElementById('infoRegion').innerHTML = '<p id="infoRegion"><b>Subregión: '+info_data["sub_regi_1"]+'</b></p>'
+                if(info_data["subregion"] != undefined){
+                    document.getElementById('infoRegion').innerHTML = '<p id="infoRegion"><b>Región: '+info_data["subregion"]+'</b></p>'
                 }
                 else{
                     console.log("Crear Tabla aqui");
@@ -76,8 +76,8 @@ var extraerData_click = function (evt) {
     console.log(evt.latlng);
     document.getElementById("coord_x").value = evt.latlng["lng"].toFixed(3);
     document.getElementById("coord_y").value = evt.latlng["lat"].toFixed(3);
-    getFeatureInfo(evt, "senamhi_v1:gpo_regiones_pp_max");
-    getFeatureInfo(evt, "senamhi_v1:q_pp")
+    getFeatureInfo(evt, "dhi:gpo_regiones_pp");
+    getFeatureInfo(evt, "dhi:q_pp")
     
 }
 
@@ -132,7 +132,7 @@ var generar_tb_pp = function(trs_tr) {
     var data_regiones = JSON.parse(datos_regiones)[0];
 
     var tr_anos = ["TR2","TR5","TR10","TR30","TR50","TR75","TR100","TR200","TR500","TR1000"];
-    var region = document.getElementById("infoRegion").innerText.replace("Subregión: ","");
+    var region = document.getElementById("infoRegion").innerText.replace("Región: ","");
     var quartil = document.getElementById('select_quartil').value;
     // var trs_tr = 100;
     var val_temp;
@@ -168,7 +168,8 @@ var generar_tb_pp = function(trs_tr) {
             val_temp_me = val_hiet_me;
             val_temp_mx = val_hiet_mx;
 
-            datos_hietograma[tr_anos[m]].push(parseFloat(val_temp_me));
+            // datos_hietograma[tr_anos[m]].push(parseFloat(val_temp_me));
+            
             // if(n==1){
             //     val_temp_mn = val_hiet_mn;
             //     val_temp_me = val_hiet_me;
@@ -178,6 +179,13 @@ var generar_tb_pp = function(trs_tr) {
             //     val_temp_me = val_pp_me[j]*trs_tr["LM_"+tr_anos[m]] - val_pp_me[j-1]*trs_tr["LM_"+tr_anos[m]];
             //     val_temp_mx = val_pp_mx[j]*trs_tr["LS_"+tr_anos[m]] - val_pp_mx[j-1]*trs_tr["LS_"+tr_anos[m]];
             // };
+            if(n==1){
+                val_temp_me_graf = val_hiet_me;
+            }else{
+                val_temp_me_graf = val_pp_me[j]*trs_tr["LM_"+tr_anos[m]] - val_pp_me[j-1]*trs_tr["LM_"+tr_anos[m]];
+            };
+            datos_hietograma[tr_anos[m]].push(parseFloat(val_temp_me_graf*1/n));
+
             tabla_datos += "</td><td align=center style='padding: 0px;'>";
             tabla_datos += "<strong>"+parseFloat(val_temp_me).toFixed(1)+"</strong>";
             tabla_datos += "("+parseFloat(val_temp_mn).toFixed(1)+"-"+parseFloat(val_temp_mx).toFixed(1)+")";
@@ -237,7 +245,8 @@ var create_graph = function(datos){
         data: datos["TR50"],
         borderColor: '#98B9AB',
         fill: false,
-        pointStyle: 'line'
+        pointStyle: 'line',
+        hidden: true
     };
 
     var graph_TR100 = {
@@ -265,21 +274,42 @@ var create_graph = function(datos){
     };
 
     var TR_data = {
-      labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24],
+      labels: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23],
       datasets: [graph_TR2, graph_TR5, graph_TR10, graph_TR30, graph_TR50, graph_TR100, graph_TR500, graph_TR1000]
     };
 
     var chartOptionsLine = {
+      responsive: {
+
+        rules: [{ // REVISAAAAAAAAAAAAAAAAAAAAR
+            condition: {
+                minWidth: 700,
+            },
+            chartOptions: {
+                legend: {
+                    display: true,
+                    position: 'right',
+                    align: 'center'
+                }
+            }
+        }]
+      }, 
       fontSize:10,
       title: {
         display: true,
-        text: 'PDS basada en intensidad-duración-frecuencia (DDF)'
+        text: 'CURVAS INTENSIDAD, DURACIÓN Y FRECUENCIA - IDF',
+        fontColor: "black",
+        fontSize:14,
+        fontStyle: "bold"
       },
       scales:{
         yAxes: [{
-            scaleLabel: {
+                scaleLabel: {
                 display: true,
-                labelString: 'Intensidad de la precipitación (mm)'
+                labelString: 'Intensidad [mm/hr]',
+                fontColor: "black",
+                fontSize:12,
+                fontStyle: "bold"
             }
         }],
         xAxes: [{
@@ -287,7 +317,14 @@ var create_graph = function(datos){
                     autoSkip: false,
                     maxRotation: 90,
                     minRotation: 90
-                }
+                },
+                scaleLabel: {
+                display: true,
+                labelString: 'Duración [hr]',
+                fontColor: "black",
+                fontSize:12,
+                fontStyle: "bold"
+            }
             }]
       },
       legend: {
@@ -309,6 +346,7 @@ var create_graph = function(datos){
       data: TR_data,
       options: chartOptionsLine
     });
+
 }
 
 var exportTableToExcel = function(tableID, filename = ''){
@@ -337,7 +375,6 @@ var exportTableToExcel = function(tableID, filename = ''){
 
 var funcion_inicial = function(){
     // Configuracion inicial
-
     // Capas principales
     var cuencas = L.tileLayer.wms(host + "geoserver/dhi/wms", {
       layers: "dhi:gpo_regiones_hidrograficas",
@@ -371,13 +408,12 @@ var funcion_inicial = function(){
        version: "1.3.0"
     });
 
-
     // Mapas base
     var basemaps = {
         'Stamen': bm_stamen(),
-        'OpenStreetMap': bm_openstreetmap().addTo(map),
+        'OpenStreetMap': bm_openstreetmap(),
         'OpenTopoMap': bm_opentopomap(),
-        'Satellite': bm_satellite(),
+        'Satellite': bm_satellite().addTo(map),
         'Blank': blank()
     };
 
@@ -402,14 +438,12 @@ var funcion_inicial = function(){
             div.id = "info legend"
         return div;
     };
-
     legend.addTo(map);
 
     var sidebar = L.control.sidebar('sidebar_leaflet').addTo(map);
     sidebar.open('principal');
     
     map.on('click', function (evt) { extraerData_click(evt) });
-    
 }
 
 funcion_inicial()
@@ -426,7 +460,12 @@ var extraerData_button = function () {
     console.log(coord);
     var coord_evt = {"latlng": {"lat": coord[0], "lng": coord[1]}}
     console.log(coord_evt);
-    getFeatureInfo(coord_evt, "senamhi_v1:gpo_regiones_pp_max");
-    getFeatureInfo(coord_evt, "senamhi_v1:q_pp")
-    
+    getFeatureInfo(coord_evt, "dhi:gpo_regiones_pp");
+    getFeatureInfo(coord_evt, "dhi:q_pp")
 }
+
+document.getElementById("download").addEventListener('click', function(){
+  var url_base64jp = document.getElementById("graph_ddf").toDataURL("image/jpg");
+  var a =  document.getElementById("download");
+  a.href = url_base64jp;
+});

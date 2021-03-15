@@ -165,7 +165,7 @@ Website: http://www.seantheme.com/color-admin-v2.0/admin/html/
 
 /*----------------- SELECT -----------------*/
 .selectWrapper {
-    width: 100%;
+    width: 80%;
     overflow: hidden;
     position: relative;
     border: 1px solid #344E80;
@@ -210,6 +210,7 @@ Website: http://www.seantheme.com/color-admin-v2.0/admin/html/
     background: rgba(255,255,255,0.8);
     box-shadow: 0 0 15px rgb(0 0 0 / 20%);
     border-radius: 5px;
+    background: white;
 }
 
 .inline {
@@ -288,7 +289,7 @@ Website: http://www.seantheme.com/color-admin-v2.0/admin/html/
     align-items: center;
 }
 
-tr:hover {
+#dtHorizontal tr:hover {
   background-color: #d9d9d9;
   cursor: pointer;
 }

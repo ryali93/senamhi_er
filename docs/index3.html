@@ -84,8 +84,8 @@
                     <ul role="tablist">
                         <li class="active"><a href="#principal" role="tab"><i class="fa fa-bars"></i></a></li>
                         <li><a href="#lluvias" role="tab"><i class="fa fa-cloud"></i></a></li>
-                        <li><a href="#lluvias_graficos" role="tab"><i class="fa fa-bar-chart"></i></a></li>
-                        <li><a href="https://github.com/ryali93" role="tab" target="_blank"><i class="fa fa-github"></i></a></li>
+                        <!-- <li><a href="#lluvias_graficos" role="tab"><i class="fa fa-bar-chart"></i></a></li> -->
+                        <li><a href="https://github.com/ryali93/senamhi_er" role="tab" target="_blank"><i class="fa fa-github"></i></a></li>
                     </ul>
 
                     <ul role="tablist">
@@ -97,6 +97,10 @@
                         <h1 class="sidebar_leaflet-header"><span class="sidebar_leaflet-close"><i class="fa fa-caret-left"></i></span></h1>
                         <br>
                         <h2 style="text-align: center;">Geovisor de la Dirección de Hidrología - SENAMHI (DHI)</h2>
+                        <div style="margin: 13px;text-align: center;">
+                            <img src="assets/img/dhi_logo.jpg" alt="Dirección General de Hidrología" width="200" height="90">
+                        </div>
+                        <div></div>
 
 
                     </div>
@@ -114,11 +118,11 @@
                                 <img src="assets/img/cosude_logo.svg" alt="Smiley face" width="50" height="55">
                             </div>
                         </div>
-                        <b>Consultar el <a href="/">manual de uso</a></b>
+                        <b>Consultar el <a href="/lluvias_extremas/assets/informe.pdf">manual de uso</a></b>
                         <br>
                         <div style="width: 100%;display: flex;">
                             <div style="width: 30%;">
-                                <p id="infoRegion"><b>Subregión: </b></p>
+                                <p id="infoRegion"><b>Región: </b></p>
                             </div>
                             <div style="width: 70%;display: flex;">
                                 <div>
@@ -126,45 +130,73 @@
                                     <label>Y (wgs84):</label><input id="coord_y" class="inline" type="number">
                                 </div>
                                 <div class="container_image">
-                                    <input id="extraerData_button" onclick="extraerData_button()" type="image" alt="Exportar" src="assets/img/location.png">
+                                    <input id="extraerData_button" onclick="extraerData_button()" type="image" alt="Exportar" src="assets/img/location.png" title="Ubicar el punto en el mapa">
                                 </div>
                             </div>
                         </div>
-
-                        <b>Seleccionar quartil:</b>
                         <br>
-                        <div class="selectWrapper">
-                            <select id="select_quartil" >
-                                <option value="Q1">Quartil 1</option>
-                                <option value="Q2">Quartil 2</option>
-                                <option value="Q3">Quartil 3</option>
-                                <option value="Q4">Quartil 4</option>
-                            </select>
+
+                        <div style="display:flex;">
+                            <div style="width: 100%;">
+                                <b>Seleccionar quartil:</b>
+                                <br>
+                                <div class="selectWrapper">
+                                    <select id="select_quartil" title="Quartil de ...">
+                                        <option value="Q1">Quartil 1</option>
+                                        <option value="Q2">Quartil 2</option>
+                                        <option value="Q3">Quartil 3</option>
+                                        <option value="Q4">Quartil 4</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div style="width: 100%;">
+                                <b>Seleccionar escenario:</b>
+                                <br>
+                                <div class="selectWrapper">
+                                    <select id="select_escenario" title="Escenario de ...">
+                                        <option value="Q1">Escenario Histórico</option>
+                                        <option value="Q2">Escenario 1</option>
+                                        <option value="Q3">Escenario 2</option>
+                                        <option value="Q4">Escenario 3</option>
+                                        <option value="Q4">Escenario 4</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            
                         </div>
+                        
                         <br><br>
                         <div id="tabla_datos" class="scrollme"></div>
                         <button id="exportar_tabla" class="exportar_tabla" onclick="exportTableToExcel('tabla_datos')">Exportar a Excel</button>
                         <br><br>
+                        <canvas id="graph_ddf" width="400" height="200"></canvas>
+                        <div style="text-align: right;">
+                            <a id="download" download="BcrpChart.jpg" href="" class="btn btn-primary float-right bg-flat-color-1" title="Descargar Gráfico">
+                            <i class="fa fa-download"></i>
+                        </div>
+                      </a>
+                        <!-- <button id="exportar_tabla2" class="exportar_tabla" onclick="exportTableToExcel('tabla_datos')">Exportar Grafico</button><br><br> -->
                     </div>
 
                     <div class="sidebar_leaflet-pane" id="lluvias_graficos">
                         <h1 class="sidebar_leaflet-header">Módulo de Lluvias extremas - Gráficos<span class="sidebar_leaflet-close"><i class="fa fa-caret-left"></i></span></h1>
                         <br>
-                        <canvas id="graph_ddf" width="400" height="200"></canvas>
+                        <!-- <canvas id="graph_ddf" width="400" height="200"></canvas> -->
                     </div>
                     <div class="sidebar_leaflet-pane" id="metadatos">
                         <h1 class="sidebar_leaflet-header">Catálogo de Metadatos<span class="sidebar_leaflet-close"><i class="fa fa-caret-left"></i></span></h1>
                         <br>
                         <dl>
                           <dt><h2>Base</h2></dt>
-                            <dd>- Límite departamental</dd>
-                            <dd>- Límite provincial</dd>
-                            <dd>- Delimitación de cuencas</dd>
+                            <dd>- <a style="text-decoration: none;" href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Límite departamental</a></dd>
+                            <dd>- <a style="text-decoration: none;" href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Límite provincial</a></dd>
+                            <dd>- <a style="text-decoration: none;" href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Delimitación de cuencas</a></dd>
                         </dl>
                         <dl>
                           <dt><h2>Lluvias extremas</h2></dt>
-                            <dd>- Índice de avenidas</dd>
-                            <dd>- Regiones de precipitación máxima</dd>
+                            <dd>- <a style="text-decoration: none;" href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Índice de avenidas</a></dd>
+                            <dd>- <a style="text-decoration: none;" href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Regiones de precipitación máxima</a></dd>
                         </dl>
 
                     </div>
