@@ -144,9 +144,11 @@ var generar_tb_pp = function(trs_tr) {
     tabla_datos += "<tr><th align=center>Duración</th>";
 
     var datos_hietograma = {};
+    var datos_idf = {};
     for(cab=0;cab<=9;cab++){
         tabla_datos+="<th>"+tr_anos[cab]+"</th>";
         datos_hietograma[tr_anos[cab]] = [];
+        datos_idf[tr_anos[cab]] = [];
     };
 
     tabla_datos += "</tr></thead><tbody>";
@@ -160,35 +162,28 @@ var generar_tb_pp = function(trs_tr) {
         tabla_datos += "<tr><td align=center>"+n+"-hr";
 
         for(m=0;m<=9;m++){
-            var val_hiet_mn = (val_pp_mn[j]*trs_tr["LI_"+tr_anos[m]]).toFixed(3);
-            var val_hiet_me = (val_pp_me[j]*trs_tr["LM_"+tr_anos[m]]).toFixed(3);
-            var val_hiet_mx = (val_pp_mx[j]*trs_tr["LS_"+tr_anos[m]]).toFixed(3);
+            var val_hiet_mn = val_pp_mn[j]*trs_tr["LI_"+tr_anos[m]];
+            var val_hiet_me = val_pp_me[j]*trs_tr["LM_"+tr_anos[m]];
+            var val_hiet_mx = val_pp_mx[j]*trs_tr["LS_"+tr_anos[m]];
 
-            val_temp_mn = val_hiet_mn;
-            val_temp_me = val_hiet_me;
-            val_temp_mx = val_hiet_mx;
-
-            // datos_hietograma[tr_anos[m]].push(parseFloat(val_temp_me));
-            
+            // datos_idf[tr_anos[m]].push(parseFloat(val_temp_me));
             // if(n==1){
-            //     val_temp_mn = val_hiet_mn;
             //     val_temp_me = val_hiet_me;
-            //     val_temp_mx = val_hiet_mx;
             // }else{
-            //     val_temp_mn = val_pp_mn[j]*trs_tr["LI_"+tr_anos[m]] - val_pp_mn[j-1]*trs_tr["LI_"+tr_anos[m]];
             //     val_temp_me = val_pp_me[j]*trs_tr["LM_"+tr_anos[m]] - val_pp_me[j-1]*trs_tr["LM_"+tr_anos[m]];
-            //     val_temp_mx = val_pp_mx[j]*trs_tr["LS_"+tr_anos[m]] - val_pp_mx[j-1]*trs_tr["LS_"+tr_anos[m]];
             // };
+
             if(n==1){
                 val_temp_me_graf = val_hiet_me;
             }else{
                 val_temp_me_graf = val_pp_me[j]*trs_tr["LM_"+tr_anos[m]] - val_pp_me[j-1]*trs_tr["LM_"+tr_anos[m]];
             };
-            datos_hietograma[tr_anos[m]].push(parseFloat(val_temp_me_graf*1/n));
+            datos_idf[tr_anos[m]].push(parseFloat(val_temp_me_graf*1/n).toFixed(2));
+            datos_hietograma[tr_anos[m]].push(parseFloat(val_temp_me_graf).toFixed(2));
 
             tabla_datos += "</td><td align=center style='padding: 0px;'>";
-            tabla_datos += "<strong>"+parseFloat(val_temp_me).toFixed(1)+"</strong>";
-            tabla_datos += "("+parseFloat(val_temp_mn).toFixed(1)+"-"+parseFloat(val_temp_mx).toFixed(1)+")";
+            tabla_datos += "<strong>"+parseFloat(val_hiet_me).toFixed(1)+"</strong>";
+            tabla_datos += "("+parseFloat(val_hiet_mn).toFixed(1)+"-"+parseFloat(val_hiet_mx).toFixed(1)+")";
             tabla_datos += "</td>";
         }
         tabla_datos += "</tr>"
@@ -198,13 +193,134 @@ var generar_tb_pp = function(trs_tr) {
     tabla_datos += '<br><br><button onclick="exportTableToExcel(';
     tabla_datos += "'tabla_datos'";
     tabla_datos += ')>Exportar a Excel</button>';
-    console.log(datos_hietograma);
     document.getElementById("tabla_datos").innerHTML = tabla_datos;
-    create_graph(datos_hietograma)
+    create_graph(datos_idf);
+    create_graph2(datos_hietograma)
 
 }
 
-var create_graph2 = function(datos){}
+var create_graph2 = function(datos){
+    var graph_ddf = document.getElementById("graph_ddf2");
+    var graph_TR2 = {
+        label: "TR2",
+        data: datos["TR2"],
+        backgroundColor: 'red',
+        hidden: true
+    };
+
+    var graph_TR5 = {
+        label: "TR5",
+        data: datos["TR5"],
+        backgroundColor: 'blue',
+        fill: false,
+        hidden: true
+    };
+
+    var graph_TR10 = {
+        label: "TR10",
+        data: datos["TR10"],
+        backgroundColor: 'pink',
+        fill: false
+    };
+
+    var graph_TR30 = {
+        label: "TR30",
+        data: datos["TR30"],
+        backgroundColor: 'black',
+        fill: false,
+        hidden: true
+    };
+
+    var graph_TR50 = {
+        label: "TR50",
+        data: datos["TR50"],
+        backgroundColor: '#98B9AB',
+        fill: false,
+        hidden: true
+    };
+
+    var graph_TR100 = {
+        label: "TR100",
+        data: datos["TR100"],
+        backgroundColor: '#F9B90AFF',
+        fill: false,
+        hidden: true
+    };
+
+    var graph_TR500 = {
+        label: "TR500",
+        data: datos["TR500"],
+        backgroundColor: '#34A74BFF',
+        fill: false,
+        hidden: true
+    };
+
+    var graph_TR1000 = {
+        label: "TR1000",
+        data: datos["TR1000"],
+        backgroundColor: '#AFA100',
+        fill: false,
+        hidden: true
+    };
+
+    var TR_data = {
+      labels: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23],
+      datasets: [graph_TR2, graph_TR5, graph_TR10, graph_TR30, graph_TR50, graph_TR100, graph_TR500, graph_TR1000]
+    };
+
+    var chartOptionsBar = {
+      fontSize:10,
+      title: {
+        display: true,
+        text: 'HIETOGRAMA DE TORMENTA PLUVIOMÉTRICA',
+        fontColor: "black",
+        fontSize: 14,
+        fontStyle: "bold"
+      },
+      scales:{
+        yAxes: [{
+                scaleLabel: {
+                display: true,
+                labelString: 'Precipitación [mm]',
+                fontColor: "black",
+                fontSize:12,
+                fontStyle: "bold"
+            }
+        }],
+        xAxes: [{
+                ticks: {
+                    autoSkip: false,
+                    maxRotation: 90,
+                    minRotation: 90
+                },
+                scaleLabel: {
+                display: true,
+                labelString: 'Duración [hr]',
+                fontColor: "black",
+                fontSize:12,
+                fontStyle: "bold"
+            }
+            }]
+      },
+      legend: {
+        display: true,
+        position: 'right',
+        align: 'center',
+        labels: {
+          fontColor: 'black',
+          fontSize: 10,
+          usePointStyle: true
+        }
+      }
+    };
+
+    var lineChart = new Chart(graph_ddf, {
+      type: 'bar',
+      data: TR_data,
+      options: chartOptionsBar
+    });
+
+}
 
 var create_graph = function(datos){
     var graph_ddf = document.getElementById("graph_ddf");
@@ -279,21 +395,7 @@ var create_graph = function(datos){
     };
 
     var chartOptionsLine = {
-      responsive: {
-
-        rules: [{ // REVISAAAAAAAAAAAAAAAAAAAAR
-            condition: {
-                minWidth: 700,
-            },
-            chartOptions: {
-                legend: {
-                    display: true,
-                    position: 'right',
-                    align: 'center'
-                }
-            }
-        }]
-      }, 
+      responsive: true,
       fontSize:10,
       title: {
         display: true,
