@@ -140,7 +140,7 @@ var generar_tb_pp = function(trs_tr) {
     console.log(quartil);
 
     var tabla_datos = "<table id='dtHorizontal' class='table table-striped' width=100%>";
-    tabla_datos += "<thead><tr><th colspan='11' align=center style='font-size:16px;'>Estimaciones de frecuencia de precipitación basadas en PDS</th>";
+    tabla_datos += "<thead><tr><th colspan='11' align=center style='font-size:14px;'>Intensidades de precipitación, para diferentes duraciones y periodos de retorno<br>con intervalos de confianza del 90%.</th>";
     tabla_datos += "<tr><th align=center>Duración</th>";
 
     var datos_hietograma = {};
