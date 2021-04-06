@@ -566,8 +566,103 @@ var extraerData_button = function () {
     getFeatureInfo(coord_evt, "dhi:q_pp")
 }
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+
+var create_bh_tdps = function(){
+    var g01_bh = JSON.parse(tdps01_bh);
+    var graph_bh_tdps = document.getElementById("create_bh_tdps");
+    console.log(g01_bh["0001"]["pp_month"].split(",").map(Number));
+
+    var d01_bh_pp = {
+        label: "PP",
+        data: g01_bh["0001"]["pp_month"].split(",").map(Number),
+        backgroundColor: '#F9B90AFF',
+        fill: false
+    };
+
+    var d01_bh_etr = {
+        label: "ETR",
+        data: g01_bh["0001"]["etr_month"].split(",").map(Number),
+        backgroundColor: '#34A74BFF',
+        fill: false
+    };
+
+    var d01_bh_wyld = {
+        label: "WYLD",
+        data: g01_bh["0001"]["wyld_clima"].split(",").map(Number),
+        backgroundColor: '#34A74BFF',
+        fill: false
+    };
+
+    var d01_data = {
+      labels: ["PP","ETR","WYLD"],
+      datasets: [d01_bh_pp, d01_bh_etr, d01_bh_wyld]
+    };
+
+    var chartOptionsBar = {
+      fontSize:10,
+      title: {
+        display: true,
+        text: 'HIETOGRAMA DE TORMENTA PLUVIOMÉTRICA',
+        fontColor: "black",
+        fontSize: 14,
+        fontStyle: "bold"
+      },
+      scales:{
+        yAxes: [{
+                scaleLabel: {
+                display: true,
+                labelString: 'Precipitación [mm]',
+                fontColor: "black",
+                fontSize:12,
+                fontStyle: "bold"
+            }
+        }],
+        xAxes: [{
+                ticks: {
+                    autoSkip: false,
+                    maxRotation: 90,
+                    minRotation: 90
+                },
+                scaleLabel: {
+                display: true,
+                labelString: 'Duración [hr]',
+                fontColor: "black",
+                fontSize:12,
+                fontStyle: "bold"
+            }
+            }]
+      },
+      legend: {
+        display: true,
+        position: 'right',
+        align: 'center',
+        labels: {
+          fontColor: 'black',
+          fontSize: 10,
+          usePointStyle: true
+        }
+      }
+    };
+
+    var barChart = new Chart(graph_bh_tdps, {
+      type: 'bar',
+      data: d01_data,
+      options: chartOptionsBar
+    });
+
+}
+
+create_bh_tdps()
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+
 document.getElementById("download").addEventListener('click', function(){
   var url_base64jp = document.getElementById("graph_ddf").toDataURL("image/jpg");
   var a =  document.getElementById("download");
   a.href = url_base64jp;
 });
+
