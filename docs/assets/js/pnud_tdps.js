@@ -1,5 +1,6 @@
 var create_bh_tdps = function(){
 	var g01_bh = JSON.parse(tdps01_bh)[0];
+    console.log(g01_bh);
     var graph_bh_tdps = document.getElementById("create_bh_tdps");
     
     var d01_bh_pp = {
@@ -27,7 +28,8 @@ var create_bh_tdps = function(){
     };
 
     var d01_data = {
-      labels: ["PP","ETR","WYLD"],
+      // labels: ["PP","ETR","WYLD"],
+      labels: [1,2,3,4,5,6,7,8,9,10,11,12],
       datasets: [d01_bh_pp, d01_bh_etr, d01_bh_wyld]
     };
 

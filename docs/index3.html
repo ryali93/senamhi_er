@@ -47,7 +47,14 @@
     <link type="text/css" rel="stylesheet" href="assets/css/bootstrap-select.min.css">
     <script src="assets/js/bootstrap-select.min.js"></script>
 
+    <!-- ================== BEGIN BOOTSTRAP SELECT CSS ================== -->
+    <link type="text/css" rel="stylesheet" href="assets/css/L.Control.Window.css" />
+    <script src="assets/js/L.Control.Window.js"></script>
 
+    <!-- Latest compiled and minified CSS -->
+    <!-- Latest compiled and minified JavaScript -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 
     <style>
         body {
@@ -62,7 +69,7 @@
             height: 94.5%;
             width: 100%;
             font: 10pt "Helvetica Neue", Arial, Helvetica, sans-serif;
-            position: fixed;
+            position: absolute;
         }
         .lorem {
             font-style: italic;
@@ -96,6 +103,7 @@
                     </ul>
 
                     <ul role="tablist">
+                        <li><a href="#contactus" role="tab"><i class="fa fa-address-book"></i></a></li>
                         <li><a href="#metadatos" role="tab"><i class="fa fa-gear"></i></a></li>
                     </ul>
                 </div>
@@ -107,9 +115,24 @@
                         <div style="margin: 13px;text-align: center;">
                             <img src="assets/img/dhi_logo.jpg" alt="Dirección General de Hidrología" width="200" height="90">
                         </div>
-                        <div></div>
-
-
+                        <div style="margin: 40px;text-align: center;">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        </div>
+                        <a href="https://www.gob.pe/senamhi">
+                            <img src="https://www.senamhi.gob.pe/load/noticia/SENA644.png" alt="Girl in a jacket" class="center_image">
+                        </a>
+                        
                     </div>
                     <div class="sidebar_leaflet-pane" id="lluvias">
                         <h1 class="sidebar_leaflet-header">
@@ -120,7 +143,7 @@
                         <div style="display: flex;text-align: justify;">
                             <div>
                                 <p>La presente herramienta esta diseñada como un sistema de apoyo de decisión, que permite la generación de visualizaciones numéricas y graficas de las curvas IDF para cualquier ubicación espacial en el ámbito peruano; Además, da cuenta de los posibles impactos del cambio climático. La interfaz proporciona intensidades de precipitación para una diversidad de periodos de retorno ( 2, 5, 10, 30, 50, 75, 100, 200, 500 y 1000 años) y duraciones (1 a 24 horas) y permite a los usuarios adquirir información de curvas IDF basadas en datos históricos, así como condiciones climáticas futuras que permiten aportar indicadores efectivos y eficientes para el diseño hidrológico.</p>
-                                <p>Los detalles sobre el enfoque metodológico y el uso de producto se proporciona en el manual técnico en la sección <a href="/">ayuda.</a></p>
+                                <p>Los detalles sobre el enfoque metodológico y el uso de producto se proporciona en el manual técnico en la sección <a href="/lluvias_extremas/assets/informe.pdf" target="_blank">ayuda.</a></p>
                             </div>
                             <div style="margin: 13px;">
                                 <img src="assets/img/cosude_logo.svg" alt="Smiley face" width="50" height="55">
@@ -176,7 +199,7 @@
                         <div id="tabla_datos" class="scrollme"></div>
                         <button id="exportar_tabla" class="exportar_tabla" onclick="exportTableToExcel('tabla_datos')">Exportar a Excel</button>
                         <br><br>
-                        <canvas id="graph_ddf" width="400" height="200"></canvas>
+                        <canvas id="graph_ddf2" width="400" height="200"></canvas>
                         <!-- <div style="text-align: right;">
                             <a id="download" download="BcrpChart.jpg" href="" class="btn btn-primary float-right bg-flat-color-1" title="Descargar Gráfico">
                             <i class="fa fa-download"></i></a>
@@ -184,7 +207,7 @@
 
                         <br><br>
 
-                        <canvas id="graph_ddf2" width="400" height="200"></canvas>
+                        <canvas id="graph_ddf" width="400" height="200"></canvas>
 
                         <br><br>
                       
@@ -205,21 +228,43 @@
                         <br><br>
                         <canvas id="create_bh_tdps" width="400" height="200"></canvas>
                     </div>
+                    <div class="sidebar_leaflet-pane" id="contactus">
+                        <h1 class="sidebar_leaflet-header">Contáctanos<span class="sidebar_leaflet-close"><i class="fa fa-caret-left"></i></span></h1>
+                        <div style="display: flex;text-align: justify;">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        </div>
+                        <div class="form4_contactus top_contactus">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-7 col-md-offset-2">
+                                        <div class="form-bg_contactus">
+                                            <form class="form_contactus">
+                                                <div class="form-group_contactus"> <input type="text" class="form-control_contactus" required="" id="nameNine" placeholder="Tu nombre"> </div>
+                                                <div class="form-group_contactus"> <input type="email" class="form-control_contactus" required="" id="emailNine" placeholder="Email"> </div>
+                                                <div class="form-group_contactus"> <textarea class="form-control_contactus" required="" rows="7" id="messageNine" placeholder="Escribe tu mensaje"></textarea> </div> <button type="submit" class="btn_contactus text-center btn-blue_contactus">Enviar mensaje</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="sidebar_leaflet-pane" id="metadatos">
-                        <h1 class="sidebar_leaflet-header">Catálogo de Metadatos<span class="sidebar_leaflet-close"><i class="fa fa-caret-left"></i></span></h1>
-                        <br>
-                        <dl>
-                          <dt><h2>Base</h2></dt>
-                            <dd>- <a style="text-decoration: none;" href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Límite departamental</a></dd>
-                            <dd>- <a style="text-decoration: none;" href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Límite provincial</a></dd>
-                            <dd>- <a style="text-decoration: none;" href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Delimitación de cuencas</a></dd>
-                        </dl>
-                        <dl>
-                          <dt><h2>Lluvias extremas</h2></dt>
-                            <dd>- <a style="text-decoration: none;" href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Índice de avenidas</a></dd>
-                            <dd>- <a style="text-decoration: none;" href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Regiones de precipitación máxima</a></dd>
-                        </dl>
-
+                        <div>
+                            <h1 class="sidebar_leaflet-header">Catálogo de Metadatos<span class="sidebar_leaflet-close"><i class="fa fa-caret-left"></i></span></h1>
+                            <br>
+                            <dl>
+                              <dt><h2>Base</h2></dt>
+                                <dd>- <a style="text-decoration: none;" href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Límite departamental</a></dd>
+                                <dd>- <a style="text-decoration: none;" href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Límite provincial</a></dd>
+                                <dd>- <a style="text-decoration: none;" href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Delimitación de cuencas</a></dd>
+                            </dl>
+                            <dl>
+                              <dt><h2>Lluvias extremas</h2></dt>
+                                <dd>- <a style="text-decoration: none;" href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Índice de avenidas</a></dd>
+                                <dd>- <a style="text-decoration: none;" href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Regiones de precipitación máxima</a></dd>
+                            </dl>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -238,8 +283,13 @@
 
 <script src="assets/js/leaflet-sidebar.js"></script>
 <script src="assets/js/map-leaflet.js"></script>
-<script src="assets/js/pnud_tdps.js"></script>
+<!-- <script src="assets/js/pnud_tdps.js"></script> -->
 <script src="assets/js/jquery-3.6.0.min.js"></script>
+<!-- <script type="text/javascript">
+    $('.selectpicker').selectpicker({
+      showSubtext:true
+    });
+</script> -->
 
 </body>
 </html>

@@ -8,6 +8,21 @@ var markerIcon = L.icon({
     iconAnchor:   [0.5, 1]
 });
 
+// var marker_1 = L.marker([-15,-75],{title:"Click to show window." }).addTo(map);
+// marker_1.on('click',function(){
+//     var win =  L.control.window(map,{title:'Bienvenido!',maxWidth:600,minWidth:400,modal: true})
+//             .content('<div class="form4_contactus top"><div class="container"><div class="row"><div class="col-md-3 col-md-offset-2"><div class="form-bg_contactus"><form class="form_contactus"><div class="form-group_contactus"> <label class="sr-only_contactus">Name</label> <input type="text" class="form-control_contactus" required="" id="nameNine" placeholder="Tu nombre"> </div><div class="form-group_contactus"> <label class="sr-only_contactus">Email</label> <input type="email" class="form-control_contactus" required="" id="emailNine" placeholder="Email"> </div><div class="form-group_contactus"> <label class="sr-only_contactus">Name</label> <textarea class="form-control_contactus" required="" rows="7" id="messageNine" placeholder="Escribe tu mensaje"></textarea> </div><button type="submit" class="btn_contactus text-center btn-blue_contactus">Enviar mensaje</button></form></div></div></div></div></div>')
+//             .show()
+// });
+var first_window = function(){
+    var win =  L.control.window(map,{title:'Bienvenido!',maxWidth:600,minWidth:400,modal: true})
+            .content('<div class="form4_contactus top"><div class="container"><div class="row"><div class="col-md-3 col-md-offset-2"><div class="form-bg_contactus"><form class="form_contactus"><div class="form-group_contactus"> <label class="sr-only_contactus">Name</label> <input type="text" class="form-control_contactus" required="" id="nameNine" placeholder="Tu nombre"> </div><div class="form-group_contactus"> <label class="sr-only_contactus">Email</label> <input type="email" class="form-control_contactus" required="" id="emailNine" placeholder="Email"> </div><div class="form-group_contactus"> <label class="sr-only_contactus">Name</label> <textarea class="form-control_contactus" required="" rows="7" id="messageNine" placeholder="Escribe tu mensaje"></textarea> </div><button type="submit" class="btn_contactus text-center btn-blue_contactus">Enviar mensaje</button></form></div></div></div></div></div>')
+            .show()
+};
+
+first_window();
+
+
 var getFeatureInfoUrl = function (latlng, lyr) {
     var point = map.latLngToContainerPoint(latlng, map.getZoom());
     var size = map.getSize();
@@ -59,7 +74,7 @@ var getFeatureInfo = function(evt, lyr){
 var showDisclaimer = function() {
     var div = document.getElementById("info legend")
     div.innerHTML = "<b>Índice de avenidas:</b><br>";
-    div.innerHTML += '<img src="'+host+'geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.3.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&STRICT=false&style=raster_style">';
+    div.innerHTML += '<img src="'+host+'geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.3.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&STRICT=false&style=style_pp_max_monthly_opc3">';
 }
 
 var hideDisclaimer = function() {
@@ -304,7 +319,7 @@ var create_graph2 = function(datos){
       },
       legend: {
         display: true,
-        position: 'right',
+        position: 'bottom',
         align: 'center',
         labels: {
           fontColor: 'black',
@@ -431,7 +446,7 @@ var create_graph = function(datos){
       },
       legend: {
         display: true,
-        position: 'right',
+        position: 'bottom',
         align: 'center',
         // verticalAlign: "center",
         // horizontalAlign: "center",
@@ -503,8 +518,8 @@ var funcion_inicial = function(){
     });
 
     var indice_avenidas = L.tileLayer.wms(host + "geoserver/dhi/wms", {
-       // opacity: 0.8,
-       layers: "dhi:gpo_indice_avenida",
+       opacity: 0.8,
+       layers: "dhi:gpo_pp_max_monthly",
        format: 'image/png',
        transparent: true,
        version: "1.3.0"
@@ -573,39 +588,44 @@ var extraerData_button = function () {
 var create_bh_tdps = function(){
     var g01_bh = JSON.parse(tdps01_bh);
     var graph_bh_tdps = document.getElementById("create_bh_tdps");
-    console.log(g01_bh["0001"]["pp_month"].split(",").map(Number));
+    var indices_bh = [6,7,8,9,10,11,0,1,2,3,4,5];
+
+    var data_bh_pp = g01_bh["0029"]["pp_month"].split(",").map(Number);
+    var data_bh_etr = g01_bh["0029"]["etr_month"].split(",").map(Number).map(x => x * -1);
+    var data_bh_wyld = g01_bh["0029"]["wyld_clima"].split(",").map(Number).map(x => x * -1);
 
     var d01_bh_pp = {
-        label: "PP",
-        data: g01_bh["0001"]["pp_month"].split(",").map(Number),
-        backgroundColor: '#F9B90AFF',
+        label: "Precipitación (mm)",
+        data: indices_bh.map(i => data_bh_pp[i]),
+        backgroundColor: 'blue',
         fill: false
     };
 
     var d01_bh_etr = {
-        label: "ETR",
-        data: g01_bh["0001"]["etr_month"].split(",").map(Number),
-        backgroundColor: '#34A74BFF',
+        label: "ETR (mm)",
+        data: indices_bh.map(i => data_bh_etr[i]),
+        backgroundColor: 'green',
         fill: false
     };
 
     var d01_bh_wyld = {
-        label: "WYLD",
-        data: g01_bh["0001"]["wyld_clima"].split(",").map(Number),
-        backgroundColor: '#34A74BFF',
+        label: "Escurrimiento (mm)",
+        data: indices_bh.map(i => data_bh_wyld[i]),
+        backgroundColor: 'red',
         fill: false
     };
 
     var d01_data = {
-      labels: ["PP","ETR","WYLD"],
-      datasets: [d01_bh_pp, d01_bh_etr, d01_bh_wyld]
+      labels: ["Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug"],
+      datasets: [d01_bh_pp, d01_bh_wyld, d01_bh_etr]
     };
 
     var chartOptionsBar = {
+      responsive: true,
       fontSize:10,
       title: {
         display: true,
-        text: 'HIETOGRAMA DE TORMENTA PLUVIOMÉTRICA',
+        text: 'BALANCE HÍDRICO',
         fontColor: "black",
         fontSize: 14,
         fontStyle: "bold"
@@ -613,31 +633,29 @@ var create_bh_tdps = function(){
       scales:{
         yAxes: [{
                 scaleLabel: {
-                display: true,
-                labelString: 'Precipitación [mm]',
-                fontColor: "black",
-                fontSize:12,
-                fontStyle: "bold"
-            }
+                    display: true,
+                    labelString: 'Balance en cuenca',
+                    fontColor: "black",
+                    fontSize:12,
+                    fontStyle: "bold"
+                },
+                stacked: true
         }],
         xAxes: [{
-                ticks: {
-                    autoSkip: false,
-                    maxRotation: 90,
-                    minRotation: 90
-                },
                 scaleLabel: {
-                display: true,
-                labelString: 'Duración [hr]',
-                fontColor: "black",
-                fontSize:12,
-                fontStyle: "bold"
-            }
+                    display: false,
+                    labelString: 'Duración [hr]',
+                    fontColor: "black",
+                    fontSize:12,
+                    fontStyle: "bold"
+                },
+                stacked: true,
+                barPercentage: 0.5
             }]
       },
       legend: {
         display: true,
-        position: 'right',
+        position: 'bottom',
         align: 'center',
         labels: {
           fontColor: 'black',
@@ -656,7 +674,6 @@ var create_bh_tdps = function(){
 }
 
 create_bh_tdps()
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
