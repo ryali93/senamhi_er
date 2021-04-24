@@ -152,6 +152,7 @@ var generar_tb_pp = function(trs_tr) {
     var quartil = document.getElementById('select_quartil').value;
     // var trs_tr = 100;
     var val_temp;
+    var intensidades;
 
     console.log(quartil);
 
@@ -164,7 +165,7 @@ var generar_tb_pp = function(trs_tr) {
     for(cab=0;cab<=9;cab++){
         tabla_datos+="<th>"+tr_anos[cab]+"</th>";
         datos_hietograma[tr_anos[cab]] = [];
-        datos_idf[tr_anos[cab]] = [];
+        // datos_idf[tr_anos[cab]] = [];
     };
 
     tabla_datos += "</tr></thead><tbody>";
@@ -182,19 +183,12 @@ var generar_tb_pp = function(trs_tr) {
             var val_hiet_me = val_pp_me[j]*trs_tr["LM_"+tr_anos[m]];
             var val_hiet_mx = val_pp_mx[j]*trs_tr["LS_"+tr_anos[m]];
 
-            // datos_idf[tr_anos[m]].push(parseFloat(val_temp_me));
-            // if(n==1){
-            //     val_temp_me = val_hiet_me;
-            // }else{
-            //     val_temp_me = val_pp_me[j]*trs_tr["LM_"+tr_anos[m]] - val_pp_me[j-1]*trs_tr["LM_"+tr_anos[m]];
-            // };
-
             if(n==1){
                 val_temp_me_graf = val_hiet_me;
             }else{
                 val_temp_me_graf = val_pp_me[j]*trs_tr["LM_"+tr_anos[m]] - val_pp_me[j-1]*trs_tr["LM_"+tr_anos[m]];
             };
-            datos_idf[tr_anos[m]].push(parseFloat(val_temp_me_graf).toFixed(2));
+            // datos_idf[tr_anos[m]].push(parseFloat(val_temp_me_graf).toFixed(2));
             datos_hietograma[tr_anos[m]].push(parseFloat(val_temp_me_graf).toFixed(2));
 
             tabla_datos += "</td><td align=center style='padding: 0px;'>";
@@ -212,13 +206,15 @@ var generar_tb_pp = function(trs_tr) {
     document.getElementById("tabla_datos").innerHTML = tabla_datos;
     // datos_idf = datos_idf.sort(function(a, b) { return a - b }).reverse()
     // datos_hietograma = datos_hietograma.sort(function(a, b) { return a - b }).reverse()
-    create_graph(datos_idf)
-    datos_hietograma = datos_idf_update(datos_hietograma)
-    create_graph2(datos_hietograma)
+    create_graph_hietograma(datos_hietograma)
+    intensidades = mean_intensity(datos_hietograma)
+    datos_idf = datos_idf_update(intensidades)
+    create_graph_idf(datos_idf)
 
 }
 
-var create_graph2 = function(datos){
+var create_graph_hietograma = function(datos){
+    // HIETOGRAMA DE DISEÑO
     var graph_ddf = document.getElementById("graph_ddf2");
     var graph_TR2 = {
         label: "TR2",
@@ -357,7 +353,7 @@ var create_graph2 = function(datos){
 
 }
 
-var create_graph = function(datos){
+var create_graph_idf = function(datos){
     var graph_ddf = document.getElementById("graph_ddf");
     var graph_TR2 = {
         label: "TR2",
@@ -644,6 +640,28 @@ var create_intensity = function(T,d,k,m,n){
     var I = k*(T**m)/(d**n)
     return(I)
 }
+
+var mean_intensity = function(datos){
+    var x = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24];
+    var trs = [2,5,10,30,50,75,100,200,500,1000];
+    var pp_dec = {}
+    var intens = {};
+    var d;
+    for(T in trs){
+        pp_dec["TR"+trs[T]] = []
+        intens["TR"+trs[T]] = []
+    }
+    for(T in trs){
+        pp_dec["TR"+trs[T]] = datos["TR"+trs[T]].map(parseFloat).sort(function(a, b) { return a - b }).reverse()
+    }
+    for(T in trs){
+        for(i=1;i<=24;i++){
+            intens["TR"+trs[T]].push(pp_dec["TR"+trs[T]].slice(0,i).reduce((a, b) => a + b, 0)/i)
+        }
+    }
+    return(intens)
+}
+
 
 var datos_idf_update = function(datos){
     var x = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24];
