@@ -161,11 +161,14 @@ var generar_tb_pp = function(trs_tr) {
     tabla_datos += "<tr><th align=center>Duración</th>";
 
     var datos_hietograma = {};
+    var datos_hietograma_mn = {};
+    var datos_hietograma_mx = {};
     var datos_idf = {};
     for(cab=0;cab<=9;cab++){
         tabla_datos+="<th>"+tr_anos[cab]+"</th>";
         datos_hietograma[tr_anos[cab]] = [];
-        // datos_idf[tr_anos[cab]] = [];
+        datos_hietograma_mn[tr_anos[cab]] = [];
+        datos_hietograma_mx[tr_anos[cab]] = [];
     };
 
     tabla_datos += "</tr></thead><tbody>";
@@ -176,7 +179,7 @@ var generar_tb_pp = function(trs_tr) {
         var val_pp_me = data_regiones[region][quartil]["P50"];
         var val_pp_mx = data_regiones[region][quartil]["P90"];
 
-        tabla_datos += "<tr><td align=center>"+n+"-hr";
+        // tabla_datos += "<tr><td align=center>"+n+"-hr";
 
         for(m=0;m<=9;m++){
             var val_hiet_mn = val_pp_mn[j]*trs_tr["LI_"+tr_anos[m]];
@@ -184,32 +187,55 @@ var generar_tb_pp = function(trs_tr) {
             var val_hiet_mx = val_pp_mx[j]*trs_tr["LS_"+tr_anos[m]];
 
             if(n==1){
+                val_temp_mn_graf = val_hiet_mn;
                 val_temp_me_graf = val_hiet_me;
+                val_temp_mx_graf = val_hiet_mx;
             }else{
+                val_temp_mn_graf = val_pp_mn[j]*trs_tr["LI_"+tr_anos[m]] - val_pp_mn[j-1]*trs_tr["LI_"+tr_anos[m]];
                 val_temp_me_graf = val_pp_me[j]*trs_tr["LM_"+tr_anos[m]] - val_pp_me[j-1]*trs_tr["LM_"+tr_anos[m]];
+                val_temp_mx_graf = val_pp_mx[j]*trs_tr["LS_"+tr_anos[m]] - val_pp_mx[j-1]*trs_tr["LS_"+tr_anos[m]];
             };
-            // datos_idf[tr_anos[m]].push(parseFloat(val_temp_me_graf).toFixed(2));
             datos_hietograma[tr_anos[m]].push(parseFloat(val_temp_me_graf).toFixed(2));
+            datos_hietograma_mn[tr_anos[m]].push(parseFloat(val_temp_mn_graf).toFixed(2));
+            datos_hietograma_mx[tr_anos[m]].push(parseFloat(val_temp_mx_graf).toFixed(2));
 
-            tabla_datos += "</td><td align=center style='padding: 0px;'>";
-            tabla_datos += "<strong>"+parseFloat(val_hiet_me).toFixed(1)+"</strong>";
-            tabla_datos += "("+parseFloat(val_hiet_mn).toFixed(1)+"-"+parseFloat(val_hiet_mx).toFixed(1)+")";
-            tabla_datos += "</td>";
+            // tabla_datos += "</td><td align=center style='padding: 0px;'>";
+            // tabla_datos += "<strong>"+parseFloat(val_hiet_me).toFixed(1)+"</strong>";
+            // tabla_datos += "("+parseFloat(val_hiet_mn).toFixed(1)+"-"+parseFloat(val_hiet_mx).toFixed(1)+")";
+            // tabla_datos += "</td>";
         }
-        tabla_datos += "</tr>"
+        // tabla_datos += "</tr>"
     }
-    tabla_datos += "</tbody></table>";
-
-    tabla_datos += '<br><br><button onclick="exportTableToExcel(';
-    tabla_datos += "'tabla_datos'";
-    tabla_datos += ')>Exportar a Excel</button>';
-    document.getElementById("tabla_datos").innerHTML = tabla_datos;
     // datos_idf = datos_idf.sort(function(a, b) { return a - b }).reverse()
     // datos_hietograma = datos_hietograma.sort(function(a, b) { return a - b }).reverse()
     create_graph_hietograma(datos_hietograma)
     intensidades = mean_intensity(datos_hietograma)
     datos_idf = datos_idf_update(intensidades)
     create_graph_idf(datos_idf)
+
+    intensidades_mn = mean_intensity(datos_hietograma_mn)
+    datos_idf_mn = datos_idf_update(intensidades_mn)
+    intensidades_mx = mean_intensity(datos_hietograma_mx)
+    datos_idf_mx = datos_idf_update(intensidades_mx)
+
+    for(j=0;j<=23;j++){
+        var n = j+1
+        tabla_datos += "<tr><td align=center>"+n+"-hr";
+        for(m=0;m<=9;m++){
+            tabla_datos += "</td><td align=center style='padding: 0px;'>";
+            tabla_datos += "<strong>"+parseFloat(datos_idf[tr_anos[m]][j]).toFixed(1)+"</strong>";
+            tabla_datos += "("+parseFloat(datos_idf_mn[tr_anos[m]][j]).toFixed(1)+"-"+parseFloat(datos_idf_mx[tr_anos[m]][j]).toFixed(1)+")";
+            tabla_datos += "</td>";
+        }
+        tabla_datos += "</tr>"
+    }
+
+    tabla_datos += "</tbody></table>";
+
+    tabla_datos += '<br><br><button onclick="exportTableToExcel(';
+    tabla_datos += "'tabla_datos'";
+    tabla_datos += ')>Exportar a Excel</button>';
+    document.getElementById("tabla_datos").innerHTML = tabla_datos;
 
 }
 
