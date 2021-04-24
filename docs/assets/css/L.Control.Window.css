@@ -29,7 +29,7 @@
 .leaflet-control-window{
     position: absolute;
     z-index: 2000;
-    border-radius: 2px;
+    border-radius: 20px;
     margin: 8px;
 
     /** BOX SHADOW **/
@@ -81,10 +81,11 @@
 }
 
 .leaflet-control-window .content{
-    padding: 8px;
+    padding: 30px;
     margin-top: -10px;
     z-index:29;
     overflow: auto;
+    text-align: justify;
 }
 
 .leaflet-control-window .promptButtons{

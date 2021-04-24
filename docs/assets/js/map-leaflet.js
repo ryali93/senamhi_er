@@ -15,8 +15,9 @@ var markerIcon = L.icon({
 //             .show()
 // });
 var first_window = function(){
-    var win =  L.control.window(map,{title:'Bienvenido!',maxWidth:600,minWidth:400,modal: true})
-            .content('<div class="form4_contactus top"><div class="container"><div class="row"><div class="col-md-3 col-md-offset-2"><div class="form-bg_contactus"><form class="form_contactus"><div class="form-group_contactus"> <label class="sr-only_contactus">Name</label> <input type="text" class="form-control_contactus" required="" id="nameNine" placeholder="Tu nombre"> </div><div class="form-group_contactus"> <label class="sr-only_contactus">Email</label> <input type="email" class="form-control_contactus" required="" id="emailNine" placeholder="Email"> </div><div class="form-group_contactus"> <label class="sr-only_contactus">Name</label> <textarea class="form-control_contactus" required="" rows="7" id="messageNine" placeholder="Escribe tu mensaje"></textarea> </div><button type="submit" class="btn_contactus text-center btn-blue_contactus">Enviar mensaje</button></form></div></div></div></div></div>')
+    var win =  L.control.window(map,{title:'<h2 style="text-align:center">Bienvenido!</h2>',maxWidth:600,minWidth:400,modal: true})
+            // .content('<div class="form4_contactus top"><div class="container"><div class="row"><div class="col-md-3 col-md-offset-2"><div class="form-bg_contactus"><form class="form_contactus"><div class="form-group_contactus"> <label class="sr-only_contactus">Name</label> <input type="text" class="form-control_contactus" required="" id="nameNine" placeholder="Tu nombre"> </div><div class="form-group_contactus"> <label class="sr-only_contactus">Email</label> <input type="email" class="form-control_contactus" required="" id="emailNine" placeholder="Email"> </div><div class="form-group_contactus"> <label class="sr-only_contactus">Name</label> <textarea class="form-control_contactus" required="" rows="7" id="messageNine" placeholder="Escribe tu mensaje"></textarea> </div><button type="submit" class="btn_contactus text-center btn-blue_contactus">Enviar mensaje</button></form></div></div></div></div></div>')
+            .content('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')
             .show()
 };
 
@@ -155,7 +156,7 @@ var generar_tb_pp = function(trs_tr) {
     console.log(quartil);
 
     var tabla_datos = "<table id='dtHorizontal' class='table table-striped' width=100%>";
-    tabla_datos += "<thead><tr><th colspan='11' align=center style='font-size:14px;'>Intensidades de precipitación, para diferentes duraciones y periodos de retorno<br>con intervalos de confianza del 90%.</th>";
+    tabla_datos += "<thead><tr><th colspan='11' align=center style='font-size:14px;'>Intensidades de precipitación, para diferentes duraciones y periodos de retorno.</th>";
     tabla_datos += "<tr><th align=center>Duración</th>";
 
     var datos_hietograma = {};
@@ -193,7 +194,7 @@ var generar_tb_pp = function(trs_tr) {
             }else{
                 val_temp_me_graf = val_pp_me[j]*trs_tr["LM_"+tr_anos[m]] - val_pp_me[j-1]*trs_tr["LM_"+tr_anos[m]];
             };
-            datos_idf[tr_anos[m]].push(parseFloat(val_temp_me_graf*1/n).toFixed(2));
+            datos_idf[tr_anos[m]].push(parseFloat(val_temp_me_graf).toFixed(2));
             datos_hietograma[tr_anos[m]].push(parseFloat(val_temp_me_graf).toFixed(2));
 
             tabla_datos += "</td><td align=center style='padding: 0px;'>";
@@ -209,7 +210,10 @@ var generar_tb_pp = function(trs_tr) {
     tabla_datos += "'tabla_datos'";
     tabla_datos += ')>Exportar a Excel</button>';
     document.getElementById("tabla_datos").innerHTML = tabla_datos;
-    create_graph(datos_idf);
+    // datos_idf = datos_idf.sort(function(a, b) { return a - b }).reverse()
+    // datos_hietograma = datos_hietograma.sort(function(a, b) { return a - b }).reverse()
+    create_graph(datos_idf)
+    datos_hietograma = datos_idf_update(datos_hietograma)
     create_graph2(datos_hietograma)
 
 }
@@ -254,10 +258,26 @@ var create_graph2 = function(datos){
         hidden: true
     };
 
+    var graph_TR75 = {
+        label: "TR75",
+        data: datos["TR75"],
+        backgroundColor: 'green',
+        fill: false,
+        hidden: true
+    };
+
     var graph_TR100 = {
         label: "TR100",
         data: datos["TR100"],
         backgroundColor: '#F9B90AFF',
+        fill: false,
+        hidden: true
+    };
+
+    var graph_TR200 = {
+        label: "TR200",
+        data: datos["TR200"],
+        backgroundColor: 'brown',
         fill: false,
         hidden: true
     };
@@ -279,8 +299,8 @@ var create_graph2 = function(datos){
     };
 
     var TR_data = {
-      labels: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23],
-      datasets: [graph_TR2, graph_TR5, graph_TR10, graph_TR30, graph_TR50, graph_TR100, graph_TR500, graph_TR1000]
+      labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24],
+      datasets: [graph_TR2, graph_TR5, graph_TR10, graph_TR30, graph_TR50, graph_TR75, graph_TR100, graph_TR200, graph_TR500, graph_TR1000]
     };
 
     var chartOptionsBar = {
@@ -341,7 +361,7 @@ var create_graph = function(datos){
     var graph_ddf = document.getElementById("graph_ddf");
     var graph_TR2 = {
         label: "TR2",
-        data: datos["TR2"],
+        data: datos["TR2"].sort(function(a, b) { return a - b }).reverse(),
         borderColor: 'red',
         fill: false,
         pointStyle: 'line'
@@ -349,7 +369,7 @@ var create_graph = function(datos){
 
     var graph_TR5 = {
         label: "TR5",
-        data: datos["TR5"],
+        data: datos["TR5"].sort(function(a, b) { return a - b }).reverse(),
         borderColor: 'blue',
         fill: false,
         pointStyle: 'line'
@@ -357,7 +377,7 @@ var create_graph = function(datos){
 
     var graph_TR10 = {
         label: "TR10",
-        data: datos["TR10"],
+        data: datos["TR10"].sort(function(a, b) { return a - b }).reverse(),
         borderColor: 'pink',
         fill: false,
         pointStyle: 'line'
@@ -365,7 +385,7 @@ var create_graph = function(datos){
 
     var graph_TR30 = {
         label: "TR30",
-        data: datos["TR30"],
+        data: datos["TR30"].sort(function(a, b) { return a - b }).reverse(),
         borderColor: 'black',
         fill: false,
         pointStyle: 'line'
@@ -373,8 +393,17 @@ var create_graph = function(datos){
 
     var graph_TR50 = {
         label: "TR50",
-        data: datos["TR50"],
+        data: datos["TR50"].sort(function(a, b) { return a - b }).reverse(),
         borderColor: '#98B9AB',
+        fill: false,
+        pointStyle: 'line',
+        hidden: true
+    };
+
+    var graph_TR75 = {
+        label: "TR75",
+        data: datos["TR75"].sort(function(a, b) { return a - b }).reverse(),
+        borderColor: 'green',
         fill: false,
         pointStyle: 'line',
         hidden: true
@@ -382,15 +411,23 @@ var create_graph = function(datos){
 
     var graph_TR100 = {
         label: "TR100",
-        data: datos["TR100"],
+        data: datos["TR100"].sort(function(a, b) { return a - b }).reverse(),
         borderColor: '#F9B90AFF',
+        fill: false,
+        pointStyle: 'line'
+    };
+
+    var graph_TR200 = {
+        label: "TR200",
+        data: datos["TR200"].sort(function(a, b) { return a - b }).reverse(),
+        borderColor: 'brown',
         fill: false,
         pointStyle: 'line'
     };
 
     var graph_TR500 = {
         label: "TR500",
-        data: datos["TR500"],
+        data: datos["TR500"].sort(function(a, b) { return a - b }).reverse(),
         borderColor: '#34A74BFF',
         fill: false,
         pointStyle: 'line'
@@ -398,15 +435,15 @@ var create_graph = function(datos){
 
     var graph_TR1000 = {
         label: "TR1000",
-        data: datos["TR1000"],
+        data: datos["TR1000"].sort(function(a, b) { return a - b }).reverse(),
         borderColor: '#AFA100',
         fill: false,
         pointStyle: 'line'
     };
 
     var TR_data = {
-      labels: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23],
-      datasets: [graph_TR2, graph_TR5, graph_TR10, graph_TR30, graph_TR50, graph_TR100, graph_TR500, graph_TR1000]
+      labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24],
+      datasets: [graph_TR2, graph_TR5, graph_TR10, graph_TR30, graph_TR50, graph_TR75, graph_TR100, graph_TR200, graph_TR500, graph_TR1000]
     };
 
     var chartOptionsLine = {
@@ -582,6 +619,60 @@ var extraerData_button = function () {
 }
 
 
+var power_regression = function(x,y){
+    var n = x.length;
+    var lr = {};
+    var sumX = 0;
+    var sumX2 = 0;
+    var sumY = 0;
+    var sumXY = 0
+    for(i=0;i<=n-1;i++){
+        sumX = sumX + Math.log(x[i]);
+        sumX2 = sumX2 + Math.log(x[i])*Math.log(x[i]);
+        sumY = sumY + Math.log(y[i]);
+        sumXY = sumXY + Math.log(y[i])*Math.log(x[i]);
+    }
+    var b = (n*sumXY - sumX*sumY)/(n*sumX2 - sumX*sumX);
+    var A = (sumY - b*sumX)/n
+    var a = Math.exp(A);
+    lr["a"] = a;
+    lr["b"] = b;
+    return(lr)
+}
+
+var create_intensity = function(T,d,k,m,n){
+    var I = k*(T**m)/(d**n)
+    return(I)
+}
+
+var datos_idf_update = function(datos){
+    var x = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24];
+    var trs = [2,5,10,30,50,75,100,200,500,1000];
+
+    var lr;
+    var coef = [];
+    var expon = [];
+    var lr_pr;
+    var k,T,m,d,n;
+    for(m in datos){
+        lr = power_regression(x, datos[m].map(parseFloat))
+        coef.push(lr["a"]);
+        expon.push(lr["b"]);
+    }
+    lr_pr = power_regression(trs, coef);
+    k = lr_pr["a"];
+    m = lr_pr["b"];
+    n = -1*expon.reduce((a,v,i)=>(a*i+v)/(i+1));
+
+    var intens = {};
+    for(T in trs){
+        intens["TR"+trs[T]] = [];
+        for(d=1;d<=24;d++){
+            intens["TR"+trs[T]].push(create_intensity(trs[T],d,k,m,n));
+        }
+    }
+    return(intens);
+}
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 
