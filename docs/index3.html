@@ -44,8 +44,8 @@
     <link type="text/css" rel="stylesheet" href="assets/css/styleSheet1.css">
 
     <!-- ================== BEGIN BOOTSTRAP SELECT CSS ================== -->
-    <link type="text/css" rel="stylesheet" href="assets/css/bootstrap-select.min.css">
-    <script src="assets/js/bootstrap-select.min.js"></script>
+    <!-- <link type="text/css" rel="stylesheet" href="assets/css/bootstrap-select.min.css">
+    <script src="assets/js/bootstrap-select.min.js"></script> -->
 
     <!-- ================== BEGIN BOOTSTRAP SELECT CSS ================== -->
     <link type="text/css" rel="stylesheet" href="assets/css/L.Control.Window.css" />
@@ -53,8 +53,8 @@
 
     <!-- Latest compiled and minified CSS -->
     <!-- Latest compiled and minified JavaScript -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script> -->
 
     <style>
         body {
@@ -96,14 +96,14 @@
             <div id="sidebar_leaflet" class="sidebar_leaflet collapsed">
                 <div class="sidebar_leaflet-tabs">
                     <ul role="tablist">
-                        <li class="active"><a href="#principal" role="tab"><i class="fa fa-bars"></i></a></li>
-                        <li><a href="#lluvias" role="tab"><i class="fa fa-cloud"></i></a></li>
-                        <li><a href="#pnud_tdps" role="tab"><i class="fa fa-bar-chart"></i></a></li>
-                        <li><a href="https://github.com/ryali93/senamhi_er" role="tab" target="_blank"><i class="fa fa-github"></i></a></li>
+                        <!-- <li class="active"><a href="#principal" role="tab"><i class="fa fa-bars"></i></a></li> -->
+                        <li class="active"><a href="#lluvias" role="tab"><i class="fa fa-cloud"></i></a></li>
+                        <!-- <li><a href="#pnud_tdps" role="tab"><i class="fa fa-bar-chart"></i></a></li> -->
+                        <!-- <li><a href="https://github.com/ryali93/senamhi_er" role="tab" target="_blank"><i class="fa fa-github"></i></a></li> -->
                     </ul>
 
                     <ul role="tablist">
-                        <li><a href="#contactus" role="tab"><i class="fa fa-address-book"></i></a></li>
+                        <!-- <li><a href="#contactus" role="tab"><i class="fa fa-address-book"></i></a></li> -->
                         <li><a href="#metadatos" role="tab"><i class="fa fa-gear"></i></a></li>
                     </ul>
                 </div>
@@ -117,12 +117,6 @@
                         </div>
                         <div style="margin: 50px;text-align: center;">
                             <p>La Dirección de Hidrología es el órgano de línea responsable de conducir, normar, formular, proponer y ejecutar planes, programas, proyectos, estudios e investigaciones en el área de hidrología; así como realizar el monitoreo y la predicción hidrológica en las diferentes escalas de tiempo. Realiza estudios del impacto del clima en los recursos hídricos.</p>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                         </div>
                         <a href="https://www.gob.pe/senamhi">
                             <img src="https://www.senamhi.gob.pe/load/noticia/SENA644.png" alt="Girl in a jacket" class="center_image">
@@ -135,15 +129,14 @@
                             <span class="sidebar_leaflet-close"><i class="fa fa-caret-left"></i></span>
                         </h1>
 
-                        <div style="display: flex;text-align: justify;">
-                            <div>
+                        <div class="containertext">
+                            <img class="containertext__image" src="assets/img/cosude.png"/>
+                            <div class="containertext__text">
                                 <p>La presente herramienta esta diseñada como un sistema de apoyo de decisión, que permite la generación de visualizaciones numéricas y graficas de las curvas IDF para cualquier ubicación espacial en el ámbito peruano; Además, da cuenta de los posibles impactos del cambio climático. La interfaz proporciona intensidades de precipitación para una diversidad de periodos de retorno ( 2, 5, 10, 30, 50, 75, 100, 200, 500 y 1000 años) y duraciones (1 a 24 horas) y permite a los usuarios adquirir información de curvas IDF basadas en datos históricos, así como condiciones climáticas futuras que permiten aportar indicadores efectivos y eficientes para el diseño hidrológico.</p>
-                                <p>Los detalles sobre el enfoque metodológico y el uso de producto se proporciona en el manual técnico en la sección <a href="/lluvias_extremas/assets/informe.pdf" target="_blank">ayuda.</a></p>
-                            </div>
-                            <div style="margin: 13px;">
-                                <img src="assets/img/cosude_logo.svg" alt="Smiley face" width="50" height="55">
                             </div>
                         </div>
+
+                        <p>Los detalles sobre el enfoque metodológico y el uso de producto se proporciona en el manual técnico en la sección <a href="/lluvias_extremas/assets/informe.pdf" target="_blank">ayuda.</a></p>
                         <!-- <b>Consultar el <a href="/lluvias_extremas/assets/informe.pdf">manual de uso</a></b> -->
                         <br>
                         <div style="width: 100%;display: flex;">
@@ -151,19 +144,22 @@
                                 <p id="infoRegion"><b>Región: </b></p>
                             </div>
                             <div style="width: 70%;display: flex;">
-                                <div>
-                                    <label>X (wgs84):</label><input id="coord_x" class="inline" type="number"><br>
-                                    <label>Y (wgs84):</label><input id="coord_y" class="inline" type="number">
-                                </div>
+                                <form>
+                                    <div>
+                                        <label style="display: inline-block;width: 70px;margin: 5px;">X (wgs84):</label><input id="coord_x" class="inline" type="number"
+                                        placeholder="Ej. -77.043" style="width:60%;"><br>
+                                        <label style="display: inline-block;width: 70px;margin: 5px;">Y (wgs84):</label><input id="coord_y" class="inline" type="number" placeholder="Ej. -12.079" style="width:60%;">
+                                    </div>
+                                </form>
                                 <div class="container_image">
-                                    <input id="extraerData_button" onclick="extraerData_button()" type="image" alt="Exportar" src="assets/img/location.png" title="Ubicar el punto en el mapa">
+                                    <input id="extraerData_button" onclick="extraerData_button()" type="image" alt="Exportar" src="assets/img/refresh.png" title="Actualizar">
                                 </div>
                             </div>
                         </div>
                         <br>
 
-                        <div style="display:flex;">
-                            <div style="width: 100%;">
+                        <!-- <div style="display:flex;"> -->
+                            <!-- <div style="width: 100%;">
                                 <b>Seleccionar quartil:</b>
                                 <br>
                                 <div class="selectWrapper">
@@ -174,39 +170,34 @@
                                         <option value="Q4">Quartil 4</option>
                                     </select>
                                 </div>
-                            </div>
-                            <div style="width: 100%;">
-                                <b>Seleccionar modelos climáticos:</b>
+                            </div> -->
+                            <div style="width: 85%;">
+                                <b>Seleccionar escenarios climáticos:</b>
                                 <br>
                                 <div class="selectWrapper">
-                                    <select id="select_escenario" title="Escenario de ...">
-                                        <option value="Q1">Escenario Histórico</option>
-                                        <option value="Q2" data-subtext="Investigación científica e industrial del Commonwealth Organización (CSIRO) y Oficina de Meteorología (BOM), Australia">ACCESS1-3</option>
-                                        <option value="Q3" data-subtext="Modelo de medio ambiente global del Hadley Center versión-2">HadGEM2-ES</option>
-                                        <option value="Q4" data-subtext="Instituto Max Planck de Meteorología de Hamburgo, Alemania">MPI-ESM-MR</option>
-                                        <option value="Q4" data-subtext="Promedio de los 3 modelos considerados">Med</option>
+                                    <select id="select_escenario" title="Elegir una opción, por defecto">
+                                        <option value="ESC_HST">Escenario Histórico</option>
+                                        <option value="ESC_ACCESS" data-subtext="Investigación científica e industrial del Commonwealth Organización (CSIRO) y Oficina de Meteorología (BOM), Australia">ACCESS1-3 (al 2050)</option>
+                                        <option value="ESC_HADGEM" data-subtext="Modelo de medio ambiente global del Hadley Center versión-2">HadGEM2-ES (al 2050)</option>
+                                        <option value="ESC_MPI" data-subtext="Instituto Max Planck de Meteorología de Hamburgo, Alemania">MPI-ESM-MR (al 2050)</option>
+                                        <option value="ESC_MED" data-subtext="Promedio de los 3 modelos considerados">Mediana de los escenarios (al 2050)</option>
                                     </select>
                                 </div>
                             </div>
-                        </div>
+                        <!-- </div> -->
                         
                         <br><br>
                         <div id="tabla_datos" class="scrollme"></div>
                         <button id="exportar_tabla" class="exportar_tabla" onclick="exportTableToExcel('tabla_datos')">Exportar a Excel</button>
                         <br><br>
-                        <canvas id="graph_ddf2" width="400" height="200"></canvas>
-                        <!-- <div style="text-align: right;">
-                            <a id="download" download="BcrpChart.jpg" href="" class="btn btn-primary float-right bg-flat-color-1" title="Descargar Gráfico">
-                            <i class="fa fa-download"></i></a>
-                        </div> -->
-
+                        <canvas id="graph_cldf" width="400" height="200"></canvas>
                         <br><br>
-
                         <canvas id="graph_ddf" width="400" height="200"></canvas>
+                        <!-- <br><br> -->
+                        <!-- <canvas id="graph_ddf2" width="400" height="200"></canvas> -->
+                        
 
                         <br><br>
-                      
-                        <!-- <button id="exportar_tabla2" class="exportar_tabla" onclick="exportTableToExcel('tabla_datos')">Exportar Grafico</button><br><br> -->
                     </div>
 
                     <div class="sidebar_leaflet-pane" id="pnud_tdps">
@@ -214,35 +205,14 @@
                         <div style="display: flex;text-align: justify;">
                             <div>
                                 <p>Los recursos hídricos del TDPS son de alto valor para Bolivia y Perú, que desde la década de 1950 han avanzado en desarrollar mecanismos de gestión conjunta. En 1992, ambos países acordaron la creación de la Autoridad Binacional Autónoma del Sistema Hídrico del Lago Titicaca, Río Desaguadero, Lago Poopó, Salar de Coipasa (ALT). Posteriormente, los países establecieron varias instancias de cooperación, como las comisiones técnicas binacionales para los ríos Maure-Mauri y Suches, y la Comisión Binacional de Alto Nivel para el Lago Titicaca. La ALT es responsable de implementar el Plan Director Global Binacional del Sistema Hídrico TDPS.</p>
-                                <p>Los detalles sobre el uso de producto se proporciona en el manual técnico en la sección <a href="/">ayuda.</a></p>
                             </div>
-                            <div style="margin: 13px;">
+                            <div style="margin: auto;text-align: center;">
                                 <img src="assets/img/UNDP_logo.png" alt="Smiley face" width="50" height="90">
                             </div>
+                            <p>Los detalles sobre el uso de producto se proporciona en el manual técnico en la sección <a href="/">ayuda.</a></p>
                         </div>
                         <br><br>
                         <canvas id="create_bh_tdps" width="400" height="200"></canvas>
-                    </div>
-                    <div class="sidebar_leaflet-pane" id="contactus">
-                        <h1 class="sidebar_leaflet-header">Contáctanos<span class="sidebar_leaflet-close"><i class="fa fa-caret-left"></i></span></h1>
-                        <div style="display: flex;text-align: justify;">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                        </div>
-                        <div class="form4_contactus top_contactus">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-7 col-md-offset-2">
-                                        <div class="form-bg_contactus">
-                                            <form class="form_contactus">
-                                                <div class="form-group_contactus"> <input type="text" class="form-control_contactus" required="" id="nameNine" placeholder="Tu nombre"> </div>
-                                                <div class="form-group_contactus"> <input type="email" class="form-control_contactus" required="" id="emailNine" placeholder="Email"> </div>
-                                                <div class="form-group_contactus"> <textarea class="form-control_contactus" required="" rows="7" id="messageNine" placeholder="Escribe tu mensaje"></textarea> </div> <button type="submit" class="btn_contactus text-center btn-blue_contactus">Enviar mensaje</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="sidebar_leaflet-pane" id="metadatos">
                         <div>
@@ -255,9 +225,17 @@
                                 <dd>- <a style="text-decoration: none;" href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Delimitación de cuencas</a></dd>
                             </dl>
                             <dl>
-                              <dt><h2>Lluvias extremas</h2></dt>
-                                <dd>- <a style="text-decoration: none;" href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Índice de avenidas</a></dd>
+                              <dt><h2>Modulo para la estimación de curvas IDF</h2></dt>
+                                <!-- <dd>- <a style="text-decoration: none;" href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Índice de avenidas</a></dd> -->
                                 <dd>- <a style="text-decoration: none;" href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Regiones de precipitación máxima</a></dd>
+
+                                <dd>- <a style="text-decoration: none;" href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Escenario climático: Escenario histórico</a></dd>
+                                <dd>- <a style="text-decoration: none;" href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Escenario climático ACCESS1-3: </a>Investigación científica e industrial del Commonwealth Organización (CSIRO) y Oficina de Meteorología (BOM), Australia</dd>
+                                <dd>- <a style="text-decoration: none;" href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Escenario climático HadGEM2-ES: </a>Modelo de medio ambiente global del Hadley Center versión-2</dd>
+                                <dd>- <a style="text-decoration: none;" href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Escenario climático MPI-ESM-MR: </a>Instituto Max Planck de Meteorología de Hamburgo, Alemania</dd>
+                                <dd>- <a style="text-decoration: none;" href="http://idesep.senamhi.gob.pe/geonetwork/" target="_blank">Escenario climático Mediana: </a>Promedio de los 3 modelos considerados (ACCESS1-3, HadGEM2-ES, MPI-ESM-MR)</dd>
+
+
                             </dl>
                         </div>
                     </div>
@@ -278,13 +256,7 @@
 
 <script src="assets/js/leaflet-sidebar.js"></script>
 <script src="assets/js/map-leaflet.js"></script>
-<!-- <script src="assets/js/pnud_tdps.js"></script> -->
 <script src="assets/js/jquery-3.6.0.min.js"></script>
-<!-- <script type="text/javascript">
-    $('.selectpicker').selectpicker({
-      showSubtext:true
-    });
-</script> -->
 
 </body>
 </html>

@@ -7,17 +7,17 @@ var markerIcon = L.icon({
     iconUrl: 'assets/img/marker.png',
     iconAnchor:   [0.5, 1]
 });
+var escenarios = {
+    "ESC_HST" : "dhi:q_pp",
+    "ESC_ACCESS" : "dhi:dhi_pp_access",
+    "ESC_HADGEM" : "dhi:dhi_pp_hadgem",
+    "ESC_MPI" : "dhi:dhi_pp_mpi",
+    "ESC_MED" :"dhi:dhi_pp_med"
+};
 
-// var marker_1 = L.marker([-15,-75],{title:"Click to show window." }).addTo(map);
-// marker_1.on('click',function(){
-//     var win =  L.control.window(map,{title:'Bienvenido!',maxWidth:600,minWidth:400,modal: true})
-//             .content('<div class="form4_contactus top"><div class="container"><div class="row"><div class="col-md-3 col-md-offset-2"><div class="form-bg_contactus"><form class="form_contactus"><div class="form-group_contactus"> <label class="sr-only_contactus">Name</label> <input type="text" class="form-control_contactus" required="" id="nameNine" placeholder="Tu nombre"> </div><div class="form-group_contactus"> <label class="sr-only_contactus">Email</label> <input type="email" class="form-control_contactus" required="" id="emailNine" placeholder="Email"> </div><div class="form-group_contactus"> <label class="sr-only_contactus">Name</label> <textarea class="form-control_contactus" required="" rows="7" id="messageNine" placeholder="Escribe tu mensaje"></textarea> </div><button type="submit" class="btn_contactus text-center btn-blue_contactus">Enviar mensaje</button></form></div></div></div></div></div>')
-//             .show()
-// });
 var first_window = function(){
-    var win =  L.control.window(map,{title:'<h2 style="text-align:center">Bienvenido!</h2>',maxWidth:600,minWidth:400,modal: true})
-            // .content('<div class="form4_contactus top"><div class="container"><div class="row"><div class="col-md-3 col-md-offset-2"><div class="form-bg_contactus"><form class="form_contactus"><div class="form-group_contactus"> <label class="sr-only_contactus">Name</label> <input type="text" class="form-control_contactus" required="" id="nameNine" placeholder="Tu nombre"> </div><div class="form-group_contactus"> <label class="sr-only_contactus">Email</label> <input type="email" class="form-control_contactus" required="" id="emailNine" placeholder="Email"> </div><div class="form-group_contactus"> <label class="sr-only_contactus">Name</label> <textarea class="form-control_contactus" required="" rows="7" id="messageNine" placeholder="Escribe tu mensaje"></textarea> </div><button type="submit" class="btn_contactus text-center btn-blue_contactus">Enviar mensaje</button></form></div></div></div></div></div>')
-            .content('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')
+    var win =  L.control.window(map,{title:'<h3 style="text-align:center">Herramienta Web para el desarrollo de Curvas de Intensidad - Duración - Frecuencia</h3>',maxWidth:600,minWidth:400,modal: true})
+            .content('La presente herramienta basada en la web integra una interfaz de usuario con sistemas de Información Geográfica (GIS). A la vez, muestra un conjunto de datos basados en precipitaciones extremas, y a partir de ello, se construyen tormentas de diseño para ser aplicados en diversos campos de la ingeniería, como la hidrología urbana, diseño de infraestructura y estudios de evaluación de riesgos, entre otros.')
             .show()
 };
 
@@ -44,14 +44,12 @@ var getFeatureInfoUrl = function (latlng, lyr) {
 
     var parameters = L.Util.extend(defaultParameters);
     var URL = source_url + L.Util.getParamString(parameters);
-    console.log(URL);
     return(URL)
 };
 
 var getFeatureInfo = function(evt, lyr){
     var infoRaster;
     var InfoVector;
-    console.log(evt.latlng);
     var url = getFeatureInfoUrl(evt.latlng, lyr);
     if(url){
         fetch(url)
@@ -62,14 +60,11 @@ var getFeatureInfo = function(evt, lyr){
                     document.getElementById('infoRegion').innerHTML = '<p id="infoRegion"><b>Región: '+info_data["subregion"]+'</b></p>'
                 }
                 else{
-                    console.log("Crear Tabla aqui");
                     generar_tb_pp(info_data);
                     changeVisibility();
                 }
             });
-
     }
-
 };
 
 var showDisclaimer = function() {
@@ -89,11 +84,11 @@ var extraerData_click = function (evt) {
     }
     marker = L.marker(evt.latlng, {icon: markerIcon}).addTo(map);
     map.setView([evt.latlng["lat"], evt.latlng["lng"]-0.05], 11);
-    console.log(evt.latlng);
     document.getElementById("coord_x").value = evt.latlng["lng"].toFixed(3);
     document.getElementById("coord_y").value = evt.latlng["lat"].toFixed(3);
+    var escenario = document.getElementById('select_escenario').value;
     getFeatureInfo(evt, "dhi:gpo_regiones_pp");
-    getFeatureInfo(evt, "dhi:q_pp")
+    getFeatureInfo(evt, escenarios[escenario])
     
 }
 
@@ -136,7 +131,6 @@ var blank = function() {
 var create_point = function(){
     map.on("click", function(e){
         var mp = new L.Marker([e.latlng.lat, e.latlng.lng]).addTo(map);
-        console.log(mp.getLatLng());
     });
 }
 
@@ -145,21 +139,20 @@ var changeVisibility = function() {
 }
 
 var generar_tb_pp = function(trs_tr) {
-    var data_regiones = JSON.parse(datos_regiones)[0];
+    var data_regiones = JSON.parse(datos_regiones);
+    console.log(data_regiones);
 
     var tr_anos = ["TR2","TR5","TR10","TR30","TR50","TR75","TR100","TR200","TR500","TR1000"];
     var region = document.getElementById("infoRegion").innerText.replace("Región: ","");
-    var quartil = document.getElementById('select_quartil').value;
-    // var trs_tr = 100;
+    // var quartil = document.getElementById('select_quartil').value;
     var val_temp;
     var intensidades;
-
-    console.log(quartil);
 
     var tabla_datos = "<table id='dtHorizontal' class='table table-striped' width=100%>";
     tabla_datos += "<thead><tr><th colspan='11' align=center style='font-size:14px;'>Intensidades de precipitación, para diferentes duraciones y periodos de retorno.</th>";
     tabla_datos += "<tr><th align=center>Duración</th>";
 
+    var datos_cldf = {};
     var datos_hietograma = {};
     var datos_hietograma_mn = {};
     var datos_hietograma_mx = {};
@@ -169,15 +162,16 @@ var generar_tb_pp = function(trs_tr) {
         datos_hietograma[tr_anos[cab]] = [];
         datos_hietograma_mn[tr_anos[cab]] = [];
         datos_hietograma_mx[tr_anos[cab]] = [];
+        datos_cldf[tr_anos[cab]] = [];
     };
 
     tabla_datos += "</tr></thead><tbody>";
     for(j=0;j<=23;j++){
         var n = j+1
 
-        var val_pp_mn = data_regiones[region][quartil]["P10"];
-        var val_pp_me = data_regiones[region][quartil]["P50"];
-        var val_pp_mx = data_regiones[region][quartil]["P90"];
+        var val_pp_mn = data_regiones[region];
+        var val_pp_me = data_regiones[region];
+        var val_pp_mx = data_regiones[region];
 
         // tabla_datos += "<tr><td align=center>"+n+"-hr";
 
@@ -185,6 +179,8 @@ var generar_tb_pp = function(trs_tr) {
             var val_hiet_mn = val_pp_mn[j]*trs_tr["LI_"+tr_anos[m]];
             var val_hiet_me = val_pp_me[j]*trs_tr["LM_"+tr_anos[m]];
             var val_hiet_mx = val_pp_mx[j]*trs_tr["LS_"+tr_anos[m]];
+
+            datos_cldf[tr_anos[m]].push(parseFloat(val_hiet_me).toFixed(2))
 
             if(n==1){
                 val_temp_mn_graf = val_hiet_mn;
@@ -208,7 +204,23 @@ var generar_tb_pp = function(trs_tr) {
     }
     // datos_idf = datos_idf.sort(function(a, b) { return a - b }).reverse()
     // datos_hietograma = datos_hietograma.sort(function(a, b) { return a - b }).reverse()
-    create_graph_hietograma(datos_hietograma)
+    // console.log(datos_hietograma["TR2"].map(parseFloat).sort(function(a, b) { return a - b }).reverse());
+    var h;
+    for(H in datos_hietograma){
+        h = datos_hietograma[H].map(parseFloat).sort(function(a, b) { return a - b }).reverse();
+        datos_hietograma[H] = [h[22],h[20],h[18],h[16],h[14],h[12],h[10],h[8],h[6],h[4],h[2],h[0],h[1],h[3],h[5],h[7],h[9],h[11],h[13],h[15],h[17],h[19],h[21],h[23]]
+    };
+    for(H in datos_hietograma_mn){
+        h = datos_hietograma_mn[H].map(parseFloat).sort(function(a, b) { return a - b }).reverse();
+        datos_hietograma_mn[H] = [h[22],h[20],h[18],h[16],h[14],h[12],h[10],h[8],h[6],h[4],h[2],h[0],h[1],h[3],h[5],h[7],h[9],h[11],h[13],h[15],h[17],h[19],h[21],h[23]]
+    };
+    for(H in datos_hietograma_mx){
+        h = datos_hietograma_mx[H].map(parseFloat).sort(function(a, b) { return a - b }).reverse();
+        datos_hietograma_mx[H] = [h[22],h[20],h[18],h[16],h[14],h[12],h[10],h[8],h[6],h[4],h[2],h[0],h[1],h[3],h[5],h[7],h[9],h[11],h[13],h[15],h[17],h[19],h[21],h[23]]
+    };
+
+    create_graph_cldf(datos_cldf)
+    // create_graph_hietograma(datos_hietograma)
     intensidades = mean_intensity(datos_hietograma)
     datos_idf = datos_idf_update(intensidades)
     create_graph_idf(datos_idf)
@@ -241,12 +253,11 @@ var generar_tb_pp = function(trs_tr) {
 
 var create_graph_hietograma = function(datos){
     // HIETOGRAMA DE DISEÑO
-    var graph_ddf = document.getElementById("graph_ddf2");
     var graph_TR2 = {
         label: "TR2",
         data: datos["TR2"],
         backgroundColor: 'red',
-        hidden: true
+        hidden: false
     };
 
     var graph_TR5 = {
@@ -261,7 +272,8 @@ var create_graph_hietograma = function(datos){
         label: "TR10",
         data: datos["TR10"],
         backgroundColor: 'pink',
-        fill: false
+        fill: false,
+        hidden: true
     };
 
     var graph_TR30 = {
@@ -371,7 +383,8 @@ var create_graph_hietograma = function(datos){
       }
     };
 
-    var lineChart = new Chart(graph_ddf, {
+    var graph_ddf = document.getElementById("graph_ddf2");
+    var barChart = new Chart(graph_ddf, {
       type: 'bar',
       data: TR_data,
       options: chartOptionsBar
@@ -418,8 +431,7 @@ var create_graph_idf = function(datos){
         data: datos["TR50"].sort(function(a, b) { return a - b }).reverse(),
         borderColor: '#98B9AB',
         fill: false,
-        pointStyle: 'line',
-        hidden: true
+        pointStyle: 'line'
     };
 
     var graph_TR75 = {
@@ -427,8 +439,7 @@ var create_graph_idf = function(datos){
         data: datos["TR75"].sort(function(a, b) { return a - b }).reverse(),
         borderColor: 'green',
         fill: false,
-        pointStyle: 'line',
-        hidden: true
+        pointStyle: 'line'
     };
 
     var graph_TR100 = {
@@ -525,6 +536,153 @@ var create_graph_idf = function(datos){
 
 }
 
+var create_graph_cldf = function(datos){
+    console.log(datos);
+    var graph_ddf = document.getElementById("graph_cldf");
+    var graph_TR2 = {
+        label: "TR2",
+        data: datos["TR2"],
+        borderColor: 'red',
+        fill: false,
+        pointStyle: 'line'
+    };
+
+    var graph_TR5 = {
+        label: "TR5",
+        data: datos["TR5"],
+        borderColor: 'blue',
+        fill: false,
+        pointStyle: 'line'
+    };
+
+    var graph_TR10 = {
+        label: "TR10",
+        data: datos["TR10"],
+        borderColor: 'pink',
+        fill: false,
+        pointStyle: 'line'
+    };
+
+    var graph_TR30 = {
+        label: "TR30",
+        data: datos["TR30"],
+        borderColor: 'black',
+        fill: false,
+        pointStyle: 'line'
+    };
+
+    var graph_TR50 = {
+        label: "TR50",
+        data: datos["TR50"],
+        borderColor: '#98B9AB',
+        fill: false,
+        pointStyle: 'line'
+    };
+
+    var graph_TR75 = {
+        label: "TR75",
+        data: datos["TR75"],
+        borderColor: 'green',
+        fill: false,
+        pointStyle: 'line'
+    };
+
+    var graph_TR100 = {
+        label: "TR100",
+        data: datos["TR100"],
+        borderColor: '#F9B90AFF',
+        fill: false,
+        pointStyle: 'line'
+    };
+
+    var graph_TR200 = {
+        label: "TR200",
+        data: datos["TR200"],
+        borderColor: 'brown',
+        fill: false,
+        pointStyle: 'line'
+    };
+
+    var graph_TR500 = {
+        label: "TR500",
+        data: datos["TR500"],
+        borderColor: '#34A74BFF',
+        fill: false,
+        pointStyle: 'line'
+    };
+
+    var graph_TR1000 = {
+        label: "TR1000",
+        data: datos["TR1000"],
+        borderColor: '#AFA100',
+        fill: false,
+        pointStyle: 'line'
+    };
+
+    var TR_data = {
+      labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24],
+      datasets: [graph_TR2, graph_TR5, graph_TR10, graph_TR30, graph_TR50, graph_TR75, graph_TR100, graph_TR200, graph_TR500, graph_TR1000]
+    };
+
+    var chartOptionsLine = {
+      responsive: true,
+      fontSize:10,
+      title: {
+        display: true,
+        text: 'CURVAS LÁMINA-DURACIÓN-FRECUENCIA',
+        fontColor: "black",
+        fontSize:14,
+        fontStyle: "bold"
+      },
+      scales:{
+        yAxes: [{
+                scaleLabel: {
+                display: true,
+                labelString: 'Precipitación máxima [mm]',
+                fontColor: "black",
+                fontSize:12,
+                fontStyle: "bold"
+            }
+        }],
+        xAxes: [{
+                ticks: {
+                    autoSkip: false,
+                    maxRotation: 90,
+                    minRotation: 90
+                },
+                scaleLabel: {
+                display: true,
+                labelString: 'Duración [hr]',
+                fontColor: "black",
+                fontSize:12,
+                fontStyle: "bold"
+            }
+            }]
+      },
+      legend: {
+        display: true,
+        position: 'bottom',
+        align: 'center',
+        // verticalAlign: "center",
+        // horizontalAlign: "center",
+        labels: {
+          fontColor: 'black',
+          fontSize: 10,
+          usePointStyle: true
+        }
+      }
+    };
+
+    var lineChart = new Chart(graph_ddf, {
+      type: 'line',
+      data: TR_data,
+      options: chartOptionsLine
+    });
+    lineChart.update();
+
+}
+
+
 var exportTableToExcel = function(tableID, filename = ''){
     var downloadLink;
     var dataType = 'application/vnd.ms-excel';
@@ -584,17 +742,25 @@ var funcion_inicial = function(){
        version: "1.3.0"
     });
 
+    var indice_avenidas = L.tileLayer.wms(host + "geoserver/dhi/wms", {
+       opacity: 0.8,
+       layers: "dhi:gpo_pp_max_monthly",
+       format: 'image/png',
+       transparent: true,
+       version: "1.3.0"
+    });
+
     // Mapas base
     var basemaps = {
         'Stamen': bm_stamen(),
-        'OpenStreetMap': bm_openstreetmap(),
+        'OpenStreetMap': bm_openstreetmap().addTo(map),
         'OpenTopoMap': bm_opentopomap(),
-        'Satellite': bm_satellite().addTo(map),
+        'Satellite': bm_satellite(),
         'Blank': blank()
     };
 
     var layers = {
-        'Indice de avenidas': indice_avenidas.addTo(map),
+        // 'Indice de avenidas': indice_avenidas,
         'Regiones pp máxima': regionespp.addTo(map),
         'Departamentos': departamentos,
         'Provincias': provincias,
@@ -608,16 +774,15 @@ var funcion_inicial = function(){
     legend.onAdd = function (map) {
         var div = L.DomUtil.create('div', 'info legend');
             div.innerHTML += "<b>Leyenda:</b><br>";
-            // div.innerHTML += '<img src="'+host+'geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.3.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&STRICT=false&style=raster_style">';
             div.setAttribute("onmouseenter", "showDisclaimer()");
             div.setAttribute("onmouseleave", "hideDisclaimer()");
             div.id = "info legend"
         return div;
     };
-    legend.addTo(map);
+    // legend.addTo(map);
 
     var sidebar = L.control.sidebar('sidebar_leaflet').addTo(map);
-    sidebar.open('principal');
+    sidebar.open('lluvias');
     
     map.on('click', function (evt) { extraerData_click(evt) });
 }
@@ -633,11 +798,10 @@ var extraerData_button = function () {
     var coord = [parseFloat(coord_y), parseFloat(coord_x)]
     marker = L.marker(coord, {icon: markerIcon}).addTo(map);
     map.setView([coord[0], coord[1]-0.05], 11);
-    console.log(coord);
     var coord_evt = {"latlng": {"lat": coord[0], "lng": coord[1]}}
-    console.log(coord_evt);
+    var escenario = document.getElementById('select_escenario').value;
     getFeatureInfo(coord_evt, "dhi:gpo_regiones_pp");
-    getFeatureInfo(coord_evt, "dhi:q_pp")
+    getFeatureInfo(coord_evt, escenarios[escenario])
 }
 
 
@@ -717,100 +881,6 @@ var datos_idf_update = function(datos){
     }
     return(intens);
 }
-//////////////////////////////////////////////////////////////////////////////////////////////
-
-
-var create_bh_tdps = function(){
-    var g01_bh = JSON.parse(tdps01_bh);
-    var graph_bh_tdps = document.getElementById("create_bh_tdps");
-    var indices_bh = [6,7,8,9,10,11,0,1,2,3,4,5];
-
-    var data_bh_pp = g01_bh["0029"]["pp_month"].split(",").map(Number);
-    var data_bh_etr = g01_bh["0029"]["etr_month"].split(",").map(Number).map(x => x * -1);
-    var data_bh_wyld = g01_bh["0029"]["wyld_clima"].split(",").map(Number).map(x => x * -1);
-
-    var d01_bh_pp = {
-        label: "Precipitación (mm)",
-        data: indices_bh.map(i => data_bh_pp[i]),
-        backgroundColor: 'blue',
-        fill: false
-    };
-
-    var d01_bh_etr = {
-        label: "ETR (mm)",
-        data: indices_bh.map(i => data_bh_etr[i]),
-        backgroundColor: 'green',
-        fill: false
-    };
-
-    var d01_bh_wyld = {
-        label: "Escurrimiento (mm)",
-        data: indices_bh.map(i => data_bh_wyld[i]),
-        backgroundColor: 'red',
-        fill: false
-    };
-
-    var d01_data = {
-      labels: ["Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug"],
-      datasets: [d01_bh_pp, d01_bh_wyld, d01_bh_etr]
-    };
-
-    var chartOptionsBar = {
-      responsive: true,
-      fontSize:10,
-      title: {
-        display: true,
-        text: 'BALANCE HÍDRICO',
-        fontColor: "black",
-        fontSize: 14,
-        fontStyle: "bold"
-      },
-      scales:{
-        yAxes: [{
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Balance en cuenca',
-                    fontColor: "black",
-                    fontSize:12,
-                    fontStyle: "bold"
-                },
-                stacked: true
-        }],
-        xAxes: [{
-                scaleLabel: {
-                    display: false,
-                    labelString: 'Duración [hr]',
-                    fontColor: "black",
-                    fontSize:12,
-                    fontStyle: "bold"
-                },
-                stacked: true,
-                barPercentage: 0.5
-            }]
-      },
-      legend: {
-        display: true,
-        position: 'bottom',
-        align: 'center',
-        labels: {
-          fontColor: 'black',
-          fontSize: 10,
-          usePointStyle: true
-        }
-      }
-    };
-
-    var barChart = new Chart(graph_bh_tdps, {
-      type: 'bar',
-      data: d01_data,
-      options: chartOptionsBar
-    });
-
-}
-
-create_bh_tdps()
-
-//////////////////////////////////////////////////////////////////////////////////////////////
 
 document.getElementById("download").addEventListener('click', function(){
   var url_base64jp = document.getElementById("graph_ddf").toDataURL("image/jpg");

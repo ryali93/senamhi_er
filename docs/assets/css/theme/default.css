@@ -279,7 +279,7 @@ Website: http://www.seantheme.com/color-admin-v2.0/admin/html/
 #extraerData_button{
     max-width: 35px;
     max-height: 40px;
-    background: #e6e6e6;
+    background: #f4f4f4;
     border-radius: 5px;
     border-style: groove;
 }
@@ -287,6 +287,18 @@ Website: http://www.seantheme.com/color-admin-v2.0/admin/html/
 .container_image{
     display: flex;
     align-items: center;
+}
+
+#container_image:hover {
+  background-color: #d7d7d7; /* Green */
+  color: white;
+  border-radius: 5px;
+}
+
+#extraerData_button:hover {
+  background-color: #d7d7d7; /* Green */
+  color: white;
+  border-radius: 5px;
 }
 
 #dtHorizontal tr:hover {
@@ -388,4 +400,29 @@ button.btn_contactus {
   margin-left: auto;
   margin-right: auto;
   width: 60%;
+}
+
+.containertext {
+    padding: 0px;
+    text-align: justify;
+}
+
+.containertext__image {
+    width: 150px;
+    margin: 20px 20px 20px 20px;
+    float: right;
+}
+
+.containertext__text {
+    display: inline;
+}
+
+@media (max-width: 992px) {
+    .containertext__image {
+        display: none;
+    }
+    .containertext {
+        text-align: justify;
+        padding: 0px;
+    }
 }
