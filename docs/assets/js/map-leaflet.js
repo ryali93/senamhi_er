@@ -8,7 +8,7 @@ var markerIcon = L.icon({
     iconAnchor:   [0.5, 1]
 });
 var escenarios = {
-    "ESC_HST" : "dhi:q_pp",
+    "ESC_HST" : "dhi:dhi_pp_q",
     "ESC_ACCESS" : "dhi:dhi_pp_access",
     "ESC_HADGEM" : "dhi:dhi_pp_hadgem",
     "ESC_MPI" : "dhi:dhi_pp_mpi",
@@ -881,10 +881,3 @@ var datos_idf_update = function(datos){
     }
     return(intens);
 }
-
-document.getElementById("download").addEventListener('click', function(){
-  var url_base64jp = document.getElementById("graph_ddf").toDataURL("image/jpg");
-  var a =  document.getElementById("download");
-  a.href = url_base64jp;
-});
-
